@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+
+{% block title %}vnxBox Holding Platform - Quản trị Tập đoàn AI{% endblock %}
+
+{% block content %}
+<!-- Nhúng dữ liệu JSON từ Django xuống an toàn tuyệt đối -->
+{{ companies_json|json_script:"companies-data" }}
+{{ agents_json|json_script:"agents-data" }}
+
+<div class="flex h-screen w-screen overflow-hidden bg-[#0B0F17] text-gray-100" x-data="holdingApp()">
+
+    <!-- ================= SIDEBAR TRÁI: ĐIỀU HƯỚNG & NHÂN VIÊN AI ================= -->
+    <aside class="w-80 bg-[#111827] border-r border-gray-800/80 flex flex-col flex-shrink-0 select-none z-20 shadow-xl">
+
+        <!-- Brand / Header -->
+        <div class="p-4 border-b border-gray-800/80 flex items-center justify-between bg-[#0d131f]">
+            <div class="flex items-center space-x-2.5">
+                <div
+                    class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-md shadow-blue-900/40">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm tracking-wide text-gray-100">vnxBox Holding</h1>
+                    <span class="text-[10px] text-cyan-400 font-mono tracking-wider">BUILD 2026 AGI</span>
+                </div>
+            </div>
+            <a href="/admin/" target="_blank"
+                class="text-[11px] bg-gray-800 hover:bg-gray-700 text-gray-300 px-2.5 py-1 rounded-md transition-colors border border-gray-700 font-medium">
+                Admin
+            </a>
+        </div>
+
+        <!-- 1. Bộ lọc Công ty / Khối ngành -->
+        <div class="p-3.5 border-b border-gray-800/80 bg-[#111827]">
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                Công Ty / Khối Ngành
+            </label>
+            <div class="relative">
+                <select x-model="selectedCompany"
+                    class="w-full bg-[#1F2937] border border-gray-700/80 rounded-lg px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-cyan-500 transition-colors appearance-none cursor-pointer">
+                    <option value="">🏢 Tất cả khối / Toàn Tập đoàn</option>
+                    <template x-for="comp in companies" :key="comp.code">
+                        <option :value="comp.code" x-text="comp.name"></option>
+                    </template>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Danh sách Nhân viên AI -->
+        <div class="flex-1 overflow-y-auto p-3.5 space-y-2.5">
+            <div class="flex items-center justify-between mb-1 px-1">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Đội Ngũ Nhân Viên AI</span>
+                <span
+                    class="text-[10px] bg-cyan-950/80 text-cyan-400 border border-cyan-800/50 px-2 py-0.5 rounded-full font-mono font-semibold"
+                    x-text="filteredAgents.length"></span>
+            </div>
+
+            <template x-for="agent in filteredAgents" :key="agent.agent_id">
+                <div
+                    class="bg-[#1a2332]/80 hover:bg-[#1F2937] border border-gray-800 hover:border-cyan-500/40 rounded-xl p-3 transition-all cursor-pointer shadow-sm group">
+                    <div class="flex items-start justify-between">
+                        <h4 class="text-xs font-bold text-gray-200 group-hover:text-cyan-300 transition-colors"
+                            x-text="agent.display_name"></h4>
+                        <span class="text-[9px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase"
+                            :class="agent.status === 'READY' ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/50' : 'bg-amber-950/80 text-amber-400 border border-amber-800/50'"
+                            x-text="agent.status">
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-cyan-400/90 mt-1 font-medium" x-text="agent.department"></p>
+                    <p class="text-[11px] text-gray-400 mt-1 line-clamp-2 leading-relaxed" x-text="agent.role_desc"></p>
+                </div>
+            </template>
+
+            <div x-show="filteredAgents.length === 0" class="text-center py-10 text-gray-500 text-xs">
+                Không tìm thấy chuyên gia AI nào thuộc khối này.
+            </div>
+        </div>
+
+        <div class="p-3 border-t border-gray-800/80 bg-[#0d131f] text-center">
+            <span class="text-[10px] text-gray-500 font-mono">vnxBox Autonomous Platform v2.6</span>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WORKSPACE PHẢI: KHUNG CHAT & REAL-TIME DEBATE ================= -->
+    <main class="flex-1 flex flex-col bg-[#0B0F17] relative overflow-hidden">
+
+        <!-- Top bar workspace -->
+        <header
+            class="h-14 border-b border-gray-800/80 bg-[#111827]/50 px-6 flex items-center justify-between backdrop-blur flex-shrink-0">
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-medium text-gray-300">Hội đồng quản trị & Tranh luận tương tác (BOD
+                    Debate)</span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span
+                    class="text-xs text-gray-400 bg-gray-800/80 px-2.5 py-1 rounded-md border border-gray-700/60 font-mono">Ollama
+                    Local (CPU)</span>
+            </div>
+        </header>
+
+        <!-- Vùng hiển thị nội dung chat / luồng tranh luận trực tiếp -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-4" id="chat-container">
+
+            <template x-if="messages.length === 0">
+                <div class="h-full w-full flex flex-col items-center justify-center text-center">
+                    <div
+                        class="max-w-xl w-full border border-dashed border-gray-800 rounded-2xl p-10 bg-[#111827]/30 shadow-inner">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600/20 to-cyan-600/20 border border-cyan-500/30 flex items-center justify-center mx-auto mb-4 text-cyan-400 shadow-lg">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-200 tracking-wide">Hệ thống Hội đồng AGI đang sẵn sàng
+                        </h3>
+                        <p class="text-xs text-gray-400 mt-2 leading-relaxed">Hãy giao việc bên dưới. Các chuyên gia AI
+                            sẽ lập tức tranh luận đa chiều và đưa ra Ma trận phương án cho Sếp xét duyệt.</p>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Danh sách các tin nhắn chat qua lại -->
+            <template x-for="(msg, index) in messages" :key="index">
+                <div class="flex flex-col space-y-1.5 max-w-3xl mx-auto w-full"
+                    :class="msg.sender === 'user' ? 'items-end' : 'items-start'">
+                    <span class="text-[10px] text-gray-500 font-mono"
+                        x-text="msg.sender === 'user' ? 'Sếp (User)' : 'Hội đồng AGI (BOD & Chuyên gia)'"></span>
+                    <div class="p-4 rounded-xl text-xs leading-relaxed shadow-md"
+                        :class="msg.sender === 'user' ? 'bg-cyan-600 text-white rounded-br-none' : 'bg-[#1F2937] border border-gray-700/80 text-gray-200 rounded-bl-none w-full'">
+
+                        <!-- Hiển thị nội dung text kèm hiệu ứng streaming -->
+                        <p class="whitespace-pre-wrap font-sans" x-text="msg.text"></p>
+
+                        <!-- Nút lựa chọn phương án tương tác khi AI đã sinh xong ma trận -->
+                        <template x-if="msg.showOptions && !msg.isStreaming">
+                            <div class="mt-4 pt-3 border-t border-gray-700/80 flex flex-wrap gap-2 items-center">
+                                <span class="text-[11px] font-semibold text-cyan-400 w-full mb-1">👉 Ý kiến chỉ đạo &
+                                    Lựa chọn của Sếp:</span>
+                                <button @click="selectOption('Phương án 1 (Django Monolith)', 'payroll_app')"
+                                    class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow">
+                                    ✅ Duyệt PA 1 (Tạo app: payroll_app)
+                                </button>
+                                <button @click="selectOption('Phương án 2 (Modular REST API)', 'payroll_app')"
+                                    class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                                    📌 Duyệt PA 2
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Khung nhập liệu (Chat Input Box) cố định ở đáy -->
+        <div class="p-4 bg-[#111827] border-t border-gray-800/80 flex-shrink-0 shadow-lg">
+            <div class="max-w-4xl mx-auto space-y-2.5">
+
+                <div class="flex items-center space-x-2">
+                    <label
+                        class="inline-flex items-center space-x-1.5 px-3 py-1 bg-[#1F2937] hover:bg-gray-700 border border-gray-700/80 rounded-lg text-xs font-medium text-gray-300 cursor-pointer transition-colors shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                        <span>Thêm file đọc hiểu (PDF/Excel/Word)</span>
+                        <input type="file" class="hidden" @change="handleFileUpload">
+                    </label>
+                    <span class="text-xs text-cyan-400 font-medium" x-text="fileName"></span>
+                </div>
+
+                <div class="relative flex items-center">
+                    <textarea x-model="promptText" @keydown.enter.prevent="if(!$event.shiftKey) { submitToCouncil() }"
+                        rows="3" placeholder="Nhập yêu cầu giao việc (Nhấn Enter để gửi)..."
+                        class="w-full bg-[#1F2937] border border-gray-700/80 rounded-xl pl-4 pr-32 py-3 text-xs text-gray-100 placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none transition-colors shadow-inner"></textarea>
+
+                    <div class="absolute right-3 bottom-3">
+                        <button @click="submitToCouncil" :disabled="isProcessing"
+                            class="inline-flex items-center space-x-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-lg transition-all transform active:scale-95 cursor-pointer disabled:opacity-50">
+                            <span>🚀 Gửi Hội đồng</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Alpine.js Logic kèm hiệu ứng Typewriter (Streaming) mượt mà -->
+<script>
+    function holdingApp() {
+        return {
+            companies: JSON.parse(document.getElementById('companies-data').textContent),
+            agents: JSON.parse(document.getElementById('agents-data').textContent),
+            selectedCompany: '',
+            promptText: '',
+            fileName: '',
+            messages: [],
+            isProcessing: false,
+
+            get filteredAgents() {
+                if (!this.selectedCompany) {
+                    return this.agents;
+                }
+                return this.agents.filter(a => a.company_code === this.selectedCompany || a.company_code === null);
+            },
+
+            handleFileUpload(event) {
+                if (event.target.files.length > 0) {
+                    this.fileName = event.target.files[0].name;
+                }
+            },
+
+            // Hàm hỗ trợ tự động chọn phương án nhanh
+            selectOption(optionName, folderName) {
+                this.promptText = `Tôi đã chọn ${optionName}. Tiến hành tạo app trong thư mục: ${folderName} và viết Vibercode chi tiết.`;
+                this.submitToCouncil();
+            },
+
+            // Hiệu ứng hiển thị từng dòng chữ (Typewriter Effect) giống LLM Stream thực tế
+            typeWriterEffect(messageIndex, fullText, callback) {
+                let currentLength = 0;
+                const speed = 10; // Tốc độ chạy chữ (ms)
+
+                this.messages[messageIndex].isStreaming = true;
+
+                const interval = setInterval(() => {
+                    if (currentLength < fullText.length) {
+                        currentLength += Math.min(3, fullText.length - currentLength);
+                        this.messages[messageIndex].text = fullText.substring(0, currentLength);
+
+                        // Cuộn khung chat theo dòng chữ
+                        const container = document.getElementById('chat-container');
+                        if (container) container.scrollTop = container.scrollHeight;
+                    } else {
+                        clearInterval(interval);
+                        this.messages[messageIndex].isStreaming = false;
+                        this.messages[messageIndex].showOptions = true; // Bật nút lựa chọn phương án sau khi viết xong
+                        if (callback) callback();
+                    }
+                }, speed);
+            },
+
+            async submitToCouncil() {
+                const text = this.promptText.trim();
+                if (!text || this.isProcessing) return;
+
+                // 1. Đẩy tin nhắn của User lên giao diện
+                this.messages.push({ sender: 'user', text: text });
+                const userPrompt = text;
+                this.promptText = '';
+                this.isProcessing = true;
+
+                this.$nextTick(() => {
+                    const container = document.getElementById('chat-container');
+                    container.scrollTop = container.scrollHeight;
+                });
+
+                // Kiểm tra nhanh xem có phải câu chào hỏi / điểm danh / gọi họp nhanh không
+                const promptLower = userPrompt.toLowerCase();
+                const greetings = ['alo', 'chào', 'hi', 'ae ơi', 'có ai không', 'hú', 'hello', 'họp đi'];
+                const isGreeting = greetings.some(g => promptLower === g || promptLower.startsWith(g + ' ')) && userPrompt.split(' ').length <= 4;
+
+                if (isGreeting) {
+                    // TRƯỜNG HỢP 1: Chào hỏi nhanh -> Gọi thẳng API không qua các bước giả lập kỹ thuật
+                    const aiMsgIndex = this.messages.push({
+                        sender: 'ai',
+                        text: '🏛️ [BOD CEO]: Đang kết nối phòng họp vnxBox...',
+                        isStreaming: true,
+                        showOptions: false
+                    }) - 1;
+
+                    await this.fetchRealAIResponse(aiMsgIndex, userPrompt);
+                } else {
+                    // TRƯỜNG HỢP 2: Yêu cầu phát triển phần mềm/nghiệp vụ -> Chạy chuỗi mô phỏng Hội đồng họp
+                    const aiMsgIndex = this.messages.push({
+                        sender: 'ai',
+                        text: '🏛️ [Hội đồng AGI] Đang khởi động phiên họp chiến lược...',
+                        isStreaming: true,
+                        showOptions: false
+                    }) - 1;
+
+                    const steps = [
+                        "🏛️ [BOD CEO]: Đã tiếp nhận chỉ đạo từ Sếp. Triệu tập các khối chuyên gia...",
+                        "📊 [Chuyên gia BA]: Đang phân tích yêu cầu nghiệp vụ và bóc tách các tính năng cốt lõi...",
+                        "🏗️ [Kiến trúc sư Trưởng]: Đang rà soát hạ tầng Local-First, thiết kế sơ đồ CSDL...",
+                        "💻 [Dev & Code Specialist]: Đang lập Bảng Ma Trận Giải Pháp (Solution Matrix)...",
+                        "🤖 [Ollama Local Model]: Đang tổng hợp biên bản họp và sinh kết quả chi tiết..."
+                    ];
+
+                    let stepIdx = 0;
+                    const stepInterval = setInterval(() => {
+                        if (stepIdx < steps.length) {
+                            this.messages[aiMsgIndex].text = steps.slice(0, stepIdx + 1).join('\n\n');
+                            stepIdx++;
+                            const container = document.getElementById('chat-container');
+                            if (container) container.scrollTop = container.scrollHeight;
+                        } else {
+                            clearInterval(stepInterval);
+                            this.fetchRealAIResponse(aiMsgIndex, userPrompt);
+                        }
+                    }, 600);
+                }
+            },
+
+            // Hàm gọi API thực tế xuống Backend Django
+            async fetchRealAIResponse(aiMsgIndex, text) {
+                try {
+                    const response = await fetch('/api/agents/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            prompt: text,
+                            company_code: this.selectedCompany,
+                            file: this.fileName
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const fullResponseText = data.response || "Hội đồng đã hoàn thành thảo luận.";
+                        this.typeWriterEffect(aiMsgIndex, fullResponseText);
+                    } else {
+                        this.typeWriterEffect(aiMsgIndex, "⚠️ Phản hồi từ backend không thành công.");
+                    }
+                } catch (error) {
+                    this.typeWriterEffect(aiMsgIndex, "❌ [Lỗi kết nối Server]: Không thể gọi tới tiến trình Backend Django.");
+                } finally {
+                    this.isProcessing = false;
+                    this.fileName = '';
+                }
+            },
+
+            // Hiệu ứng chạy chữ mượt mà cho kết quả trả về
+            typeWriterEffect(messageIndex, fullText) {
+                let currentLength = 0;
+                const speed = 10;
+                this.messages[messageIndex].isStreaming = true;
+
+                const interval = setInterval(() => {
+                    if (currentLength < fullText.length) {
+                        currentLength += Math.min(4, fullText.length - currentLength);
+                        this.messages[messageIndex].text = fullText.substring(0, currentLength);
+
+                        const container = document.getElementById('chat-container');
+                        if (container) container.scrollTop = container.scrollHeight;
+                    } else {
+                        clearInterval(interval);
+                        this.messages[messageIndex].isStreaming = false;
+                        // Chỉ hiển thị nút chọn phương án nếu nội dung là ma trận giải pháp phần mềm
+                        if (fullText.includes("Solution Matrix") || fullText.includes("Phương án")) {
+                            this.messages[messageIndex].showOptions = true;
+                        }
+                    }
+                }, speed);
+            }
+        }
+    }
+</script>
+{% endblock %}
