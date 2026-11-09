@@ -1,0 +1,258 @@
+<!-- Path: workspace/tabs/index.html -->
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tập đoàn AI Tự trị - Vibercode Enterprise Dashboard</title>
+    <!-- Tailwind CSS & Alpine.js qua CDN (No-GPU local app UI) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col" x-data="dashboardApp()">
+
+    <!-- Header / Navigation -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h1 class="text-xl font-bold tracking-wide text-emerald-400">VIBERCODE ENTERPRISE PLATFORM</h1>
+        </div>
+        <div class="text-xs text-slate-400">
+            Engine: <span class="text-slate-200 font-semibold">Ollama (qwen2.5-coder:7b)</span> | Mode: <span
+                class="text-emerald-400 font-semibold">Local-First (CPU)</span>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar: Danh sách Agent đang vận hành -->
+        <aside class="w-72 bg-slate-800/50 border-r border-slate-700 p-4 flex flex-col justify-between">
+            <div>
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Danh sách Nhân viên AI
+                </h2>
+                <div class="space-y-2">
+                    <template x-for="agent in agents" :key="agent.agent_id">
+                        <div
+                            class="p-3 bg-slate-800 rounded-lg border border-slate-700 hover:border-slate-600 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-mono font-bold text-emerald-400"
+                                    x-text="agent.agent_id"></span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                                    :class="agent.status === 'READY' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'"
+                                    x-text="agent.status"></span>
+                            </div>
+                            <div class="text-sm font-semibold text-slate-200" x-text="agent.display_name"></div>
+                            <div class="text-xs text-slate-400 mt-1" x-text="agent.department"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-900 rounded border border-slate-800 text-xs text-slate-400">
+                📌 <strong>Quy tắc hệ thống:</strong> Đảm bảo mọi file sinh ra &lt; 300 dòng và được đăng ký vào <code
+                    class="text-emerald-400">PROJECT_MAP.md</code>.
+            </div>
+        </aside>
+
+        <!-- Main Content Area: Chứa Tab hệ thống & Workspace -->
+        <main class="flex-1 flex flex-col bg-slate-950 overflow-y-auto">
+            <!-- Tabs Bar Header -->
+            <div class="flex border-b border-slate-800 bg-slate-900/40 px-4">
+                <button @click="activeTab = 'orchestrator'"
+                    :class="activeTab === 'orchestrator' ? 'border-emerald-500 text-emerald-400 bg-slate-800/60' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                    class="px-4 py-3 text-sm font-medium border-b-2 transition">
+                    🕹️ Viber Orchestrator
+                </button>
+                <button @click="activeTab = 'gold_calculator'"
+                    :class="activeTab === 'gold_calculator' ? 'border-amber-500 text-amber-400 bg-slate-800/60' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                    class="px-4 py-3 text-sm font-medium border-b-2 transition">
+                    📊 Quản lý Định mức Vàng
+                </button>
+                <button @click="activeTab = 'project_map'"
+                    :class="activeTab === 'project_map' ? 'border-emerald-500 text-emerald-400 bg-slate-800/60' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                    class="px-4 py-3 text-sm font-medium border-b-2 transition">
+                    🗺️ PROJECT_MAP.md
+                </button>
+            </div>
+
+            <!-- Tab Content 1: Điều phối tác vụ & Giao việc -->
+            <div x-show="activeTab === 'orchestrator'" class="p-6 space-y-6">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <h3 class="text-base font-semibold text-slate-200 mb-2">Gửi lệnh điều phối cho BOD_CEO_01</h3>
+                    <div class="flex gap-2">
+                        <input type="text" x-model="userPrompt"
+                            placeholder="Nhập yêu cầu nghiệp vụ hoặc ứng dụng mới..."
+                            class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500">
+                        <button @click="submitPrompt()"
+                            class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold px-5 py-2 rounded-lg text-sm transition">
+                            Phân rã & Thực thi
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <h3 class="text-base font-semibold text-slate-200 mb-3">Luồng phân rã tác vụ (Task Decomposition
+                        DAG)</h3>
+                    <div class="space-y-3">
+                        <template x-for="task in executionPlan" :key="task.step">
+                            <div
+                                class="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800">
+                                <div class="flex items-center space-x-3">
+                                    <span
+                                        class="w-6 h-6 rounded-full bg-slate-800 text-emerald-400 font-mono text-xs flex items-center justify-center font-bold"
+                                        x-text="task.step"></span>
+                                    <div>
+                                        <span class="text-xs font-mono font-semibold text-amber-400"
+                                            x-text="`[${task.assigned_to}]`"></span>
+                                        <span class="text-sm text-slate-300 ml-2" x-text="task.action"></span>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono text-slate-400" x-text="task.status"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 2: Quản lý Định mức Vàng (Tích hợp từ tab_gold_calculator.html) -->
+            <div x-show="activeTab === 'gold_calculator'" class="p-6">
+                <div class="p-6 space-y-6 bg-slate-900 rounded-xl border border-slate-800" x-data="goldCalcApp()">
+                    <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-amber-400">📊 Quản lý Định mức Vàng & Hao hụt Chế tác</h3>
+                            <p class="text-xs text-slate-400">Nghiệp vụ hạch toán trọng lượng vàng thô, vàng thành phẩm
+                                và tỷ lệ hao hụt cho phép.</p>
+                        </div>
+                        <span
+                            class="text-xs font-mono bg-amber-950 text-amber-400 border border-amber-800 px-2.5 py-1 rounded-full">
+                            Agent: BIZ_GOLD_CALC_01
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Trọng lượng Vàng thô
+                                (Chỉ)</label>
+                            <input type="number" step="0.01" x-model.number="rawWeight"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Trọng lượng Thành phẩm
+                                (Chỉ)</label>
+                            <input type="number" step="0.01" x-model.number="finishedWeight"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Định mức Hao hụt Cho phép
+                                (%)</label>
+                            <input type="number" step="0.1" x-model.number="allowedLossRate"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-3">
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Kết quả Hạch toán Chi
+                            tiết</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                                <div class="text-[11px] text-slate-400">Hao hụt Thực tế</div>
+                                <div class="text-base font-bold font-mono text-slate-100"
+                                    x-text="actualLoss().toFixed(3) + ' Chỉ'"></div>
+                            </div>
+                            <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                                <div class="text-[11px] text-slate-400">Tỷ lệ Hao hụt Thực tế</div>
+                                <div class="text-base font-bold font-mono"
+                                    :class="actualLossRate() > allowedLossRate ? 'text-rose-400' : 'text-emerald-400'"
+                                    x-text="actualLossRate().toFixed(2) + ' %'"></div>
+                            </div>
+                            <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                                <div class="text-[11px] text-slate-400">Hao hụt Cho phép</div>
+                                <div class="text-base font-bold font-mono text-slate-100"
+                                    x-text="allowedLoss().toFixed(3) + ' Chỉ'"></div>
+                            </div>
+                            <div class="bg-slate-900 p-3 rounded border border-slate-800">
+                                <div class="text-[11px] text-slate-400">Đánh giá Nghiệp vụ</div>
+                                <div class="text-xs font-bold mt-1 px-2 py-0.5 rounded"
+                                    :class="isOverAllowed() ? 'bg-rose-950 text-rose-400 border border-rose-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'"
+                                    x-text="isOverAllowed() ? 'VƯỢT ĐỊNH MỨC' : 'ĐẠT ĐỊNH MỨC'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 3: Xem Bản đồ Dự án -->
+            <div x-show="activeTab === 'project_map'" class="p-6">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <h3 class="text-base font-semibold text-slate-200 mb-2">Sơ đồ tổng thể hệ thống (PROJECT_MAP.md)
+                    </h3>
+                    <pre
+                        class="bg-slate-950 p-4 rounded-lg text-xs font-mono text-emerald-400 border border-slate-800 overflow-x-auto leading-relaxed">
+# BẢN ĐỒ CẤU TRÚC DỰ ÁN (PROJECT MAP)
+- /core:
+  - viber_orchestrator.py [~130 dòng]
+  - viber_sandbox.py [~70 dòng]
+- /agents:
+  - BOD_CEO_01.json
+  - BOD_HR_01.json
+  - ENG_VIBER_DEV_01.json
+  - QA_VIBER_TESTER_01.json
+- /workspace/tabs:
+  - index.html [~240 dòng]
+  - tab_gold_calculator.html [~140 dòng]
+          </pre>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function dashboardApp() {
+            return {
+                activeTab: 'orchestrator',
+                userPrompt: '',
+                agents: [
+                    { agent_id: 'BOD_CEO_01', display_name: 'CEO Điều phối', department: 'Khối Quản trị', status: 'READY' },
+                    { agent_id: 'BOD_HR_01', display_name: 'Giám đốc Nhân sự', department: 'Khối Quản trị', status: 'READY' },
+                    { agent_id: 'ENG_VIBER_DEV_01', display_name: 'Dev Vibercode', department: 'Khối Kỹ thuật', status: 'READY' },
+                    { agent_id: 'QA_VIBER_TESTER_01', display_name: 'QA Tester', department: 'Khối Kiểm thử', status: 'READY' }
+                ],
+                executionPlan: [
+                    { step: 1, assigned_to: 'BOD_CEO_01', action: 'Phân tích yêu cầu và kiểm tra PROJECT_MAP.md', status: 'SUCCESS' },
+                    { step: 2, assigned_to: 'ENG_VIBER_DEV_01', action: 'Sinh mã nguồn UI/Tab cho tính năng mới', status: 'SUCCESS' },
+                    { step: 3, assigned_to: 'QA_VIBER_TESTER_01', action: 'Chạy Static Syntax Analysis trong viber_sandbox.py', status: 'PASSED' }
+                ],
+                submitPrompt() {
+                    if (!this.userPrompt) return;
+                    alert('Đã gửi yêu cầu tới BOD_CEO_01: ' + this.userPrompt);
+                    this.userPrompt = '';
+                }
+            }
+        }
+
+        // Logic cho Tab Gold Calculator
+        function goldCalcApp() {
+            return {
+                rawWeight: 10.0,
+                finishedWeight: 9.85,
+                allowedLossRate: 1.2,
+                actualLoss() {
+                    return Math.max(0, this.rawWeight - this.finishedWeight);
+                },
+                actualLossRate() {
+                    if (!this.rawWeight) return 0;
+                    return (this.actualLoss() / this.rawWeight) * 100;
+                },
+                allowedLoss() {
+                    return (this.rawWeight * this.allowedLossRate) / 100;
+                },
+                isOverAllowed() {
+                    return this.actualLossRate() > this.allowedLossRate;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
