@@ -1,0 +1,89 @@
+<template>
+  <div>
+    <Stepper :steps="steps" :current-step="currentStep" @next="nextStep" @prev="prevStep" @complete="completeStep" />
+    <form v-if="currentStep === 1" @submit.prevent="submitStep1">
+      <InputField label="Ngày lập" v-model="formData.ngay_lap" type="date" />
+      <InputField label="Kho nhập" v-model="formData.kho_nhap" />
+      <InputField label="Chi nhánh" v-model="formData.chi_nhanh" />
+      <InputField label="Mô tả" v-model="formData.mo_ta" type="textarea" />
+      <InputField label="Chứng từ tham chiếu" v-model="formData.chung_tu_tham_chiêu" />
+      <Button type="submit">Tiếp tục</Button>
+    </form>
+    <form v-if="currentStep === 2" @submit.prevent="submitStep2">
+      <ItemLineForm v-for="(itemLine, index) in formData.item_lines" :key="index" v-model="formData.item_lines[index]" />
+      <Button type="submit">Tiếp tục</Button>
+    </form>
+    <form v-if="currentStep === 3" @submit.prevent="submitStep3">
+      <InputField label="Người duyệt" v-model="formData.nguoi_duyet" type="select" :options="users" />
+      <Button type="submit">Hoàn thành</Button>
+    </form>
+    <Button v-if="currentStep > 1" @click="prevStep">Quay lại</Button>
+    <Button v-if="currentStep < steps.length" @click="nextStep">Tiếp tục</Button>
+    <Button v-if="currentStep === steps.length" @click="completeStep">Hoàn thành</Button>
+  </div>
+</template>
+
+<script>
+import Stepper from './Stepper.vue';
+import InputField from './InputField.vue';
+import ItemLineForm from './ItemLineForm.vue';
+
+export default {
+  components: {
+    Stepper,
+    InputField,
+    ItemLineForm
+  },
+  data() {
+    return {
+      steps: ['Khởi tạo', 'Chờ duyệt', 'Đã/Không duyệt/Hủy'],
+      currentStep: 1,
+      formData: {
+        ngay_lap: '',
+        kho_nhap: '',
+        chi_nhanh: '',
+        mo_ta: '',
+        chung_tu_tham_chiêu: '',
+        nguoi_duyet: '',
+        item_lines: []
+      },
+      users: []
+    };
+  },
+  methods: {
+    nextStep() {
+      this.currentStep++;
+    },
+    prevStep() {
+      this.currentStep--;
+    },
+    completeStep() {
+      if (this.currentStep === 1) {
+        this.submitStep1();
+      } else if (this.currentStep === 2) {
+        this.submitStep2();
+      } else if (this.currentStep === 3) {
+        this.submitStep3();
+      }
+    },
+    submitStep1() {
+      // Logic xử lý form Step 1
+    },
+    submitStep2() {
+      // Logic xử lý form Step 2
+    },
+    submitStep3() {
+      // Logic xử lý form Step 3
+    }
+  },
+  created() {
+    // Logic lấy dữ liệu cho form
+    this.fetchUsers();
+  },
+  methods: {
+    fetchUsers() {
+      // Logic lấy danh sách người dùng
+    }
+  }
+};
+</script>

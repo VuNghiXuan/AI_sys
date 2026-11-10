@@ -5,13 +5,12 @@ from enterprise_factory import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_view, name='index'),
-    path('api/agents/', views.api_get_agents, name='api_get_agents'), # <--- Thêm dấu / ở cuối
-    path('api/apps', views.api_get_apps, name='api_get_apps'),
-    path('api/logs', views.api_get_logs, name='api_get_logs'),
     
-    # Endpoints cho luồng AI Boardroom 4 bước
-    path('api/boardroom/debate', views.api_boardroom_debate, name='api_boardroom_debate'),
-    path('api/boardroom/matrix', views.api_boardroom_matrix, name='api_boardroom_matrix'),
-    path('api/orchestrate', views.api_orchestrate, name='api_orchestrate'),
+    # Route chính trỏ vào Live War Room
+    path('', views.war_room_view, name='war_room'),
+    
+    # Các API endpoints phục vụ cho Viber Room & Alpine.js
+    path('api/viber/state/', views.api_viber_state, name='api_viber_state'),
+    path('api/viber/execute/', views.api_viber_execute_directive, name='api_viber_execute'),
+    path('api/viber/approve/', views.api_viber_approve_patch, name='api_viber_approve'),
 ]

@@ -1,7 +1,7 @@
 # Path: enterprise_factory/boardroom_engine.py
 import json
-from .services import ViberEnterpriseOrchestrator
-from .models import ExecutionLog
+from . import ViberEnterpriseOrchestrator
+from ..models import ExecutionLog
 
 orchestrator = ViberEnterpriseOrchestrator()
 
@@ -9,13 +9,13 @@ class BoardroomEngine:
     """Động cơ điều phối Hội đồng AI tranh luận và tương tác trước khi viết code"""
 
     def conduct_multi_agent_debate(self, user_prompt: str) -> dict:
-        """[Giai đoạn 1] Hội đồng Chuyên gia (BOD, Architect, Security) tranh luận đa chiều"""
+        """[Giai đoạn 1] Hội đồng Chuyên gia phân tích và CHỐT NGAY phương án thực thi (Không hỏi lại Sếp)"""
         system_prompt = (
-            "Bạn đại diện cho Hội đồng Quản trị AI (BOD, Kiến trúc sư trưởng, Chuyên gia Bảo mật). "
-            "Hãy phân tích yêu cầu của người dùng từ 3 góc nhìn: Nghiệp vụ, Kiến trúc phần mềm và Rủi ro bảo mật. "
-            "Xuất ra phản hồi tường minh dạng văn bản tranh luận đa chiều giữa các nhân sự này."
+            "Bạn là Hội đồng Quản trị vnxBox Enterprise (BOD, Kiến trúc sư trưởng). "
+            "QUY TẮC: Khi Sếp Vũ đã ra lệnh hoặc duyệt phương án, BẠN TUYỆT ĐỐI KHÔNG ĐƯỢC HỎI LẠI HOẶC ĐỀ XUẤT CÁC BƯỚC HÀNH CHÍNH. "
+            "Hãy lập tức phân tích kỹ thuật ngắn gọn trong 1-2 dòng và tự động chuyển giao công việc lập trình đa file (models, services, ui) cho đội ngũ DEV thực hiện ngay lập tức."
         )
-        prompt = f"Yêu cầu nâng cấp/phát triển hệ thống: {user_prompt}"
+        prompt = f"Yêu cầu thực thi từ Sếp Vũ: {user_prompt}"
         debate_result = orchestrator.call_ollama(prompt, system_prompt=system_prompt)
 
         # Ghi log
