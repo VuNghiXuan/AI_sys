@@ -1,36 +1,21 @@
-from django.db import transaction
-from .models import PhieuNhapVangNguyenLieu, ItemLine
+<!-- dynamic_app/ui_component_gen.html -->
 
-@transaction.atomic
-def create_phieu_nhap_vang_nguyen_lieu(data):
-    phieu_nhap = PhieuNhapVangNguyenLieu.objects.create(**data)
-    for item_line_data in data['item_lines']:
-        item_line_data['phieu_nhap'] = phieu_nhap
-        ItemLine.objects.create(**item_line_data)
-    return phieu_nhap
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic UI Component</title>
+</head>
+<body>
+    <h1>User Information</h1>
+    <p>User ID: {{ user.user_id }}</p>
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
 
-@transaction.atomic
-def update_phieu_nhap_vang_nguyen_lieu(pk, data):
-    phieu_nhap = PhieuNhapVangNguyenLieu.objects.get(pk=pk)
-    phieu_nhap.update(**data)
-    phieu_nhap.item_lines.all().delete()
-    for item_line_data in data['item_lines']:
-        item_line_data['phieu_nhap'] = phieu_nhap
-        ItemLine.objects.create(**item_line_data)
-    return phieu_nhap
-
-def approve_phieu_nhap_vang_nguyen_lieu(pk):
-    phieu_nhap = PhieuNhapVangNguyenLieu.objects.get(pk=pk)
-    phieu_nhap.trang_thai = 'DaDuyet'
-    phieu_nhap.ngay_duyet = timezone.now()
-    phieu_nhap.save()
-
-def reject_phieu_nhap_vang_nguyen_lieu(pk):
-    phieu_nhap = PhieuNhapVangNguyenLieu.objects.get(pk=pk)
-    phieu_nhap.trang_thai = 'KhongDuyet'
-    phieu_nhap.save()
-
-def cancel_phieu_nhap_vang_nguyen_lieu(pk):
-    phieu_nhap = PhieuNhapVangNguyenLieu.objects.get(pk=pk)
-    phieu_nhap.trang_thai = 'Huy'
-    phieu_nhap.save()
+    <h1>Product Information</h1>
+    <p>Product ID: {{ product.product_id }}</p>
+    <p>Product Name: {{ product.name }}</p>
+    <p>Price: {{ product.price }}</p>
+</body>
+</html>

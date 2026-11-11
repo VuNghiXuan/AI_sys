@@ -1,16 +1,18 @@
 # File: vnxbox_core/urls.py
 from django.contrib import admin
-from django.urls import path
-from enterprise_factory import views
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # Route chính trỏ vào Live War Room
-    path('', views.war_room_view, name='war_room'),
-    
-    # Các API endpoints phục vụ cho Viber Room & Alpine.js
-    path('api/viber/state/', views.api_viber_state, name='api_viber_state'),
-    path('api/viber/execute/', views.api_viber_execute_directive, name='api_viber_execute'),
-    path('api/viber/approve/', views.api_viber_approve_patch, name='api_viber_approve'),
+    # Bao gồm toàn bộ routing của enterprise_factory
+    path('', include('enterprise_factory.urls')),
 ]
+
+# Thêm cấu hình phục vụ static/media files khi đang chạy DEBUG = True trên ASGI/Daphne
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # Hoặc nếu Sếp để file trong app static:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

@@ -1,143 +1,177 @@
-// File: static/enterprise_factory/js/war_room.js
-document.addEventListener('alpine:init', () => {
-    Alpine.data('enterpriseApp', () => ({
-        agents: [],
-        discussions: [],
-        patches: [],
-        directiveText: '',
-        selectedCompany: 'GLOBAL',
-        loading: false,
+/**
+ * File: enterprise_factory/static/enterprise_factory/js/war_room.js
+ * Quản lý logic Alpine.js cho vnxBox Live War Room (WebSocket, @ Mention, Live Status Feed)
+ */
 
-        // --- CÁC BIẾN QUẢN LÝ SMART POLLING (NGỦ ĐÔNG THÔNG MINH) ---
-        pollInterval: 3000, // Mặc định 3 giây
-        idleTimer: 0,       // Bộ đếm thời gian rảnh rỗi
+function warRoom() {
+    return {
+        socket: null,
+        statusText: 'Đang kết nối WebSocket...',
+        directiveText: '',
+        loading: false,
+        agents: [],        // Danh sách nhân sự lấy từ DB
+        discussions: [],   // Lịch sử thảo luận từ DB
+        logs: [],          // Log WebSocket thời gian thực
+        patches: [],       // Bản vá code chờ duyệt
+
+        // Cấu hình popup @ Mention - Khai báo rõ ràng tại đây để Alpine.js nhận diện
+        showMentionMenu: false,
+        mentionFilter: '',
+        cursorPosition: 0,
 
         init() {
-            this.fetchState();
-            // Bắt đầu chạy vòng lặp thông minh
-            this.scheduleNextPoll();
+            console.log("[*] [WarRoom] Khởi tạo giao diện Live War Room...");
+            this.loadInitialData();
+            this.initWebSocket();
         },
 
-        // Vòng lặp đệ quy thông minh thay thế setInterval cứng nhắc
-        scheduleNextPoll() {
-            setTimeout(async () => {
-                await this.fetchState();
-                // Lên lịch gọi tiếp theo với tốc độ hiện tại (có thể đã giãn ra nếu rảnh)
-                this.scheduleNextPoll();
-            }, this.pollInterval);
-        },
-
-        async fetchState() {
+        // 1. Tải dữ liệu ban đầu từ Backend (Agents & Discussions)
+        async loadInitialData() {
             try {
-                let res = await fetch('/api/viber/state/');
-                let data = await res.json();
-                if (data.status === 'success') {
-                    this.agents = data.agents;
-                    this.discussions = data.discussions;
-                    this.patches = data.patches;
+                const response = await fetch('/api/war-room/init-data/');
+                if (response.ok) {
+                    const data = await response.json();
 
-                    // --- LOGIC TỰ ĐỘNG ĐIỀU CHỈNH NHỊP QUÉT ---
-                    let hasPending = this.patches && this.patches.some(p => p.status === 'PENDING');
+                    // Chuẩn hóa tuyệt đối role_type thành string uppercase để tránh lỗi .includes()
+                    this.agents = (data.agents || []).map(agent => ({
+                        ...agent,
+                        role_type: agent.role_type ? String(agent.role_type).toUpperCase() : 'GENERAL'
+                    }));
 
-                    if (!hasPending && !this.loading) {
-                        this.idleTimer += this.pollInterval;
-                        // Nếu im lặng quá 45 giây không có patch chờ hay AI đang chạy -> Giãn nhịp lên 10 giây tiết kiệm CPU
-                        if (this.idleTimer > 45000) {
-                            this.pollInterval = 10000;
-                        }
-                    } else {
-                        // Có việc bận (có patch chờ hoặc đang xử lý) -> Đưa về tốc độ real-time 3 giây ngay lập tức
-                        this.wakeUpFast();
+                    this.discussions = data.discussions || [];
+                    this.patches = data.patches || [];
+                }
+            } catch (e) {
+                console.warn("[!] [WarRoom] Không thể tải dữ liệu init qua HTTP (Dùng mock hoặc chạy qua WS):", e);
+                // Dữ liệu fallback chuẩn an toàn
+                this.agents = [
+                    { agent_id: 'BOD_CEO_01', display_name: 'Giám đốc Điều hành', role_type: 'BOD' },
+                    { agent_id: 'DEV_BE_01', display_name: 'Kỹ sư Backend Core', role_type: 'DEV_BE' },
+                    { agent_id: 'HR_MANAGER_01', display_name: 'Giám đốc Nhân sự', role_type: 'HR' },
+                    { agent_id: 'QA_TESTER_01', display_name: 'Kiểm định Chất lượng', role_type: 'QA' }
+                ];
+            }
+        },
+
+        // 2. Khởi tạo kết nối WebSocket Real-time
+        initWebSocket() {
+            const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+            const wsUrl = wsScheme + '://' + window.location.host + '/ws/war-room/';
+
+            this.socket = new WebSocket(wsUrl);
+
+            this.socket.onopen = () => {
+                this.statusText = '● Trực tuyến (Connected)';
+                console.log("[+] [WebSocket] Đã kết nối thành công tới vnxBox Core ASGI.");
+            };
+
+            this.socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log("[*] [WebSocket] Nhận message:", data);
+
+                if (data.status === 'broadcast') {
+                    this.logs.push({
+                        time: new Date().toLocaleTimeString(),
+                        text: `[${data.sender} -> ${data.target}] (${data.phase}): ${data.content}`
+                    });
+
+                    if (data.content) {
+                        this.discussions.unshift({
+                            id: Date.now(),
+                            agent_name: data.sender,
+                            message_content: data.content,
+                            created_at: new Date().toLocaleTimeString()
+                        });
                     }
                 }
-            } catch (err) {
-                console.error("Lỗi đồng bộ trạng thái phòng họp:", err);
-            }
+            };
+
+            this.socket.onclose = () => {
+                this.statusText = '✕ Mất kết nối (Disconnected)';
+                console.warn("[!] [WebSocket] Đã đóng kết nối. Đang thử kết nối lại sau 3s...");
+                setTimeout(() => this.initWebSocket(), 3000);
+            };
+
+            this.socket.onerror = (err) => {
+                this.statusText = '⚠ Lỗi kết nối WebSocket';
+                console.error("[-] [WebSocket Error]:", err);
+            };
         },
 
-        // Hàm đánh thức hệ thống chạy max speed ngay lập tức
-        wakeUpFast() {
-            this.pollInterval = 3000;
-            this.idleTimer = 0;
+        // 3. Click vào nhân sự ở Sidebar để tự động chèn @mention vào ô input
+        insertMention(agentId) {
+            this.directiveText = `@${agentId} ${this.directiveText}`;
+            this.showMentionMenu = false;
+            const inputEl = document.querySelector('input[type="text"]');
+            if (inputEl) inputEl.focus();
         },
 
-        async sendDirective() {
-            if (!this.directiveText.trim() || this.loading) return;
+        // 4. Gửi chỉ đạo qua WebSocket
+        sendDirective() {
+            if (!this.directiveText.trim()) return;
 
-            // Đánh thức ngay khi Sếp ra lệnh
-            this.wakeUpFast();
-
-            let text = this.directiveText;
-            this.directiveText = '';
             this.loading = true;
+            const text = this.directiveText;
 
-            try {
-                let res = await fetch('/api/viber/execute/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        directive_text: text,
-                        company_code: this.selectedCompany
-                    })
-                });
-                let data = await res.json();
-                if (data.status === 'success') {
-                    await this.fetchState();
-                } else {
-                    alert('Lỗi xử lý: ' + data.message);
+            let target = 'ALL';
+            if (text.includes('@all')) {
+                target = 'ALL';
+            } else {
+                const match = text.match(/@([A-Za-z0-9_]+)/);
+                if (match) {
+                    target = match[1];
                 }
-            } catch (err) {
-                console.error("Lỗi khi gửi chỉ đạo:", err);
-            } finally {
-                this.loading = false;
             }
+
+            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+                this.socket.send(JSON.stringify({
+                    action: 'chat',
+                    message: text,
+                    target_agent: target
+                }));
+
+                this.discussions.unshift({
+                    id: Date.now(),
+                    agent_name: 'Sếp Vũ',
+                    message_content: text,
+                    created_at: new Date().toLocaleTimeString()
+                });
+
+                this.directiveText = '';
+            } else {
+                alert("WebSocket chưa sẵn sàng kết nối. Vui lòng kiểm tra lại server Daphne!");
+            }
+
+            this.loading = false;
         },
 
+        // Phê duyệt bản vá code (Approve Patch)
         async approvePatch(patchId) {
-            if (!confirm("Sếp có chắc chắn muốn duyệt và áp dụng bản vá code này vào hệ thống?")) return;
+            alert(`Đang phê duyệt bản vá #${patchId}...`);
+        },
 
-            // Đánh thức ngay khi Sếp tương tác duyệt patch
-            this.wakeUpFast();
+        // Hủy bản vá code
+        async rejectPatch(patchId) {
+            this.patches = this.patches.filter(p => p.id !== patchId);
+        },
 
-            try {
-                let res = await fetch('/api/viber/approve/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ patch_id: patchId })
-                });
-                let data = await res.json();
-                if (data.status === 'success') {
-                    alert(data.message);
-                    await this.fetchState();
-                } else {
-                    alert('Lỗi duyệt patch: ' + data.message);
-                }
-            } catch (err) {
-                console.error("Lỗi khi duyệt patch:", err);
+        // 5. Kiểm tra ký tự '@' để hiển thị menu Popup Mention
+        checkMention(event) {
+            const val = this.directiveText;
+            const lastChar = val.slice(-1);
+            if (lastChar === '@' || (val.includes('@') && !val.slice(val.lastIndexOf('@')).includes(' '))) {
+                this.showMentionMenu = true;
+            } else {
+                this.showMentionMenu = false;
             }
         },
 
-        // Thêm hàm từ chối / hủy patch đã hoàn thiện
-        async rejectPatch(patchId) {
-            if (!confirm(`Sếp có chắc chắn muốn hủy bản vá ID #${patchId} này không?`)) return;
-
-            this.wakeUpFast();
-
-            try {
-                let res = await fetch('/api/viber/reject/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ patch_id: patchId })
-                });
-                let data = await res.json();
-                if (data.status === 'success') {
-                    await this.fetchState();
-                } else {
-                    alert('Lỗi hủy patch: ' + data.message);
-                }
-            } catch (err) {
-                console.error('Lỗi kết nối khi hủy patch:', err);
-            }
+        // 6. Chọn nhân sự từ menu Popup Mention
+        selectMention(mentionTag) {
+            this.directiveText = this.directiveText.replace(/@[^\s]*$/, '') + mentionTag + ' ';
+            this.showMentionMenu = false;
+            const inputEl = document.querySelector('input[type="text"]');
+            if (inputEl) inputEl.focus();
         }
-    }));
-});
+    }
+}

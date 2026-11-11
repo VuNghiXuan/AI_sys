@@ -1,0 +1,232 @@
+<!-- File: enterprise_factory/templates/enterprise_factory/war_room.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vnxBox Enterprise - Live War Room</title>
+
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Nạp file war_room.js TRƯỚC kèm ?v=102 để ép làm mới cache -->
+    <script src="{% static 'enterprise_factory/js/war_room.js' %}?v=103"></script>
+
+    <!-- 3. Nạp Alpine.js SAU CÙNG -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans antialiased h-screen flex flex-col overflow-hidden"
+    x-data="warRoom()">
+
+    <!-- Header Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-3">
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
+            <h1 class="text-xl font-bold tracking-wide text-emerald-400">
+                vnxBox Enterprise
+                <span class="text-xs text-slate-400 font-normal">| Live War Room (AI Boardroom & Real-time
+                    Stream)</span>
+            </h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <!-- Trạng thái kết nối WebSocket -->
+            <span class="text-xs bg-slate-800 px-3 py-1.5 rounded border border-slate-700 text-emerald-300 font-mono"
+                x-text="statusText"></span>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- Sidebar: Danh sách nhân sự AI trực chiến (Phân màu theo chức năng) -->
+        <aside class="w-80 bg-slate-900/60 border-r border-slate-800 flex flex-col">
+            <div class="p-4 border-b border-slate-800 bg-slate-900/80 flex justify-between items-center">
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Hội đồng Nhân sự AI</h2>
+                <span
+                    class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">Click
+                    để gọi @</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-3">
+                <template x-for="agent in agents" :key="agent.agent_id">
+                    <div @click="insertMention(agent.agent_id)"
+                        class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-3 shadow-sm cursor-pointer hover:border-emerald-500 transition group">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-sm text-slate-200 group-hover:text-emerald-400 transition"
+                                x-text="agent.display_name"></h3>
+                            <!-- Badge phân màu chuyên môn (Dùng String kiểm tra an toàn chống lỗi undefined) -->
+                            <span class="text-[10px] px-2 py-0.5 rounded font-mono border" :class="{
+                                'bg-red-950 text-red-300 border-red-800': String(agent.role_type || '') === 'BOD',
+                                'bg-blue-950 text-blue-300 border-blue-800': String(agent.role_type || '').includes('DEV'),
+                                'bg-purple-950 text-purple-300 border-purple-800': String(agent.role_type || '') === 'HR',
+                                'bg-emerald-950 text-emerald-300 border-emerald-800': String(agent.role_type || '') === 'QA'
+                            }" x-text="agent.role_type"></span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 font-mono flex items-center justify-between">
+                            <span x-text="'ID: ' + agent.agent_id"></span>
+                            <span class="inline-flex items-center gap-1 text-[10px] text-emerald-400">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Trực chiến
+                            </span>
+                        </p>
+                    </div>
+                </template>
+            </div>
+        </aside>
+
+        <!-- Center: Phòng họp trực tuyến & Dòng thời gian thảo luận -->
+        <main class="flex-1 flex flex-col bg-slate-950 relative">
+
+            <!-- Tab nội dung phòng họp -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col-reverse" id="chat-stream">
+
+                <!-- 1. Hiển thị Lịch sử Thảo luận & Tin nhắn Real-time -->
+                <template x-for="item in discussions" :key="item.id || item.created_at">
+                    <div class="flex flex-col my-2 w-full animate-fadeIn"
+                        :class="item.agent_name === 'Sếp Vũ' || item.agent_name === 'USER' ? 'items-end' : 'items-start'">
+
+                        <!-- Tiêu đề người gửi & Thời gian -->
+                        <div class="flex items-center space-x-2 mb-1 text-xs px-1">
+                            <span class="font-bold px-2.5 py-0.5 rounded border shadow-sm" :class="{
+                                'bg-indigo-950 text-indigo-300 border-indigo-800': item.agent_name === 'Sếp Vũ' || item.agent_name === 'USER',
+                                'bg-red-950 text-red-300 border-red-800': String(item.agent_name || '').includes('BOD'),
+                                'bg-blue-950 text-blue-300 border-blue-800': String(item.agent_name || '').includes('DEV'),
+                                'bg-purple-950 text-purple-300 border-purple-800': String(item.agent_name || '').includes('HR'),
+                                'bg-emerald-950 text-emerald-300 border-emerald-800': !String(item.agent_name || '').includes('BOD') && !String(item.agent_name || '').includes('DEV') && !String(item.agent_name || '').includes('HR') && item.agent_name !== 'Sếp Vũ'
+                            }" x-text="item.agent_name">
+                            </span>
+                            <span class="text-[10px] text-slate-500 font-mono" x-text="item.created_at"></span>
+                        </div>
+
+                        <!-- Khung chứa nội dung chat -->
+                        <div class="rounded-2xl px-4 py-3 max-w-2xl shadow-md text-sm leading-relaxed"
+                            :class="item.agent_name === 'Sếp Vũ' || item.agent_name === 'USER' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none'">
+                            <p class="whitespace-pre-wrap font-sans" x-text="item.message_content"></p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- 2. Hiển thị Log hệ thống WebSocket real-time -->
+                <template x-for="log in logs.slice().reverse()" :key="log.time + log.text">
+                    <div class="flex flex-col items-start my-1 opacity-90">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <span
+                                class="text-xs font-bold text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800">
+                                ⚡ Hoạt động tác nhân AI
+                            </span>
+                            <span class="text-[10px] text-slate-500 font-mono" x-text="log.time"></span>
+                        </div>
+                        <div
+                            class="bg-slate-900/80 border border-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-3xl shadow-sm">
+                            <p class="text-xs text-amber-200/90 whitespace-pre-wrap font-mono" x-text="log.text"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Bản vá code chờ duyệt (Pending Patches Panel) -->
+            <div class="bg-slate-900 border-t border-slate-800 p-4 max-h-48 overflow-y-auto"
+                x-show="patches && patches.length > 0">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                            BẢN VÁ CODE CHỜ SẾP PHÊ DUYỆT (<span x-text="patches.length"></span>)
+                        </h3>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <template x-for="patch in patches" :key="patch.id">
+                        <div
+                            class="bg-slate-950 border border-slate-800 rounded-lg p-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span
+                                    class="text-xs font-mono text-sky-400 bg-sky-950/60 px-2 py-1 rounded border border-sky-800/50"
+                                    x-text="patch.target_file"></span>
+                                <span class="text-xs text-slate-400 font-mono" x-text="'ID: #' + patch.id"></span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button @click="approvePatch(patch.id)"
+                                    class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded font-semibold transition">
+                                    ✓ Approve & Apply
+                                </button>
+                                <button @click="rejectPatch(patch.id)"
+                                    class="bg-rose-600/80 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded font-semibold transition">
+                                    ✕ Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Fixed Bottom Input Bar (Tích hợp Menu Gợi ý @ Mention khi gõ phím @) -->
+            <div class="bg-slate-900 border-t border-slate-800 p-4 relative">
+
+                <!-- POPUP GỢI Ý KHI NHẤN PHÍM @ -->
+                <div x-show="showMentionMenu"
+                    class="absolute bottom-20 left-4 w-80 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50 animate-fadeIn">
+                    <div
+                        class="px-3 py-2 bg-slate-800 text-xs font-semibold text-slate-400 border-b border-slate-700 flex justify-between items-center">
+                        <span>🎯 Chọn nhân sự hoặc phòng ban</span>
+                        <span class="text-[10px] text-emerald-400 font-mono">Dùng Phím @</span>
+                    </div>
+                    <div class="max-h-52 overflow-y-auto p-1 space-y-1">
+                        <!-- Option @all -->
+                        <div @click="selectMention('@all')"
+                            class="px-3 py-2.5 hover:bg-amber-950/80 hover:text-amber-200 rounded-lg cursor-pointer flex items-center justify-between text-sm text-amber-400 font-bold border border-amber-900/50 bg-amber-950/30">
+                            <span>@all (Toàn bộ tập đoàn)</span>
+                            <span
+                                class="text-[10px] bg-amber-900 text-amber-200 px-2 py-0.5 rounded font-mono">Broadcast</span>
+                        </div>
+
+                        <!-- Danh sách nhân sự động từ DB -->
+                        <template x-for="agent in agents" :key="agent.agent_id">
+                            <div @click="selectMention('@' + agent.agent_id)"
+                                class="px-3 py-2.5 hover:bg-slate-800 rounded-lg cursor-pointer flex items-center justify-between text-sm transition">
+                                <div class="flex flex-col">
+                                    <span class="font-semibold text-slate-200" x-text="agent.display_name"></span>
+                                    <span class="text-[10px] text-slate-400 font-mono"
+                                        x-text="'@' + agent.agent_id"></span>
+                                </div>
+                                <span class="text-[10px] px-2 py-0.5 rounded font-mono border" :class="{
+                                    'bg-red-950 text-red-300 border-red-800': String(agent.role_type || '') === 'BOD',
+                                    'bg-blue-950 text-blue-300 border-blue-800': String(agent.role_type || '').includes('DEV'),
+                                    'bg-purple-950 text-purple-300 border-purple-800': String(agent.role_type || '') === 'HR',
+                                    'bg-emerald-950 text-emerald-300 border-emerald-800': String(agent.role_type || '') === 'QA'
+                                }" x-text="agent.role_type"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Form Gửi Chỉ Đạo -->
+                <form @submit.prevent="sendDirective()" class="flex space-x-3">
+                    <input type="text" x-model="directiveText" @input="checkMention($event)"
+                        placeholder="Nhập lệnh chỉ đạo (Gõ '@' để gọi nhân sự, vd: @DEV_BE_01 Viết code hoặc @all Báo cáo)..."
+                        class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+
+                    <button type="submit" :disabled="loading"
+                        class="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold px-6 py-3 rounded-lg text-sm shadow-md transition flex items-center justify-center min-w-[140px]">
+                        <span x-show="!loading">🚀 Gửi Chỉ Đạo</span>
+                        <span x-show="loading" class="flex items-center space-x-2">
+                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            <span>Đang xử lý...</span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
