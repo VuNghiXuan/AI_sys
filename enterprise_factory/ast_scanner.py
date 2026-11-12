@@ -1,90 +1,78 @@
 # File: enterprise_factory/ast_scanner.py
-"""
-AST Scanner & Code Inspector cho vnxBox Enterprise.
-Chịu trách nhiệm quét cấu trúc mã nguồn, kiểm tra định mức dưới 300 dòng/file,
-trích xuất danh sách Class/Function và đồng bộ hóa vào Django ORM (ProjectNode).
-"""
-
-import ast
 import os
-from .models import ProjectNode, AgentRegistry
+import ast
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ASTCodeScanner:
-    """Bộ phân tích cú pháp trừu tượng (AST) để kiểm định chất lượng mã nguồn Vibercode"""
+    def __init__(self, project_root="."):
+        self.project_root = project_root
 
-    @staticmethod
-    def scan_file(file_path: str, company_code: str = None, agent_id: str = None) -> dict:
+    def scan_file(self, file_path):
         """
-        Quét một file mã nguồn Python, đếm số dòng, trích xuất classes/functions
-        và kiểm tra xem có vi phạm giới hạn < 300 dòng hay không.
+        Quét file thông minh:
+        - Nếu là file .py: Dùng AST trích xuất classes, methods, imports chi tiết cho AI học code.
+        - Nếu là file khác (.html, .js, .json, v.v.): Ghi nhận metadata và nội dung thô 
+          để AI có mẫu mà tham chiếu, sửa đổi sau này.
         """
-        if not os.path.exists(file_path):
-            return {
-                "success": False,
-                "error": f"Không tìm thấy file tại đường dẫn: {file_path}"
-            }
-
+        result = {
+            "file_path": file_path,
+            "file_type": "python" if file_path.endswith(".py") else "asset/markup",
+            "classes": [],
+            "functions": [],
+            "imports": [],
+            "raw_snippet": ""
+        }
+        
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                code_content = f.read()
-
-            # 1. Đếm số dòng thực tế
-            lines = code_content.splitlines()
-            line_count = len(lines)
-
-            # 2. Phân tích AST để lấy danh sách Class và Function
-            tree = ast.parse(code_content)
-            classes_defined = []
-            functions_defined = []
-
-            for node in ast.walk(tree):
-                if isinstance(node, ast.ClassDef):
-                    classes_defined.append({
-                        "name": node.name,
-                        "lineno": node.lineno
-                    })
-                elif isinstance(node, ast.FunctionDef):
-                    functions_defined.append({
-                        "name": node.name,
-                        "lineno": node.lineno
-                    })
-
-            # 3. Kiểm tra vi phạm giới hạn dòng code (< 300 dòng)
-            is_oversized = line_count > 300
-
-            # 4. Lưu hoặc cập nhật vào ProjectNode trong cơ sở dữ liệu
-            agent_obj = AgentRegistry.objects.filter(agent_id=agent_id).first() if agent_id else None
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
             
-            project_node, created = ProjectNode.objects.update_or_create(
-                path=file_path,
-                defaults={
-                    "line_count": line_count,
-                    "created_by_agent": agent_obj,
-                    "classes_defined": classes_defined,
-                    "functions_defined": functions_defined
-                }
-            )
+            # Xử lý riêng cho file Python bằng AST
+            if file_path.endswith(".py"):
+                tree = ast.parse(content, filename=file_path)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.ClassDef):
+                        methods = [n.name for n in node.body if isinstance(n, ast.FunctionDef)]
+                        result["classes"].append({
+                            "name": node.name,
+                            "methods": methods
+                        })
+                    elif isinstance(node, ast.FunctionDef):
+                        result["functions"].append(node.name)
+                    elif isinstance(node, (ast.Import, ast.ImportFrom)):
+                        for alias in node.names:
+                            result["imports"].append(alias.name)
+                logger.info(f"Đã quét thành công Python AST: {file_path}")
+            else:
+                # Đối với các file non-Python (.html, .js, .css, .md...), lưu lại một phần snippet 
+                # để AI nắm bắt cấu trúc mẫu khi cần tra cứu/sửa code.
+                result["raw_snippet"] = content[:500] # Lưu 500 ký tự đầu làm mẫu ngữ cảnh
+                logger.info(f"Đã lập chỉ mục Asset/Markup file cho AI: {file_path}")
 
-            return {
-                "success": True,
-                "file_path": file_path,
-                "line_count": line_count,
-                "is_oversized": is_oversized,
-                "warning": "⚠️ CẢNH BÁO: File vượt quá định mức 300 dòng! Cần thực hiện File Splitting." if is_oversized else None,
-                "classes_count": len(classes_defined),
-                "functions_count": len(functions_defined)
-            }
-
-        except SyntaxError as se:
-            return {
-                "success": False,
-                "error_type": "SyntaxError",
-                "message": f"Lỗi cú pháp Python tại dòng {se.lineno}: {se.msg}"
-            }
         except Exception as e:
-            return {
-                "success": False,
-                "error_type": type(e).__name__,
-                "message": str(e)
-            }
+            # Bắt lỗi an toàn tuyệt đối, không làm sập tiến trình khởi động hệ thống khi gặp file HTML/XML đặc biệt
+            logger.warning(f"Bỏ qua phân tích cú pháp sâu cho file {file_path} (Lỗi: {e})")
+            
+        return result
+
+    def scan_project(self):
+        """Quét toàn bộ thư mục project để lập bản đồ tri thức toàn diện cho AI codebase"""
+        codebase_map = []
+        try:
+            for root, dirs, files in os.walk(self.project_root):
+                # Bỏ qua các thư mục hệ thống, cache, môi trường ảo
+                if any(p in root for p in ['.git', '__pycache__', 'env', 'migrations', 'static']):
+                    continue
+                for file in files:
+                    # Quét toàn bộ các định dạng file phục vụ cho AI lập trình & thiết kế
+                    if file.endswith((".py", ".html", ".js", ".css", ".json", ".md")):
+                        full_path = os.path.join(root, file)
+                        codebase_map.append(self.scan_file(full_path))
+                        
+            logger.info("Hoàn tất quét toàn diện project codebase (Python + Assets) thành công cho AI.")
+        except Exception as e:
+            logger.error(f"Lỗi quét project codebase: {e}", exc_info=True)
+            
+        return codebase_map

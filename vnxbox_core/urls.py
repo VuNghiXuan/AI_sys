@@ -3,12 +3,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Bao gồm toàn bộ routing của enterprise_factory
     path('', include('enterprise_factory.urls')),
+    path('favicon.ico', lambda x: HttpResponse(status=204)),
 ]
 
 # Thêm cấu hình phục vụ static/media files khi đang chạy DEBUG = True trên ASGI/Daphne

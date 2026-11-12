@@ -1,147 +1,159 @@
-"""
-WebSocket Consumer cho Live War Room của vnxBox Enterprise.
-Hỗ trợ @ Mention nhân sự, phân luồng action, tranh luận hội đồng BOD - DEV - HR theo thời gian thực.
-"""
+# File: enterprise_factory/consumers.py
 import logging
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from enterprise_factory.models import AgentRegistry
+from enterprise_factory.models import AgentRegistry, AgentDiscussion, Company
+from enterprise_factory.intent_router import IntentRouter
+from enterprise_factory.services.orchestrator import ask_local_agent
 
 logger = logging.getLogger(__name__)
 
 
 class WarRoomConsumer(AsyncWebsocketConsumer):
-    """Kênh WebSocket quản lý phòng họp trực tuyến và trạng thái hoạt động của nhân sự AI"""
-
     async def connect(self):
         self.room_group_name = "live_war_room_global"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
-        logger.info(f"[*] [WS_CONNECT] Kết nối War Room thành công (Channel ID: {self.channel_name})")
+        print(f"[+] [WS_CONNECT] Client đã kết nối thành công vào War Room. Channel Name: {self.channel_name}")
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-        logger.info(f"[*] [WS_DISCONNECT] Ngắt kết nối War Room. Code: {close_code}")
+        print(f"[-] [WS_DISCONNECT] Client ngắt kết nối. Code: {close_code}")
 
     @database_sync_to_async
     def get_all_active_agents(self):
-        """Lấy toàn bộ danh sách nhân sự AI trực chiến từ Database"""
         return list(AgentRegistry.objects.select_related('role').all())
 
     @database_sync_to_async
     def get_specific_agent(self, agent_id):
-        """Lấy thông tin nhân sự cụ thể theo ID khi được @mention"""
+        return AgentRegistry.objects.select_related('role').filter(agent_id=agent_id).first()
+
+    @database_sync_to_async
+    def save_and_get_context(self, sender_name: str, content: str) -> str:
+        """Lưu tin nhắn vào DB và in log xác nhận"""
+        company = Company.objects.filter(code='GLOBAL').first()
         try:
-            return AgentRegistry.objects.select_related('role').get(agent_id=agent_id)
-        except AgentRegistry.DoesNotExist:
-            return None
+            kwargs = {'company': company, 'message_content': content}
+            if hasattr(AgentDiscussion, 'agent_name'):
+                kwargs['agent_name'] = sender_name
+            elif hasattr(AgentDiscussion, 'sender'):
+                kwargs['sender'] = sender_name
+            
+            created_obj = AgentDiscussion.objects.create(**kwargs)
+            print(f"[DB] Đã lưu message thành công | ID: {created_obj.id} | Sender: {sender_name} | Content: {content[:30]}...")
+        except Exception as ex:
+            try:
+                AgentDiscussion.objects.create(company=company, message_content=content)
+                print(f"[DB-Fallback] Đã lưu message không có trường sender/agent_name.")
+            except Exception as e:
+                logger.warning(f"[!] Không thể lưu AgentDiscussion vào DB: {e}")
+
+        recent_msgs = AgentDiscussion.objects.order_by('-id')[:6]
+        history = [f"{getattr(m, 'agent_name', getattr(m, 'sender', 'Chat'))}: {m.message_content}" for m in reversed(recent_msgs)]
+        return "\n".join(history)
+
+    @database_sync_to_async
+    def call_llm_sync(self, system_prompt: str, user_prompt: str) -> str:
+        print(f"[LLM] Đang gọi Ollama... Prompt length: {len(user_prompt)}")
+        response = ask_local_agent(system_prompt, user_prompt, timeout_seconds=60)
+        print(f"[LLM] Nhận phản hồi từ Ollama xong. Response length: {len(response) if response else 0}")
+        return response
 
     async def receive(self, text_data):
-        """Nhận chỉ đạo, tin nhắn hoặc hành động @ mention từ Sếp"""
-        logger.debug(f"[DEBUG] [WS_RECEIVE] Raw payload: {text_data}")
-        
+        print(f"\n[INCOMING WS RAW] -> {text_data}")
         try:
             data = json.loads(text_data)
-            action = data.get('action', 'chat')
-            message = data.get('message', '')
+            message = data.get('message', '').strip()
             target_agent = data.get('target_agent', 'ALL')
+            if not message:
+                print("[!] Message rỗng, bỏ qua.")
+                return
 
-            logger.info(f"[*] [WS_ACTION] Action: '{action}' | Target: '{target_agent}' | Nội dung: '{message}'")
+            # Cố định tên Sếp Vũ chuẩn xác 100%
+            sender_user = 'Sếp Vũ'
 
-            # 1. Broadcast tin nhắn chỉ đạo của Sếp xuống phòng họp
+            # 1. Broadcast tin nhắn của Sếp
+            print(f"[BROADCAST] Đẩy tin nhắn của '{sender_user}' xuống group...")
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'broadcast_message',
-                    'sender': 'Sếp Vũ',
+                    'sender': sender_user,
                     'target': target_agent,
                     'phase': 'DIRECTIVE',
-                    'content': message,
-                    'agent_status': 'LISTENING'
+                    'content': message
+                }
+            )
+            await self.save_and_get_context(sender_user, message)
+
+            # --- ROUTING & DELEGATION ---
+            msg_lower = message.lower()
+            if target_agent == 'ALL':
+                if any(kw in msg_lower for kw in ['hr', 'nhân sự', 'nhân viên', 'tuyển dụng', 'gọi hr']):
+                    target_agent = 'HR_MANAGER_01'
+                elif any(kw in msg_lower for kw in ['dev', 'lập trình', 'code', 'fix bug', 'lỗi']):
+                    target_agent = 'DEV_BE_01'
+
+            agent_obj = None
+            if target_agent != 'ALL':
+                agent_obj = await self.get_specific_agent(target_agent)
+            if not agent_obj:
+                agent_obj = await self.get_specific_agent('BOD_CEO_01')
+
+            sender_name = agent_obj.display_name if agent_obj else 'BOD CEO (Tổng Giám Đốc AI)'
+            agent_code = agent_obj.agent_id if agent_obj else 'BOD_CEO_01'
+            domain_scope = agent_obj.domain_scope if agent_obj else 'GLOBAL_MANAGEMENT'
+
+            print(f"[ROUTING] Target Agent được chọn: {agent_code} ({sender_name})")
+
+            system_prompt = (
+                f"Bạn là {sender_name} ({agent_code}) của tập đoàn vnxBox Enterprise.\n"
+                f"Chức năng: {domain_scope}.\n"
+                f"Sếp Vũ vừa chỉ đạo: '{message}'.\n"
+                f"Quy tắc bắt buộc: Luôn xưng 'em' hoặc 'tôi' với Sếp Vũ, trả lời cực kỳ ngắn gọn, sắc sảo, thực tế, "
+                f"không bao giờ nói 'tôi là trợ lý AI' hay 'tôi không thể giúp'."
+            )
+
+            routing = IntentRouter.route(message)
+            tier = routing['tier']
+            print(f"[ROUTER] Intent Tier: {tier} | Code: {routing.get('intent_code')}")
+
+            if tier == 2:
+                agents = await self.get_all_active_agents()
+                agent_details = "\n".join([f"- **{ag.display_name}** (`{ag.agent_id}`): {ag.domain_scope}" for ag in agents])
+                response_text = f"📊 **[Báo cáo Nhân sự]**: Hiện tại ma trận có **{len(agents)} nhân sự AI** trực chiến:\n{agent_details}"
+                sender_name = 'HR Director (Giám Đốc Nhân Sự AI)'
+            else:
+                response_text = await self.call_llm_sync(system_prompt, message)
+                if not response_text or "không thể" in response_text or "trợ lý AI" in response_text:
+                    response_text = f"Dạ báo cáo Sếp, việc này để em chỉ đạo ban điều hành rà soát và báo cáo chi tiết lại ngay ạ!"
+
+            # 2. Broadcast câu trả lời của AI
+            print(f"[BROADCAST] Đẩy phản hồi của AI '{sender_name}' xuống group...")
+            await self.save_and_get_context(sender_name, response_text)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'broadcast_message',
+                    'sender': sender_name,
+                    'target': target_agent,
+                    'phase': routing.get('intent_code', 'GENERAL'),
+                    'content': response_text
                 }
             )
 
-            # 2. Xử lý phản hồi đa chiều từ Hội đồng AI (BOD, DEV, HR)
-            if target_agent == 'ALL' or 'app' in message.lower() or 'viết' in message.lower() or 'bán vàng' in message.lower():
-                # Kịch bản phòng họp sôi động: Cả BOD, DEV và HR cùng vào tranh luận phân tích dự án
-                agents = await self.get_all_active_agents()
-                
-                for ag in agents:
-                    role_code = ag.role.role_code if ag.role else 'GENERAL'
-                    content_response = self.generate_expert_response(ag.display_name, role_code, message)
-                    
-                    await self.channel_layer.group_send(
-                        self.room_group_name,
-                        {
-                            'type': 'broadcast_message',
-                            'sender': ag.display_name,
-                            'target': 'ALL',
-                            'phase': 'DEBATE_CONSENSUS',
-                            'content': content_response,
-                            'agent_status': 'WORKING'
-                        }
-                    )
-            else:
-                # Trường hợp Sếp gọi riêng một chuyên gia cụ thể qua @mention
-                agent_obj = await self.get_specific_agent(target_agent)
-                if agent_obj:
-                    role_code = agent_obj.role.role_code if agent_obj.role else 'GENERAL'
-                    content_response = f"Tuân lệnh Sếp! Với tư cách là {agent_obj.display_name} ({agent_obj.domain_scope}), tôi đã tiếp nhận yêu cầu: '{message}'. Tiến hành lập đồ thị DAG thực thi ngay."
-                    
-                    await self.channel_layer.group_send(
-                        self.room_group_name,
-                        {
-                            'type': 'broadcast_message',
-                            'sender': agent_obj.display_name,
-                            'target': target_agent,
-                            'phase': 'FOCUSED_TASK',
-                            'content': content_response,
-                            'agent_status': 'CODING'
-                        }
-                    )
-
         except Exception as e:
             logger.error(f"[-] [WS_ERROR] Lỗi xử lý message: {str(e)}", exc_info=True)
-
-    def generate_expert_response(self, agent_name, role_type, user_msg):
-        """Hàm mô phỏng chuyên gia AI phản hồi thông minh theo đúng vai trò CEO và Giám đốc Nhân sự"""
-        msg_lower = user_msg.lower()
-        role_upper = str(role_type).upper()
-        name_lower = agent_name.lower()
-        
-        # 1. Giám đốc Nhân sự (HR)
-        if 'hr' in role_upper or 'nhân sự' in name_lower:
-            return (
-                f"📊 **[Giám đốc Nhân sự]**: Dạ, tôi đã có mặt thưa Sếp! "
-                f"Liên quan đến yêu cầu '{user_msg}', tôi sẽ kích hoạt ngay **HR Spawner Engine** để rà soát ma trận nhân sự, "
-                f"đánh giá năng lực các Agent hiện tại và tiến hành cấp phát tài nguyên, tuyển dụng bổ sung chuyên gia nếu thiếu hụt."
-            )
-        
-        # 2. Tổng Giám đốc / CEO (BOD)
-        elif 'bod' in role_upper or 'ceo' in role_upper or 'giám đốc điều hành' in name_lower:
-            return (
-                f"🎯 **[CEO / Tổng Giám đốc]**: Đã tiếp nhận chỉ đạo trọng tâm của Sếp: '{user_msg}'. "
-                f"Tôi yêu cầu toàn bộ ban điều hành và các phòng ban lập tức bóc tách ma trận nghiệp vụ, "
-                f"phối hợp chặt chẽ với Giám đốc Nhân sự để đưa dự án vào tiến độ Sprint thực thi."
-            )
-        
-        # 3. Các chuyên gia kỹ thuật khác (Dev, QA,...)
-        elif 'dev' in role_upper or 'backend' in name_lower:
-            return (
-                f"💻 **[Dev Core]**: Đã nhận lệnh từ Sếp. Sẵn sàng hiện thực hóa kiến trúc Django, SQLite và Alpine.js "
-                f"với chuẩn quan hệ dữ liệu N-1 cho hệ thống vận hành."
-            )
-        else:
-            return f"🤖 **[{agent_name}]**: Đã ghi nhận chỉ đạo của Sếp và sẵn sàng phối hợp cùng Ban Tổng Giám đốc."
+            print(f"[-] [WS_ERROR EXCEPTION]: {str(e)}")
 
     async def broadcast_message(self, event):
-        """Đẩy dữ liệu và trạng thái hành động xuống giao diện qua WebSocket"""
-        await self.send(text_data=json.dumps({
+        payload = {
             'status': 'broadcast',
             'sender': event.get('sender'),
             'target': event.get('target', 'ALL'),
             'phase': event.get('phase', 'GENERAL'),
-            'content': event.get('content'),
-            'agent_status': event.get('agent_status', 'ONLINE')
-        }))
+            'content': event.get('content')
+        }
+        print(f"[WS SEND TO CLIENT] -> Sender: {payload['sender']} | Content: {payload['content'][:30]}...")
+        await self.send(text_data=json.dumps(payload))

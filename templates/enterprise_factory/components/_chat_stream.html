@@ -1,0 +1,29 @@
+<!-- File: enterprise_factory/templates/enterprise_factory/components/_chat_stream.html -->
+<!-- CHỨC NĂNG: Hiển thị danh sách tin nhắn, phân định lề phải cho Sếp Vũ, lề trái cho Agent với màu sắc phân cấp theo vai trò -->
+<div class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col-reverse" id="chat-stream">
+    <template x-for="item in discussions" :key="item.id || item.created_at">
+        <div class="flex flex-col my-3 w-full animate-fadeIn"
+            :class="isUserMessage(item.agent_name) ? 'items-end' : 'items-start'">
+
+            <!-- Tiêu đề người gửi & Thời gian -->
+            <div class="flex items-center space-x-2 mb-1 text-xs px-1"
+                :class="isUserMessage(item.agent_name) ? 'flex-row-reverse space-x-reverse' : ''">
+
+                <!-- Nhãn tên (Sếp Vũ màu tím đậm, Agent phân màu theo hệ thống) -->
+                <span class="font-bold px-2.5 py-0.5 rounded border shadow-sm font-mono"
+                    :class="isUserMessage(item.agent_name) ? 'bg-indigo-950 text-indigo-300 border-indigo-800' : getAgentBadgeClass(item.agent_name)"
+                    x-text="getSenderLabel(item.agent_name)">
+                </span>
+
+                <!-- Thời gian -->
+                <span class="text-[10px] text-slate-500 font-mono" x-text="item.created_at"></span>
+            </div>
+
+            <!-- Khung chứa nội dung chat -->
+            <div class="rounded-2xl px-4 py-3 max-w-2xl shadow-md text-sm leading-relaxed"
+                :class="isUserMessage(item.agent_name) ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none'">
+                <p class="whitespace-pre-wrap font-sans" x-text="item.message_content"></p>
+            </div>
+        </div>
+    </template>
+</div>

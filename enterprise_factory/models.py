@@ -6,7 +6,23 @@ Hỗ trợ quản lý đa công ty, hồ sơ nhân sự AI động, phân rã ta
 
 from django.db import models
 
+# File: enterprise_factory/models.py (Bổ sung model SystemConfig)
 
+class SystemConfig(models.Model):
+    """Bảng lưu cấu hình hệ thống / Tenant Owner động phục vụ thương mại hóa"""
+    key = models.CharField(max_length=100, unique=True, verbose_name="Khóa cấu hình")
+    value = models.TextField(verbose_name="Giá trị")
+    description = models.TextField(blank=True, null=True, verbose_name="Mô tả")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Cập nhật lần cuối")
+
+    def __str__(self):
+        return f"{self.key} = {self.value}"
+
+    class Meta:
+        verbose_name = "Cấu hình Hệ thống"
+        verbose_name_plural = "Danh mục Cấu hình Hệ thống"
+
+        
 class Company(models.Model):
     """Bảng quản lý khối ngành / tập đoàn đa lĩnh vực"""
     code = models.CharField(max_length=50, primary_key=True, help_text="Mã định danh (VD: GLOBAL, HTJ)")

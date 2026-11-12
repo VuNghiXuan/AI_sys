@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # App Django Channels (Real-time WebSocket)
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +46,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'channels',
-    
+
     # Local Enterprise Factory App
     'enterprise_factory',
 
@@ -117,13 +120,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# Đổi từ 'UTC' sang múi giờ của Việt Nam
+LANGUAGE_CODE = 'vi'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
-USE_TZ = True
+# Nếu muốn lưu giờ local chính xác tuyệt đối theo timezone hệ thống:
+USE_TZ = False  # Đổi thành False để Django dùng giờ trực tiếp theo TIME_ZONE trên vô hiệu hóa lệch UTC
 
 
 # Static files (CSS, JavaScript, Images)

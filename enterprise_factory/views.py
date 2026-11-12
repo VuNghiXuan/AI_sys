@@ -20,7 +20,7 @@ from enterprise_factory.models import (
     AgentDiscussion, CodePatchProposal, AgentTaskDAG
 )
 from enterprise_factory.services.dag_executor import DAGTaskEngine
-from enterprise_factory.services.intent_router import classify_user_intent
+from enterprise_factory.intent_router import classify_user_intent
 from enterprise_factory.services.orchestrator import ask_local_agent
 
 from channels.layers import get_channel_layer

@@ -1,14 +1,14 @@
 """
 DAG Task Decomposition & Execution Engine cho vnxBox Enterprise.
-Tích hợp Intent Router để phân loại ý định (Chào hỏi, Họp, Tuyển dụng, Viết code) 
-trước khi phân rã task DAG.
+Tích hợp Intent Router để phân loại ý định trước khi phân rã task DAG.
+Đã tinh gọn để chặn đứng hiện tượng multi-agent broadcast đồng loạt.
 """
 import logging
 import json
 from enterprise_factory.models import AgentTaskDAG, AgentRegistry, AgentDiscussion
 from enterprise_factory.services.orchestrator import ask_local_agent
 from enterprise_factory.services.hr_spawner import HRSpawner
-from enterprise_factory.services.intent_router import IntentRouter  # <-- Import Intent Router mới
+from enterprise_factory.intent_router import IntentRouter
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +29,18 @@ class DAGTaskEngine:
             
             logger.info(f"[*] [DAG_ENGINE] Intent Router xác định ý định: {intent_code}")
 
-            # Nếu là Small Talk hoặc câu hỏi xã giao đơn giản, BOD phản hồi nhanh luôn qua bảng Discussion
-            if intent_code == 'SMALL_TALK' or intent_code == 'MEETING_CALL':
-                quick_msg = intent_info.get('quick_response') or f"BOD đã ghi nhận yêu cầu '{directive_text}' của Sếp và sẵn sàng triệu tập anh em vào phòng họp!"
+            # Nếu là Small Talk hoặc cuộc gọi họp nhanh, CHỈ DUY NHẤT BOD_CEO_01 phản hồi.
+            # Tuyệt đối không kích hoạt HR hay các agent khác nhảy vào tranh luận cùng lúc.
+            if intent_code in ['SMALL_TALK', 'MEETING_CALL']:
+                quick_msg = intent_info.get('quick_response') or f"BOD CEO đã ghi nhận chỉ đạo '{directive_text}' từ Sếp và sẵn sàng điều phối toàn hệ thống."
+                
                 AgentDiscussion.objects.create(
                     company=company,
+                    directive=directive,
                     agent_name='BOD_CEO_01',
-                    message_content=quick_msg
+                    message_content=f"🤖 **[BOD CEO (Tổng Giám Đốc AI)]**: {quick_msg}"
                 )
-                logger.info(f"[+] [DAG_ENGINE] Xử lý nhanh Intent {intent_code} thành công mà không cần tạo DAG rườm rà.")
+                logger.info(f"[+] [DAG_ENGINE] BOD phản hồi nhanh cho Intent {intent_code}, chặn broadcast đa agent thành công.")
                 return True
 
             # 1. Truy vấn toàn bộ nhân sự hiện có trong tập đoàn
