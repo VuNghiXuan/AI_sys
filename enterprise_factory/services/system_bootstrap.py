@@ -61,8 +61,7 @@ class SystemBootstrapEngine:
             )
             logger.info(f"✔️ [Auto-Genesis] Company GLOBAL (Created: {created})")
 
-            # 🏢 [BỔ SUNG] Seed cấu hình Chủ sở hữu hệ thống (Tenant Owner / Sếp tổng)
-            # Giúp sau này bán app cho khách hàng khác chỉ cần đổi config này là xong, không hardcode.
+            # 🏢 Khởi tạo cấu hình Tên Chủ Sở Hữu (Tenant Owner / Sếp) động trong DB
             owner_config, owner_created = SystemConfig.objects.get_or_create(
                 key="TENANT_OWNER_NAME",
                 defaults={
@@ -95,7 +94,8 @@ class SystemBootstrapEngine:
                     "role": bod_role,
                     "domain_scope": "GLOBAL_MANAGEMENT",
                     "system_prompt": "Quản lý chung, điều phối chiến lược và phân rã task.",
-                    "risk_threshold": "HITL_REQUIRED"
+                    "risk_threshold": "HITL_REQUIRED",
+                    "title_name": "Tổng Giám Đốc Điều Hành"
                 }
             )
             logger.info(f"🚀 [Auto-Genesis] BOD_CEO_01 (Created: {c_bod})")
@@ -108,7 +108,8 @@ class SystemBootstrapEngine:
                     "role": hr_role,
                     "domain_scope": "RECRUITMENT_SPAWNER",
                     "system_prompt": "Quản lý nhân sự, tuyển dụng và spawn agent chuyên gia.",
-                    "risk_threshold": "AUTO_APPLY"
+                    "risk_threshold": "AUTO_APPLY",
+                    "title_name": "Giám Đốc Nhân Sự"
                 }
             )
             logger.info(f"🚀 [Auto-Genesis] HR_MANAGER_01 (Created: {c_hr})")

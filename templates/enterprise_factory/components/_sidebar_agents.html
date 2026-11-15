@@ -1,32 +1,60 @@
 <!-- File: enterprise_factory/templates/enterprise_factory/components/_sidebar_agents.html 
 (Chức năng: Hiển thị danh sách nhân sự AI trực chiến ở cột trái, click vào để gọi @mention)-->
 <aside class="w-80 bg-slate-900/60 border-r border-slate-800 flex flex-col">
-    <div class="p-4 border-b border-slate-800 bg-slate-900/80 flex justify-between items-center">
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Hội đồng Nhân sự AI</h2>
-        <span class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">Click
-            để gọi @</span>
+    <div class="p-4 border-b border-slate-800 bg-slate-900/80 flex justify-between items-center shadow-sm">
+        <div>
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Hội đồng Nhân sự AI</h2>
+            <p class="text-[10px] text-slate-500 font-mono mt-0.5">vnxBox Enterprise Boardroom</p>
+        </div>
+        <span
+            class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-md border border-emerald-800/60 shadow-inner flex items-center space-x-1">
+            <span>🖱️ Click để @mention</span>
+        </span>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-3">
+    <!-- Danh sách nhân sự trực chiến -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
         <template x-for="agent in agents" :key="agent.agent_id">
             <div @click="insertMention(agent.agent_id)"
-                class="bg-slate-800/60 border border-slate-700/60 rounded-lg p-3 shadow-sm cursor-pointer hover:border-emerald-500 transition group">
+                class="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-emerald-500/60 rounded-xl p-3.5 shadow-sm cursor-pointer transition-all duration-200 group relative overflow-hidden">
+
+                <!-- Viền sáng hiệu ứng khi hover -->
+                <div
+                    class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+
                 <div class="flex justify-between items-start">
-                    <h3 class="font-semibold text-sm text-slate-200 group-hover:text-emerald-400 transition"
-                        x-text="agent.display_name"></h3>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono border" :class="{
-                        'bg-red-950 text-red-300 border-red-800': String(agent.role_type || '') === 'BOD',
-                        'bg-blue-950 text-blue-300 border-blue-800': String(agent.role_type || '').includes('DEV'),
-                        'bg-purple-950 text-purple-300 border-purple-800': String(agent.role_type || '') === 'HR',
-                        'bg-emerald-950 text-emerald-300 border-emerald-800': String(agent.role_type || '') === 'QA'
+                    <div>
+                        <h3 class="font-semibold text-sm text-slate-200 group-hover:text-emerald-400 transition"
+                            x-text="agent.display_name"></h3>
+                        <!-- Hiển thị chức danh chi tiết (VD: Tổng Giám Đốc Điều Hành) -->
+                        <p class="text-[11px] text-slate-400 font-medium mt-0.5"
+                            x-text="agent.title_name || 'Chuyên gia AI'"></p>
+                    </div>
+
+                    <!-- Huy hiệu chức vụ (Role Badge) -->
+                    <span class="text-[10px] px-2 py-0.5 rounded font-mono border uppercase tracking-wider" :class="{
+                        'bg-red-950/90 text-red-300 border-red-800': String(agent.role_type || '') === 'BOD',
+                        'bg-blue-950/90 text-blue-300 border-blue-800': String(agent.role_type || '').includes('DEV'),
+                        'bg-purple-950/90 text-purple-300 border-purple-800': String(agent.role_type || '') === 'HR',
+                        'bg-emerald-950/90 text-emerald-300 border-emerald-800': String(agent.role_type || '') === 'QA',
+                        'bg-slate-800 text-slate-300 border-slate-700': !['BOD', 'DEV', 'HR', 'QA'].some(r => String(agent.role_type || '').includes(r))
                     }" x-text="agent.role_type"></span>
                 </div>
-                <p class="text-xs text-slate-400 mt-1 font-mono flex items-center justify-between">
-                    <span x-text="'ID: ' + agent.agent_id"></span>
-                    <span class="inline-flex items-center gap-1 text-[10px] text-emerald-400">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Trực chiến
+
+                <!-- Footer của card: ID & Domain Scope -->
+                <div
+                    class="mt-3 pt-2.5 border-t border-slate-700/40 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                    <span class="text-slate-500" x-text="'ID: ' + agent.agent_id"></span>
+                    <span class="inline-flex items-center gap-1.5 text-emerald-400 font-sans">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-[10px]">Trực chiến</span>
                     </span>
-                </p>
+                </div>
             </div>
         </template>
     </div>

@@ -36,3 +36,9 @@ if __name__ == '__main__':
     clean_migrations()
     print("=== HOÀN TẤT LÀM SẠCH! ===")
     print("Bây giờ Sếp có thể chạy lại lệnh: python manage.py makemigrations và python manage.py migrate")
+
+
+
+    # Xoá toàn bộ thư mục: rmdir /s /q staticfiles
+    # python manage.py collectstatic --noinput
+    # daphne -b 127.0.0.1 -p 8000 vnxbox_core.asgi:application

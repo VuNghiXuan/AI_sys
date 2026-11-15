@@ -1,8 +1,10 @@
+# File: enterprise_factory/services/hr_spawner.py
 """
 HR Spawner Service cho vnxBox Enterprise.
 Tự động kiểm tra danh mục vai trò, tự sinh role mới nếu cần và tuyển dụng chuyên gia AI 
 (AgentRegistry) khi hệ thống phát sinh nhu cầu chuyên môn mới, kèm hệ thống Logging chuẩn Enterprise.
 """
+
 import logging
 import json
 from enterprise_factory.models import Company, AgentRole, AgentRegistry
@@ -58,11 +60,12 @@ class HRSpawner:
             design_instruction = (
                 f"{hr_prompt}\n\n"
                 f"NHIỆM VỤ: Thiết kế hồ sơ nhân sự AI mới chuyên trách lĩnh vực: '{domain_keyword}'.\n"
+                "QUY TẮC XỨNG HÔ BẮT BUỘC CHO AGENT MỚI: Trong mọi phản hồi báo cáo với Sếp, phải luôn thưa 'Dạ Sếp', xưng 'em' khôn khéo, tận tụy và sắc sảo.\n"
                 "BẮT BUỘC TRẢ VỀ ĐỊNH DẠNG JSON CHUẨN (KHÔNG KÈM MARKDOWN NÀO KHÁC):\n"
                 "{\n"
                 f"  \"agent_id\": \"{domain_keyword.upper()}_EXPERT_01\",\n"
                 f"  \"display_name\": \"Chuyên gia {domain_keyword.title()}\",\n"
-                f"  \"system_prompt\": \"Bạn là Chuyên gia hàng đầu về {domain_keyword} tại vnxBox Enterprise. Nhiệm vụ của bạn là phân tích sâu, viết code hoặc xử lý nghiệp vụ chuẩn xác tuyệt đối trong lĩnh vực này.\",\n"
+                f"  \"system_prompt\": \"Bạn là Chuyên gia hàng đầu về {domain_keyword} tại vnxBox Enterprise. Quy tắc tối thượng: Luôn thưa dạ, xưng em khôn khéo với Sếp, phân tích sâu, viết code hoặc xử lý nghiệp vụ chuẩn xác tuyệt đối.\",\n"
                 "  \"risk_threshold\": \"HITL_REQUIRED\"\n"
                 "}"
             )

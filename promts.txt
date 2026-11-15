@@ -1,1 +1,119 @@
-📜 TÀI LIỆU CHỈ DẪN KIẾN TRÚC & VẬN HÀNH TẬP ĐOÀN AI TỰ TRỊ (VNXBOX ENTERPRISE & VIBERCODE)(Bản tổng hợp nâng cấp chuẩn AGI Local-First - Xây dựng dựa trên thực chiến Live War Room)📌 I. TẦM NHÌN SẢN PHẨM & NGUYÊN TẮC CỐT LÕI (CORE PRINCIPLES)Kiến trúc Local-First & Headless:Hoạt động 100% Offline trên hạ tầng nội bộ (Ollama + qwen2.5-coder, bge-m3, Django Core, WebSocket Channels).Tách biệt hoàn toàn Backend Core và Frontend Dashboard, đảm bảo bảo mật tuyệt đối dữ liệu doanh nghiệp trong mạng LAN.Triệt tiêu Ảo giác & Thực thi Sandbox (Zero-Hallucination Math):Cấm AI tự nhẩm số học hay hardcode logic. Mọi bài toán tính toán tài chính, giá vàng, định mức đều phải được viết script Python và thực thi trong môi trường cô lập (Restricted Sandbox, Timeout 2-3s, RAM 128MB).Minh bạch Trích dẫn & Định vị Sâu (Deep Traceability):Định vị tri thức đa tầng: [Doanh Nghiệp] > [Domain] > [Sub-Domain] > [Chương] > [Điều] > [Mục/Sheet Name]. Tích hợp 1-Click Rollback và lịch sử phiên bản (KnowledgeHistory).🏛️ II. HỆ THỐNG QUẢN TRỊ NHÂN SỰ & QUY TRÌNH TỰ TRỊ (DYNAMIC ORG & WORKFLOW)1. HR Agent Spawner & Org Chart (Neo4j Graph Database)Mỗi nhân viên AI là một Node độc lập trong biểu đồ Neo4j chứa định danh (agent_id), phạm vi chuyên môn (domain_scope), và quy chuẩn riêng biệt (SOP).HR Spawner: Khi phát sinh lĩnh vực mới, hệ thống tự động sinh nhân sự, gán prompt chuyên ngành và cấu hình sơ đồ DAG tương ứng mà không cần viết code thủ công.2. Kỹ thuật "Just-in-Time Context Injection" (Chống loãng ngữ cảnh tuyệt đối)Để giải quyết bài toán scale hàng triệu Agent mà vẫn giữ tốc độ phản hồi trên CPU dưới 2-3 giây, hệ thống tuyệt đối không bao giờ nạp toàn bộ profile hệ thống vào prompt.Cơ chế JIT: Chỉ bơm đúng 3 mảnh ghép tối thiểu: (1) Profile rút gọn của Agent thực thi, (2) Bước task hiện tại trong DAG, và (3) Sliding Window Memory (3-5 tương tác gần nhất). Kích thước prompt luôn được kiểm soát dưới 2000 tokens.⚡ III. MA TRẬN PHÂN QUYỀN & CƠ CHẾ BẢO HIỂM TỰ ĐỘNG (SMART SAFEGUARD)1. Ma trận Phân quyền Quyết định (Management by Exception)Để tránh biến Sếp thành "nô lệ duyệt code" nhưng vẫn kiểm soát được rủi ro, hệ thống phân định rõ 4 cấp độ:Nhóm công việcMức độ rủi roCơ chế xử lý tự động tối ưu1. UI Components, HTML/CSS Templates, Helper NhỏThấp🤖 Smart Auto-Apply 100%: AI tự sinh, tự check AST an toàn và tự động ghi thẳng xuống file.2. Refactor Code nội bộ, Tối ưu hàm (Không đổi Schema DB)Trung bình🛡️ Auto-Apply kèm Snapshot: Tự động backup, chạy test, nếu pass 100% tự động áp dụng.3. Thay đổi Cấu trúc Database (Models, Migrations), Logic tài chínhCao🛑 Bắt buộc HITL (Human-in-the-Loop): Đưa vào hàng đợi PENDING chờ Sếp review trực tiếp.4. Tầng Bảo mật Core, Middleware xác thực, DeployRất cao🔒 Sếp duyệt thủ công + Xác thực tác động hệ thống.2. Cơ chế "Bảo hiểm Tự động" (Automatic Snapshot & Rollback)Auto-Backup (.vnx_backups/): Trước khi ghi đè bất kỳ file nào, hệ thống tự động lưu bản sao (.bak + timestamp) vào thư mục ẩn.Auto-Rollback on Failure: Nếu file sau khi ghi phát sinh lỗi cú pháp (SyntaxError) hoặc ngoại lệ hệ thống, tiến trình tự động hoàn tác về trạng thái ban đầu trong tích tắc và báo cáo chi tiết.🔥 IV. TRẢI NGHIỆM PHÒNG HỌP "LIVE WAR ROOM" SỐNG ĐỘNG (ASYNC STREAMING FEED)Thay vì cơ chế "im lặng tuyệt đối" dễ gây nhàm chán, phòng họp được tối ưu theo triết lý "Minh bạch tiến độ nhưng không gây nghẽn mạch":Dòng thời gian chiến trường (Live Streaming Feed):Các Agent (BOD CEO, Architect, Dev, QA) liên tục cập nhật trạng thái thảo luận, tranh luận và phân rã task công khai trên màn hình chat chung của phòng họp qua WebSocket.Sếp hoàn toàn nắm bắt được tiến độ từng giây như đang dự một cuộc họp trực tuyến thực thụ.Quy tắc "Smart Alert" & Reactive UI:Các thông tin nghiệp vụ chạy mượt mà trên dòng thời gian. Chỉ khi gặp ngoại lệ nguy hiểm hoặc chờ duyệt patch quan trọng, hệ thống mới bật cảnh báo để Sếp can thiệp.Reactive UI Filter: Khi Sếp bấm Approve hoặc Reject, bản vá lập tức biến mất khỏi giao diện chờ mà không cần F5 lại trình duyệt.🚀 V. KIẾN TRÚC PHÂN TÁN MICRO-APPS & WORKERS (SẴN SÀNG CHO SCALE LỚN)Django Core Engine: Đóng vai trò tổng hành dinh xử lý API, WebSocket và giao diện Dashboard của Sếp.Async Workers (Celery / Sub-processes): Đảm bảo hàng triệu task ngầm của Agent chạy độc lập phía sau, tuyệt đối không làm giật lag hay nghẽn mạch giao diện quản trị của Sếp trên trình duyệt.
+# BẢN CHỈ DẪN HỆ THỐNG: KIẾN TRÚC TẬP ĐOÀN AI TỰ TRỊ (VNXBOX ENTERPRISE - ULTIMATE SPEC 2026)
+
+## 📌 I. TẦM NHÌN SẢN PHẨM & QUY CHUẨN KỸ THUẬT CỐT LÕI
+
+1. **Kiến trúc Local-First & Headless:**
+   - **Bảo mật tuyệt đối:** Hoạt động 100% Offline trong mạng LAN nội bộ (Ollama + `qwen2.5-coder:7b` cho code/toán, `llama3`/`gemma2` cho tổng hợp, `bge-m3` cho Vector Embeddings).
+   - **Phân tách hoàn toàn:** Backend Core (Django REST API / Daphne ASGI WebSocket) và Frontend Engine (Alpine.js + Tailwind CSS).
+
+2. **Triệt tiêu Ảo giác Tính toán (Zero-Hallucination Math):**
+   - **Cấm AI tự nhẩm số học hay hardcode logic:** Mọi công thức tài chính, kế toán, giá vốn, định mức hay tỷ lệ chiết khấu phải được viết thành script Python và thực thi trong **Restricted Sandbox Environment** (`knowledge/sandbox.py`: Timeout 2–3s, RAM 128MB, chặn các thư viện độc hại `os`, `sys`, `subprocess`, `socket`, `requests`).
+   - Tích hợp **Neuro-Symbolic Solver (Z3 Theorem Prover / SymPy)** để đạt độ chính xác 100% về mặt toán học.
+
+3. **Quy chuẩn Lập trình Vibercode, Giới hạn File (< 300 dòng) & Bắt buộc Logging:**
+   - **Giới hạn tuyệt đối < 300 dòng/file:** Mọi file mã nguồn Python, JS, HTML hoặc config do AI sinh ra KHÔNG ĐƯỢC PHÉP vượt quá 300 dòng.
+   - **Cơ chế Tự động Tách file (File Splitting & Modularization):** Khi một module có xu hướng phình to vượt 300 dòng, AI bắt buộc tách thành các file con chuyên biệt (VD: `base.py`, `memory_loader.py`, `chat_handler.py`) hoặc đưa vào thư mục chuyên môn (`consumers/`, `services/`, `utils/`, `views/`) kèm file điều hướng sạch bên ngoài. Không nhét logic vào `__init__.py`.
+   - **Chú thích vị trí bắt buộc:** Dòng đầu tiên của mọi file mã nguồn xuất bản phải ghi rõ đường dẫn và tên file đầy đủ.
+   - **Nguyên tắc Nguyên tử (Full File Output):** Khi sinh mã nguồn mới hoặc tạo bản vá, AI phải xuất **toàn bộ mã nguồn hoàn chỉnh của file**, không dùng dấu ngoặc nhọn hoặc chú thích dạng `// ... giữ nguyên code cũ ...`.
+   - **Quy chuẩn Logging Bắt buộc (Mandatory Logging Policy):**
+     - Cấm tuyệt đối dùng `print()` thô sơ trong production code. Mọi service backend, ASGI consumer, và executor bắt buộc phải sử dụng module `logging` chuẩn của Python (`logger = logging.getLogger(__name__)`).
+     - **Chiến lược 3 tầng:** Terminal (Console level INFO/DEBUG), File Log tập trung (`logs/vnxbox_system.log` với FileHandler encoding UTF-8 và cơ chế rotation), và Database/WebSocket Broadcast (lưu vết sự kiện quan trọng lên War Room).
+     - **Bẫy lỗi ngoại lệ (Try-Catch & Exc_Info):** Mọi hàm quan trọng gọi LLM Ollama, xử lý database hoặc thao tác DAG task bắt buộc phải bọc trong `try...except` kèm `exc_info=True`.
+
+4. **Minh bạch Trích dẫn & Định vị Sâu (Deep Traceability):**
+   - Trích dẫn định vị đa tầng: `[Doanh Nghiệp / Phân Hệ] > [Domain Lĩnh Vực] > [Sub-Domain Nghiệp Vụ] > [Chương X] > [Điều Y] > [Mục Z / Sheet Name]`.
+   - Tích hợp **1-Click Edit** mở thẳng Admin Dashboard và lưu trữ lịch sử phiên bản (`KnowledgeHistory`) hỗ trợ so sánh Diff và Rollback 1-Click.
+
+5. **Bản đồ Dự án & Tri thức (Project Mapping & Graph Anchoring):**
+   - Quản lý cấu trúc dự án (`ProjectNode`, `AgentTaskDAG`, `PROJECT_MAP.md`) trực tiếp qua Django ORM và AST Scanner để kiểm soát độ dài, chống trùng lặp hàm/class và đồng bộ đồ thị tri thức doanh nghiệp bằng Neo4j.
+
+---
+
+## ⚡ II. KIẾN TRÚC XỬ LÝ PROMPT DÀI & TỐI ƯU PHẦN CỨNG LOCAL (CPU-ONLY)
+
+### 1. Tối ưu Phần cứng Đa nhân (Core Pinning & Token Budget)
+- **Phân chia nhân xử lý (Core Pinning):** Trên CPU kiến trúc lai (P-cores + E-cores như Intel Core i7-14700, 32GB RAM), cấu hình biến môi trường hệ thống để tránh dàn trải sang E-cores và giữ model trực tuyến trên RAM:
+  - `OLLAMA_NUM_THREAD=10` (ép sử dụng đúng cụm nhân hiệu năng cao P-cores).
+  - `OLLAMA_KEEP_ALIVE=-1` (giữ model `qwen2.5-coder:7b` thường trực trên RAM, loại bỏ độ trễ nạp từ ổ đĩa).
+- **Kiểm soát ngân sách Token (Token Budget):** Giữ tổng độ dài mỗi lần gọi Ollama (System Prompt + User Prompt) dưới **1.500 - 2.000 tokens** (~4.000 - 5.000 ký tự) để pha đọc đầu vào (Prompt Evaluation) không bị nghẽn cổ chai trên CPU, đảm bảo thời gian phản hồi nằm gọn trong 15 - 45 giây.
+
+### 2. Kiến trúc Lai Phân cấp (Python Hierarchical Chunker + Map-Reduce + JIT Context)
+Khi tiếp nhận bản chỉ đạo hoặc Spec siêu dài (> 250 ký tự bật cờ bảo vệ `IS_COMPLEX_SPEC = True`, > 1.500 ký tự kích hoạt băm nhỏ):
+1. **Long-Prompt Safeguard (Chặn nhận nhầm Intent):** Tuyệt đối chặn không cho các yêu cầu dài rơi vào nhóm xã giao/họp ngắn (`SMALL_TALK`, `MEETING_CALL`), ép chuyển thẳng sang luồng điều phối `DEEP_CODE`.
+2. **Bước 1 - Cắt nhỏ phân cấp bằng Python (0 giây):** Dùng Regex tách văn bản theo cấu trúc tiêu đề Markdown (`## Mục lớn` -> `### Mục nhỏ`), lưu nguyên bản gốc vào bảng tạm trong Django DB (`WorkingMemory` / `SpecDocument`) để bảo toàn dữ liệu.
+3. **Bước 2 - Nén ngữ cảnh Map-Reduce:** Chia Spec thành các gói nhỏ (~1.500 ký tự/gói), gọi Ollama tóm tắt từng gói theo cấu trúc JSON (`muc_lon`, `yeu_cau_cot_loi`, `file_lien_quan`) và cập nhật tiến trình từng phần lên Live Trace Console.
+4. **Bước 3 - Just-in-Time (JIT) Context Injection:** Khi thực thi từng task qua LangGraph & Neo4j, chỉ bơm đúng 3 mảnh ghép tối thiểu: `[Tóm tắt mục tiêu tổng thể ~200 từ] + [Chi tiết Task hiện tại] + [Mã nguồn liên quan từ Neo4j]`.
+
+### 3. Cơ chế Ký ức Ngữ cảnh Đa tầng (Context Hydration & Memory)
+- **Tầng A (Database Context Rehydration):** Khi bắt đầu phiên mới, hệ thống tự động query lại lịch sử `AgentDiscussion` và các mốc quyết định (`IntentMemory`, `AgentTaskDAG`) từ các phiên trước, nén thành tóm tắt nhúng vào System Prompt để AI không bị mất trí nhớ ngắn hạn.
+- **Tầng B (Semantic Memory Retrieval):** Khi người dùng nhắc lại chủ đề cũ, Intent Router kết hợp Vector/BM25 quét lịch sử để phục hồi đúng ngữ cảnh liên quan.
+
+---
+
+## 🧠 III. HỆ THỐNG INTENT ROUTER ĐA TẦNG & TỰ HỌC (3-TIER INTENT ROUTING)
+
+1. **Lớp 1: Fast Chit-Chat & System Status (0 giây - Không gọi Ollama):** Dùng từ khóa/Regex cho câu ngắn chào hỏi, điểm danh họp (`SMALL_TALK`, `MEETING_CALL`) để BOD CEO phản hồi ngay lập tức.
+2. **Lớp 2: Direct Database / State Query (Tốc độ mili-giây):** Truy vấn trực tiếp Django DB (`AgentRegistry`, `AgentTaskDAG`) báo cáo nhân sự, tiến độ công việc.
+3. **Lớp 3: Deep Business & Vibercode Reasoning:** Kích hoạt chuỗi DAG qua LangGraph + Neo4j + Ollama (`qwen2.5-coder`).
+4. **Cơ chế Tự học Động (`IntentMemory`):** Lưu vết câu hỏi kèm nhãn ý định, dùng Embedding local so sánh độ tương đồng (> 85%) và cập nhật tức thì qua Human-in-the-Loop Feedback (`LIKE` / `CORRECT`).
+
+---
+
+## 🏛️ IV. HỆ THỐNG QUẢN TRỊ NHÂN SỰ & QUY TRÌNH TƯƠNG TÁC TỰ TRỊ
+
+```text
+[1. Tiếp nhận Prompt & Tiền xử lý Phân rã Đầu mục (Elicitation & Breakdown)]
+    ├── BOD CEO tóm tắt tổng quan và chia thành các đầu mục thực thi tuần tự (1, 2, 3...)
+    └── Phân công rõ nhân sự AI phụ trách từng đầu mục & báo cáo trạng thái (đã làm/vướng mắc)
+                         │
+                         ▼
+[2. Kiểm tra Năng lực & HR Agent Spawner (Auto-Recruitment)]
+    ├── Kiểm tra ma trận nhân sự hiện có (AgentRegistry / Neo4j)
+    └── Nếu thiếu chuyên môn -> Chỉ đạo HR Spawner lập JD, thu thập prompt profile & lưu DB
+                         │
+                         ▼
+[3. Solution Matrix & Phê duyệt (Interactive Approval)]
+    ├── Tổng hợp 2-3 phương án tối ưu (kèm ưu/nhược điểm)
+    └── Tạm dừng sinh code, chờ Sếp nhấn nút xác nhận (Approve Option)
+                         │
+                         ▼
+[4. Thực thi Vibercode & Kiểm định Sandbox (Approval-Gated Task DAG)]
+    ├── Triển khai code nguyên tử (< 300 dòng/file), kiểm định AST & Dry-Run qua sandbox.py
+    └── Đồng bộ đồ thị Neo4j qua ast_scanner.py & xuất Test Report lên Live War Room
+```
+
+- **Ma trận Phân quyền (Smart Safeguard):**
+  - *Thấp (UI, HTML/CSS):* Smart Auto-Apply 100%.
+  - *Trung bình (Refactor nội bộ):* Auto-Apply kèm Snapshot.
+  - *Cao (Database Models, Migrations, Tài chính):* Bắt buộc HITL (`PENDING` trên War Room).
+  - *Rất cao (Bảo mật Core, Deploy):* Duyệt thủ công + Xác thực tác động.
+
+---
+
+## 🔥 V. TRẢI NGHIỆM PHÒNG HỌP "LIVE WAR ROOM" & BẢNG TEST REPORT
+
+1. **Full-Duplex WebSockets (Daphne ASGI):** Tách biệt luồng tiếp nhận (`consumers/` điều hướng qua các module), suy luận và phát sóng log tiến trình.
+2. **Live Thought Trace Console:** Neo ở góc trên bên phải (không che khung nhập liệu), hiển thị trực quan từng bước micro-step (`[1/4] Bóc tách Spec`, `[2/4] BOD phân rã DAG`, `[3/4] Quét ký ức`, `[4/4] Chờ phê duyệt`).
+3. **Automated Test Report:** Chạy Dry-Run trên `sandbox.py` và hiển thị bảng điểm trực quan (`AST Syntax: Passed`, `Dry-Run Staging: Passed`, `Neo4j Impact: Clean`) kèm nút **✓ Approve & Apply**.
+
+---
+
+## 🔒 VI. QUY CHUẨN KÝ ỨC MÃ NGUỒN & CẤU TRÚC DỰ ÁN (CODE GRAPH & PROJECT MAP)
+
+1. **Nguyên tắc Bất biến: "Biết rõ hiện trạng trước khi viết code mới"**
+   - Cấm tuyệt đối sinh code mù khi chưa nắm rõ cấu trúc file, class, hàm trong `PROJECT_MAP.md`.
+   - Mọi đoạn code sinh ra phải tương thích ngược (backward-compatible) với các module đã được thiết lập ở các phiên trước.
+
+2. **Quy trình Vibe Coding 4 Bước (Strict Workflow):**
+   - **Bước 1 (AST Inspection & Map Check):** Đọc kỹ `PROJECT_MAP.md` để xác định chính xác vị trí file, class, hàm có sẵn.
+   - **Bước 2 (Impact Analysis):** Phân tích xem thay đổi ảnh hưởng đến những file nào (Model $\rightarrow$ Serializer $\rightarrow$ View $\rightarrow$ Template).
+   - **Bước 3 (Atomic Vibercode < 300 lines):** Viết Vibercode hoàn chỉnh, chia nhỏ file nếu vượt 300 dòng. Bắt buộc có path header ở dòng đầu tiên.
+   - **Bước 4 (Graph & Map Synchronization):** Cập nhật sơ đồ hàm/class vào `PROJECT_MAP.md` sau khi hoàn thành.
+
+3. **Bản đồ Cấu trúc Cốt lõi Hiện tại (`PROJECT_MAP.md`):**
+   - **`enterprise_factory/consumers/`**: `base.py`, `chat_handler.py`, `memory_loader.py`.
+   - **`enterprise_factory/models/`**: `agent.py`, `base.py`, `knowledge.py`, `workflow.py`.
+   - **`enterprise_factory/services/`**: `semantic_router.py`, `long_prompt_handler.py`, `dag_executor.py`, `hr_spawner.py`, `intent_cache_middleware.py`, `intent_router.py`, `system_bootstrap.py`, `web_search.py`, `orchestrator/`.
+   - **`enterprise_factory/views/`**: `dashboard.py`, `directive_api.py`, `patch_api.py`, `state_api.py`.
+   - **`dynamic_app/`**: `models_gen.py`, `services_gen.py`.
+   - **`vnxbox_core/`**: `settings.py`, `asgi.py`, `routing.py`, `urls.py`.

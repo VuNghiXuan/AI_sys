@@ -1,271 +1,327 @@
-/**
- * File: enterprise_factory/static/enterprise_factory/js/war_room.js
- * Quản lý logic Alpine.js cho vnxBox Live War Room (Verbose Debugging Edition)
- */
+/* ==========================================================================
+   Đường dẫn: enterprise_factory/static/enterprise_factory/js/war_room.js
+   Chức năng: Tích hợp toàn diện Live War Room (Chat, WebSocket, Feedback, Progress, Dynamic Matrix)
+   ========================================================================== */
 
-function warRoom() {
+function warRoomMaster() {
     return {
-        socket: null,
-        statusText: 'Đang kết nối WebSocket...',
-        directiveText: '',
-        loading: false,
-        agents: [],
+        // --- 1. State Chat & WebSocket ---
+        messages: [],
         discussions: [],
-        logs: [],
-        patches: [],
-
+        agents: [],
+        directiveText: '',
+        inputMessage: '',
+        loading: false,
+        isThinking: false,
         showMentionMenu: false,
         mentionFilter: '',
-        cursorPosition: 0,
+        statusText: 'Đang kết nối WebSocket...',
+        socket: null,
 
+        // --- 2. State Progress & Terminal ---
+        isProgressActive: false,
+        currentProgressText: 'Sẵn sàng...',
+        progressLogs: [],
+        hideTimeout: null,
+        openTerminal: false,
+        progressInitialized: false,
+
+        // --- 3. State Dynamic Matrix & Patches ---
+        dynamicTools: [],
+        dynamicWorkflows: [],
+        patches: [],
+        isMatrixLoaded: false,
+
+        // --- INIT CHUNG ---
         init() {
-            console.log("[*] [WarRoom] Khởi tạo giao diện Live War Room chuẩn Enterprise...");
-            this.loadInitialData();
-            this.initWebSocket();
+            console.log("[*] [war_room.js] Khởi tạo toàn diện vnxBox Enterprise War Room...");
+            this.loadInitData();
+            this.connectWebSocket();
+            this.initProgressEvents();
         },
 
-        // 🛡️ Helper định danh chuẩn xác: Phân định rạch ròi User (Sếp) và AI Agent
-        isUserMessage(senderName, messageContent = '') {
-            const sender = String(senderName || '').trim().toUpperCase();
-            const content = String(messageContent || '').trim();
+        // --- TẢI DỮ LIỆU KHỞI TẠO (API init-data) ---
+        loadInitData() {
+            console.log("[*] Đang gọi API /api/war-room/init-data/...");
+            fetch('/api/war-room/init-data/')
+                .then(res => res.json())
+                .then(data => {
+                    console.log("[+] Dữ liệu init-data nhận được:", data);
 
-            // 1. Nếu sender chứa tên rõ ràng của bất kỳ Agent AI nào -> CHẮC CHẮN LÀ AI (Nằm lề trái, KHÔNG BAO GIỜ là User)
-            if (sender.includes('BOD') || sender.includes('DEV') || sender.includes('HR') ||
-                sender.includes('QA') || sender.includes('AI') || sender.includes('HỆ THỐNG') ||
-                sender.includes('MANAGER_01') || sender.includes('CEO_01')) {
-                return false;
-            }
+                    // 1. Agents
+                    if (data.agents && Array.isArray(data.agents)) {
+                        this.agents = data.agents.map(a => ({
+                            agent_id: a.agent_id || '',
+                            display_name: a.display_name || 'AI Agent',
+                            title_name: a.title_name || 'Chuyên gia AI',
+                            role_type: a.role_type || 'GENERAL',
+                            avatar_url: a.avatar_url || '',
+                            domain_scope: a.domain_scope || ''
+                        }));
+                        console.log(`[+] Đã nạp ${this.agents.length} nhân sự vào sidebar.`);
+                    }
 
-            // 2. Nếu sender chứa tên tường minh của Sếp -> CHẮC CHẮN LÀ SẾP (Nằm lề phải)
-            if (sender.includes('SẾP VŨ') || sender.includes('VŨ') || sender === 'USER') {
-                return true;
-            }
+                    // 2. Discussions / History (Nạp trực tiếp, không reverse nếu backend đã sắp xếp đúng chuẩn)
+                    if (data.discussions && Array.isArray(data.discussions)) {
+                        // Gán thẳng mảng nguyên bản từ API để khung chat flex-col-reverse hiển thị chính xác từ dưới lên
+                        this.messages = data.discussions;
+                        this.discussions = data.discussions;
+                        console.log(`[+] Đã nạp toàn bộ ${this.discussions.length} tin nhắn lịch sử vào khung chat.`);
+                    }
 
-            // 3. Nếu sender bị rỗng (""), ta kiểm tra xem có phải nội dung trả lời từ AI hay không
-            // Lưu ý: Tuyệt đối không dựa vào việc có chữ "Sếp Vũ" trong nội dung để kết luận là User, vì AI chào Sếp cũng chứa từ này!
-            if (content.startsWith('Xin chào') ||
-                content.startsWith('Xin lỗi') ||
-                content.startsWith('Dạ') ||
-                content.startsWith('📊') ||
-                content.includes('tôi là một trợ lý') ||
-                content.includes('tập đoàn có') ||
-                content.includes('nhân sự lập trình') ||
-                content.includes('tôi đã nhận được chỉ đạo')) {
-                return false; // Là AI -> Nằm lề trái
-            }
-
-            // 4. Còn lại các lệnh gọi ngắn của Sếp (như "alo", "@BOD_CEO_01", "@HR_MANAGER_01") -> Nằm lề phải
-            return true;
+                    // 3. Tools & Workflows
+                    this.dynamicTools = data.tools || [];
+                    this.dynamicWorkflows = data.workflows || [];
+                    this.isMatrixLoaded = true;
+                })
+                .catch(err => {
+                    console.error("❌ Lỗi tải dữ liệu init-data:", err);
+                });
         },
 
-        // 1. Tải dữ liệu ban đầu từ Backend
-        async loadInitialData() {
-            console.log("[*] [HTTP INIT] Đang tải dữ liệu ban đầu từ /api/war-room/init-data/...");
-            try {
-                const response = await fetch('/api/war-room/init-data/');
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("[*] [HTTP INIT SUCCESS] Dữ liệu nhận từ DB:", data);
-
-                    this.agents = (data.agents || []).map(agent => ({
-                        ...agent,
-                        role_type: agent.role_type ? String(agent.role_type).toUpperCase() : 'GENERAL'
-                    }));
-
-                    // Chuẩn hóa toàn bộ lịch sử cũ từ DB
-                    this.discussions = (data.discussions || []).map(item => {
-                        let sender = item.agent_name || item.sender || '';
-                        const isUser = this.isUserMessage(sender, item.message_content);
-
-                        if (isUser) {
-                            sender = 'Sếp Vũ';
-                        } else if (!sender || sender.trim() === '') {
-                            // Nếu là AI nhưng thiếu tên, dò nội dung để gán đúng tên nhân sự
-                            const content = item.message_content || '';
-                            if (content.includes('tuyển dụng') || content.includes('nhân sự')) {
-                                sender = 'HR Director (Giám Đốc Nhân Sự AI)';
-                            } else {
-                                sender = 'BOD CEO (Tổng Giám Đốc AI)';
-                            }
-                        }
-
-                        return {
-                            ...item,
-                            agent_name: sender
-                        };
-                    });
-
-                    this.patches = data.patches || [];
-                } else {
-                    console.warn("[!] [HTTP INIT WARNING] Response không OK:", response.status);
-                }
-            } catch (e) {
-                console.error("[!] [HTTP INIT ERROR] Không thể tải dữ liệu init qua HTTP:", e);
-                this.agents = [
-                    { agent_id: 'BOD_CEO_01', display_name: 'Giám đốc Điều hành', role_type: 'BOD' },
-                    { agent_id: 'DEV_BE_01', display_name: 'Kỹ sư Backend Core', role_type: 'DEV_BE' },
-                    { agent_id: 'HR_MANAGER_01', display_name: 'Giám đốc Nhân sự', role_type: 'HR' }
-                ];
+        // --- WEBSOCKET CHAT & PROGRESS ---
+        connectWebSocket() {
+            // Nếu đã có socket đang mở hoặc đang kết nối, đóng lại trước khi tạo mới để tránh double connection
+            if (this.socket) {
+                try {
+                    this.socket.close();
+                } catch (e) { }
             }
-        },
 
-        // 2. Khởi tạo kết nối WebSocket Real-time
-        initWebSocket() {
             const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
-            const wsUrl = wsScheme + '://' + window.location.host + '/ws/war-room/';
-            console.log(`[*] [WS] Đang kết nối WebSocket tới: ${wsUrl}`);
+            const wsUrl = `${wsScheme}://${window.location.host}/ws/war-room/`;
 
+            console.log(`[*] Kết nối WebSocket tới: ${wsUrl}`);
             this.socket = new WebSocket(wsUrl);
 
             this.socket.onopen = () => {
-                console.log("[+] [WS OPEN] Kết nối WebSocket thành công!");
-                this.statusText = '● Trực tuyến (Connected)';
+                console.log("[+] WebSocket đã sẵn sàng.");
+                this.isWsConnected = true;
             };
 
             this.socket.onmessage = (event) => {
-                console.log("[INCOMING WS EVENT RAW] ->", event.data);
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.status === 'broadcast') {
-                        console.log(`[WS BROADCAST] Sender: "${data.sender}" | Target: "${data.target}" | Phase: "${data.phase}" | Content: "${data.content}"`);
-
-                        if (data.phase === 'DIRECTIVE' || data.phase === 'GENERAL' || data.phase.includes('QUERY') || data.phase.includes('DEBATE')) {
-                            this.logs.push({
-                                time: new Date().toLocaleTimeString(),
-                                text: `[${data.sender} -> ${data.target}] (${data.phase}): ${data.content}`
-                            });
-                        }
-
-                        if (data.content) {
-                            let sender = data.sender;
-                            if (this.isUserMessage(sender)) {
-                                sender = 'Sếp Vũ';
-                            }
-                            console.log(`[WS RENDER] Thêm message vào UI | Sender hiển thị: "${sender}"`);
-                            this.discussions.unshift({
-                                id: Date.now() + Math.random(),
-                                agent_name: sender,
-                                message_content: data.content,
-                                created_at: new Date().toLocaleTimeString()
-                            });
-                        }
-                    }
-                } catch (parseErr) {
-                    console.error("[!] [WS PARSE ERROR] Không thể parse JSON từ WS:", parseErr);
-                }
+                const data = JSON.parse(event.data);
+                console.log("[WS INCOMING]:", data);
+                // Xử lý đẩy message vào mảng hiển thị
+                this.handleIncomingMessage(data);
             };
 
-            this.socket.onclose = (closeEvent) => {
-                console.warn("[-] [WS CLOSE] Mất kết nối WebSocket. Code:", closeEvent.code);
-                this.statusText = '✕ Mất kết nối (Disconnected)';
-                setTimeout(() => this.initWebSocket(), 3000);
+            this.socket.onclose = () => {
+                console.warn("[-] WebSocket ngắt kết nối. Đang thử kết nối lại sau 3s...");
+                this.isWsConnected = false;
+                setTimeout(() => this.connectWebSocket(), 3000);
             };
 
             this.socket.onerror = (err) => {
-                console.error("[!] [WS ERROR]", err);
-                this.statusText = '⚠ Lỗi kết nối WebSocket';
+                console.error("[-] Lỗi WebSocket:", err);
             };
         },
 
-        insertMention(agentId) {
-            this.directiveText = `@${agentId} ${this.directiveText}`;
-            this.showMentionMenu = false;
-            const inputEl = document.querySelector('input[type="text"]');
-            if (inputEl) inputEl.focus();
-        },
-
+        // --- GỬI CHỈ ĐẠO ---
         sendDirective() {
-            if (!this.directiveText.trim()) return;
+            const text = (this.directiveText || this.inputMessage || '').trim();
+            if (!text) return;
 
+            if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+                this.statusText = '🟡 Đang kết nối lại...';
+                this.connectWebSocket();
+                setTimeout(() => {
+                    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+                        this.executeSendPayload(text);
+                    } else {
+                        alert("⚠️ Không thể kết nối tới WebSocket Server!");
+                    }
+                }, 500);
+                return;
+            }
+
+            this.executeSendPayload(text);
+        },
+
+        executeSendPayload(text) {
+            const payload = {
+                action: 'chat',
+                message: text,
+                target_agent: 'ALL'
+            };
+
+            this.socket.send(JSON.stringify(payload));
+
+            const userItem = {
+                id: Date.now() + Math.random(),
+                sender: 'Sếp Vũ',
+                agent_name: 'Sếp Vũ',
+                title_name: 'Chủ sở hữu hệ thống',
+                message_content: text,
+                sender_type: 'USER',
+                created_at: new Date().toLocaleTimeString()
+            };
+
+            this.discussions.unshift(userItem);
+            this.messages = this.discussions;
+
+            this.directiveText = '';
+            this.inputMessage = '';
+            this.showMentionMenu = false;
             this.loading = true;
-            const text = this.directiveText;
-            console.log(`[*] [SEND DIRECTIVE] Gửi lệnh: "${text}"`);
-
-            let target = 'ALL';
-            if (text.includes('@all')) {
-                target = 'ALL';
-            } else {
-                const match = text.match(/@([A-Za-z0-9_]+)/);
-                if (match) {
-                    target = match[1];
-                }
-            }
-            console.log(`[*] [SEND DIRECTIVE] Target Agent được phân rã: "${target}"`);
-
-            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-                this.socket.send(JSON.stringify({
-                    action: 'chat',
-                    message: text,
-                    target_agent: target
-                }));
-                this.directiveText = '';
-            } else {
-                console.error("[!] [SEND ERROR] WebSocket chưa sẵn sàng!");
-                alert("WebSocket chưa sẵn sàng kết nối!");
-            }
-
-            this.loading = false;
+            this.isThinking = true;
         },
 
-        async approvePatch(patchId) {
-            console.log(`[*] [PATCH] Phê duyệt patch #${patchId}`);
-            alert(`Đang phê duyệt bản vá #${patchId}...`);
+        sendMessage() {
+            this.sendDirective();
         },
 
-        async rejectPatch(patchId) {
-            console.log(`[*] [PATCH] Từ chối patch #${patchId}`);
-            this.patches = this.patches.filter(p => p.id !== patchId);
-        },
-
+        // --- @MENTION XỬ LÝ ---
         checkMention(event) {
-            const val = this.directiveText;
-            const lastChar = val.slice(-1);
-            if (lastChar === '@' || (val.includes('@') && !val.slice(val.lastIndexOf('@')).includes(' '))) {
+            const val = event.target.value;
+            const cursorIdx = event.target.selectionStart;
+            const textBeforeCursor = val.substring(0, cursorIdx);
+            const match = textBeforeCursor.match(/@(\w*)$/);
+
+            if (match) {
                 this.showMentionMenu = true;
+                this.mentionFilter = match[1].toLowerCase();
             } else {
                 this.showMentionMenu = false;
             }
         },
 
-        selectMention(mentionTag) {
-            this.directiveText = this.directiveText.replace(/@[^\s]*$/, '') + mentionTag + ' ';
+        selectMention(mentionCode) {
+            const val = this.directiveText;
+            const lastAtIdx = val.lastIndexOf('@');
+            if (lastAtIdx !== -1) {
+                this.directiveText = val.substring(0, lastAtIdx) + `${mentionCode} `;
+            } else {
+                this.directiveText += `${mentionCode} `;
+            }
             this.showMentionMenu = false;
-            const inputEl = document.querySelector('input[type="text"]');
+            const inputEl = document.querySelector('input[x-model="directiveText"]');
             if (inputEl) inputEl.focus();
         },
 
-        // 🛡️ Hiển thị tên chuẩn xác trên khung chat
-        getSenderLabel(senderName) {
-            if (this.isUserMessage(senderName)) {
-                return 'Sếp Vũ';
-            }
-            return senderName || 'BOD CEO AI';
+        insertMention(agentId) {
+            this.directiveText = `@${agentId} ${this.directiveText}`;
+            const inputEl = document.querySelector('input[x-model="directiveText"]');
+            if (inputEl) inputEl.focus();
         },
 
-        // 🎨 Phân màu sắc huy hiệu cực kỳ chi tiết cho từng loại Agent AI
-        getAgentBadgeClass(senderName) {
-            if (!senderName) return 'bg-slate-800 text-slate-300 border-slate-700';
-            const name = String(senderName).toUpperCase();
+        // --- RENDER HELPERS ---
+        isUserMessage(item) {
+            if (!item) return false;
+            const senderType = String(item.sender_type || '').toUpperCase();
+            const senderName = String(item.agent_name || item.sender || '').toLowerCase();
+            return senderType === 'USER' || senderName.includes('vũ') || senderName.includes('sếp');
+        },
 
-            // 1. Ban Giám Đốc / BOD / CEO -> Đỏ quyền lực
-            if (name.includes('BOD') || name.includes('CEO') || name.includes('GIÁM ĐỐC ĐIỀU HÀNH')) {
-                return 'bg-red-950 text-red-300 border-red-800';
-            }
-            // 2. Nhân sự / HR -> Tím thủy chung
-            else if (name.includes('HR') || name.includes('NHÂN SỰ') || name.includes('RECRUITMENT')) {
-                return 'bg-purple-950 text-purple-300 border-purple-800';
-            }
-            // 3. Kỹ thuật / Dev / Backend -> Xanh dương
-            else if (name.includes('DEV') || name.includes('KỸ SƯ') || name.includes('BACKEND') || name.includes('ENGINEER')) {
-                return 'bg-blue-950 text-blue-300 border-blue-800';
-            }
-            // 4. Kiểm định / QA / Test -> Xanh ngọc / Emerald
-            else if (name.includes('QA') || name.includes('TEST') || name.includes('KIỂM ĐỊNH')) {
-                return 'bg-emerald-950 text-emerald-300 border-emerald-800';
-            }
+        getSenderLabel(item) {
+            if (typeof item === 'string') return item;
+            return item.agent_name || item.sender || 'AI Expert';
+        },
 
-            // Mặc định cho các Agent khác hoặc Hệ thống -> Xám chuyên nghiệp
+        getAgentBadgeClass(agentName) {
+            const name = String(agentName || '').toUpperCase();
+            if (name.includes('BOD') || name.includes('CEO')) return 'bg-red-950 text-red-300 border-red-800';
+            if (name.includes('DEV') || name.includes('CODE')) return 'bg-blue-950 text-blue-300 border-blue-800';
+            if (name.includes('HR')) return 'bg-purple-950 text-purple-300 border-purple-800';
+            if (name.includes('QA') || name.includes('SEARCH') || name.includes('TEST')) return 'bg-emerald-950 text-emerald-300 border-emerald-800';
             return 'bg-slate-800 text-slate-300 border-slate-700';
         },
+
+        // --- SELF-LEARNING FEEDBACK ---
+        sendFeedback(item, feedbackType) {
+            console.log(`[*] Gửi feedback [${feedbackType}] cho tin nhắn ID: ${item.id || 'N/A'}`);
+            const payload = {
+                message_id: item.id || null,
+                agent_name: item.agent_name || item.sender,
+                content: item.message_content,
+                feedback_type: feedbackType
+            };
+
+            fetch('/api/war-room/feedback/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': this.getCsrfToken()
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(async res => {
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.includes("application/json")) {
+                        return res.json();
+                    } else {
+                        throw new Error("API endpoint chưa được định nghĩa trên Django (404 HTML Response)");
+                    }
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log(`✅ Đã ghi nhận phản hồi [${feedbackType}] thành công!`);
+                    } else {
+                        console.warn("⚠️ Phản hồi từ server:", data.message);
+                    }
+                })
+                .catch(err => {
+                    console.warn("ℹ️ [Feedback Note]: " + err.message);
+                });
+        },
+
+        getCsrfToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        },
+
+        // --- PROGRESS & TERMINAL ---
+        initProgressEvents() {
+            if (this.progressInitialized) return;
+            this.progressInitialized = true;
+
+            window.addEventListener('toggle-terminal', () => {
+                this.openTerminal = !this.openTerminal;
+            });
+        },
+
+        handleProgressEvent(data) {
+            if (['PROGRESS', 'WEB_SEARCH', 'DEEP_CODE', 'DB_QUERY', 'MEETING_CALL', 'SMALL_TALK'].includes(data.phase)) {
+                this.isProgressActive = true;
+                this.currentProgressText = data.content || 'Đang xử lý nghiệp vụ...';
+                this.pushLog(data.content);
+
+                if (this.hideTimeout) clearTimeout(this.hideTimeout);
+                this.hideTimeout = setTimeout(() => {
+                    this.isProgressActive = false;
+                }, 12000);
+            } else if (data.sender_type === 'AGENT') {
+                this.pushLog(`[✅ HOÀN TẤT] ${data.sender}: Đã hoàn thành nhiệm vụ.`);
+                if (this.hideTimeout) clearTimeout(this.hideTimeout);
+                this.hideTimeout = setTimeout(() => {
+                    this.isProgressActive = false;
+                }, 2000);
+            }
+        },
+
+        pushLog(text) {
+            this.progressLogs.unshift({
+                id: Date.now() + Math.random(),
+                timestamp: new Date().toLocaleTimeString(),
+                text: text
+            });
+            if (this.progressLogs.length > 100) this.progressLogs.pop();
+        },
+
+        clearLogs() {
+            this.progressLogs = [];
+            this.isProgressActive = false;
+        }
     }
 }

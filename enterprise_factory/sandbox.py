@@ -1,17 +1,18 @@
-# File: enterprise_factory/sandbox.py
+# enterprise_factory/sandbox.py
 """
 Secure Python Sandbox Engine cho vnxBox Enterprise.
 Thực thi mã Python trong môi trường cô lập, giới hạn thời gian (Timeout),
 giới hạn bộ nhớ và chặn hoàn toàn các module độc hại (os, sys, subprocess, socket).
 """
 
-import sys
+import logging
 import io
 import contextlib
-import signal
-import resource
-import restricted_python  # Hoặc cơ chế RestrictedPython tiêu chuẩn
+import threading
 from RestrictedPython import compile_restricted, safe_builtins
+from RestrictedPython.Guards import safer_getattr
+
+logger = logging.getLogger(__name__)
 
 class SandboxExecutionError(Exception):
     """Lỗi phát sinh khi thực thi mã trong Sandbox"""
@@ -25,17 +26,6 @@ class PythonSandbox:
         self.timeout_seconds = timeout_seconds
         self.max_memory_mb = max_memory_mb * 1024 * 1024  # Chuyển sang Bytes
 
-    def _set_security_limits(self):
-        """Thiết lập giới hạn tài nguyên hệ thống trước khi chạy code (Linux/Unix limits)"""
-        try:
-            # Giới hạn bộ nhớ RAM ảo (AS)
-            resource.setrlimit(resource.RLIMIT_AS, (self.max_memory_mb, self.max_memory_mb))
-            # Chặn không cho tạo file quá lớn (FSIZE)
-            resource.setrlimit(resource.RLIMIT_FSIZE, (1024 * 1024, 1024 * 1024))
-        except (ValueError, AttributeError):
-        # Bỏ qua nếu chạy trên môi trường không hỗ trợ (ví dụ Windows một số giới hạn RLIMIT)
-            pass
-
     def execute(self, code_string: str, input_context: dict = None) -> dict:
         """
         Thực thi đoạn mã code truyền vào và trả về kết quả hoặc lỗi chi tiết.
@@ -44,10 +34,13 @@ class PythonSandbox:
         if input_context is None:
             input_context = {}
 
+        logger.info(f"[*] [SANDBOX] Bắt đầu biên dịch và thực thi code an toàn (Timeout: {self.timeout_seconds}s)...")
+
         # 1. Biên soạn code qua RestrictedPython để kiểm soát cú pháp nguy hiểm
         try:
             byte_code = compile_restricted(code_string, filename='<sandbox_code>', mode='exec')
         except Exception as e:
+            logger.error(f"[-] [SANDBOX SYNTAX ERROR]: {str(e)}", exc_info=True)
             return {
                 "success": False,
                 "error_type": "SyntaxOrRestrictedError",
@@ -59,58 +52,59 @@ class PythonSandbox:
         safe_globals = {
             '__builtins__': safe_builtins,
             '_print': print,
-            '_getattr__': getattr,
+            '_getattr__': safer_getattr,
             'context': input_context
         }
         
         local_scope = {}
-
-        # 3. Bắt luồng Standard Output để lấy kết quả print từ code sinh ra
         stdout_buffer = io.StringIO()
 
-        def timeout_handler(signum, frame):
-            raise TimeoutError("Mã nguồn thực thi quá thời gian cho phép (Timeout).")
+        # Dùng Event để kiểm soát timeout an toàn trên cả Windows lẫn Linux
+        execution_error = None
+        is_timeout = False
 
-        # Đăng ký cơ chế ngắt thời gian (Chỉ hỗ trợ trên luồng chính Unix)
-        old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(self.timeout_seconds)
+        def target_execution():
+            nonlocal execution_error
+            try:
+                with contextlib.redirect_stdout(stdout_buffer):
+                    exec(byte_code, safe_globals, local_scope)
+            except Exception as ex:
+                execution_error = ex
 
-        try:
-            self._set_security_limits()
-            with contextlib.redirect_stdout(stdout_buffer):
-                # Thực thi byte code trong không gian cô lập
-                exec(byte_code, safe_globals, local_scope)
-            
-            # Tắt báo thức sau khi chạy xong an toàn
-            signal.alarm(0)
+        # Chạy trong Thread riêng để ép Timeout
+        exec_thread = threading.Thread(target=target_execution)
+        exec_thread.daemon = True
 
-            execution_output = stdout_buffer.getvalue()
-            # Lấy giá trị biến 'result' từ scope nội bộ nếu có
-            return_value = local_scope.get('result', execution_output.strip())
+        exec_thread.start()
+        exec_thread.join(timeout=self.timeout_seconds)
 
-            return {
-                "success": True,
-                "error_type": None,
-                "message": "Thực thi thành công qua Secure Sandbox.",
-                "output": return_value
-            }
-
-        except TimeoutError as te:
-            signal.alarm(0)
+        if exec_thread.is_alive():
+            is_timeout = True
+            logger.warning(f"[!] [SANDBOX TIMEOUT]: Mã nguồn vượt quá giới hạn {self.timeout_seconds} giây.")
             return {
                 "success": False,
                 "error_type": "TimeoutError",
-                "message": str(te),
-                "output": None
-            }
-        except Exception as ex:
-            signal.alarm(0)
-            return {
-                "success": False,
-                "error_type": type(ex).__name__,
-                "message": str(ex),
+                "message": f"Mã nguồn thực thi quá thời gian cho phép ({self.timeout_seconds}s).",
                 "output": stdout_buffer.getvalue()
             }
-        finally:
-            # Khôi phục signal handler ban đầu
-            signal.signal(signal.SIGALRM, old_handler)
+
+        if execution_error:
+            logger.error(f"[-] [SANDBOX RUNTIME ERROR]: {str(execution_error)}", exc_info=True)
+            return {
+                "success": False,
+                "error_type": type(execution_error).__name__,
+                "message": str(execution_error),
+                "output": stdout_buffer.getvalue()
+            }
+
+        execution_output = stdout_buffer.getvalue()
+        # Lấy giá trị biến 'result' từ scope nội bộ nếu có, ngược lại lấy output print
+        return_value = local_scope.get('result', execution_output.strip())
+
+        logger.info("[+] [SANDBOX SUCCESS] Thực thi mã nguồn thành công qua Sandbox.")
+        return {
+            "success": True,
+            "error_type": None,
+            "message": "Thực thi thành công qua Secure Sandbox.",
+            "output": return_value
+        }

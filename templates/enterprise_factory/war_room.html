@@ -1,6 +1,4 @@
-<!-- File: enterprise_factory/templates/enterprise_factory/war_room.html 
- (Khung xương chính, chứa layout tổng, nạp Alpine.js, Tailwind và include 4 component con)
- -->
+<!-- File: enterprise_factory/templates/enterprise_factory/war_room.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,24 +7,38 @@
     <meta charset="UTF-8">
     <title>vnxBox Enterprise - Live War Room</title>
 
-    <!-- Chống chớp giao diện khi Alpine.js khởi tạo -->
     <style>
         [x-cloak] {
             display: none !important;
         }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.8);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(71, 85, 105, 1);
+        }
     </style>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- File Logic JS trung tâm -->
-    <script src="{% static 'enterprise_factory/js/war_room.js' %}?v=111"></script>
-    <!-- Alpine.js Framework -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Nạp tệp JavaScript Master tổng hợp duy nhất -->
+    <script src="{% static 'enterprise_factory/js/war_room.js' %}?v=2026_master"></script>
 </head>
 
 <body class="bg-slate-950 text-slate-100 font-sans antialiased h-screen flex flex-col overflow-hidden"
-    x-data="Object.assign(warRoom(), { showLogsDrawer: false })" x-cloak>
+    x-data="warRoomMaster()" x-init="init()" x-cloak>
 
     <!-- Header Bar Tổng Thể -->
     <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center shadow-md z-20">
@@ -38,13 +50,10 @@
             </h1>
         </div>
         <div class="flex items-center space-x-4">
-            <!-- Nút bật tắt Terminal Logs -->
-            <button @click="showLogsDrawer = !showLogsDrawer"
-                class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded border border-slate-700 text-amber-300 font-mono transition flex items-center space-x-1.5">
-                <span>⚡ Terminal Logs</span>
-                <span class="bg-amber-950 text-amber-400 px-1.5 py-0.2 rounded text-[10px]" x-text="logs.length"></span>
-            </button>
-            <!-- Trạng thái kết nối WebSocket -->
+            <!-- Hiển thị nhanh số lượng Tool & Workflow đang hoạt động -->
+            <span class="text-xs bg-slate-800 px-2.5 py-1 rounded border border-slate-700 text-cyan-400 font-mono"
+                x-text="`Tools: ${dynamicTools.length} | Workflows: ${dynamicWorkflows.length}`"></span>
+
             <span class="text-xs bg-slate-800 px-3 py-1.5 rounded border border-slate-700 text-emerald-300 font-mono"
                 x-text="statusText"></span>
         </div>
@@ -59,13 +68,10 @@
         <!-- Center Workspace -->
         <main class="flex-1 flex flex-col bg-slate-950 relative overflow-hidden">
 
-            <!-- 2. COMPONENT: Vùng hiển thị luồng chat cuộc họp -->
+            <!-- 2. COMPONENT: Vùng hiển thị luồng chat cuộc họp (Hiển thị trực tiếp mọi tin nhắn & tiến trình ngầm tại đây) -->
             {% include "enterprise_factory/components/_chat_stream.html" %}
 
-            <!-- 3. COMPONENT: Terminal Logs Drawer (Ẩn/Hiện) -->
-            {% include "enterprise_factory/components/_terminal_logs.html" %}
-
-            <!-- 4. COMPONENT: Thanh nhập liệu & Popup @Mention -->
+            <!-- 3. COMPONENT: Thanh nhập liệu & Popup @Mention (Đã loại bỏ terminal popup thừa) -->
             {% include "enterprise_factory/components/_input_bar.html" %}
 
         </main>

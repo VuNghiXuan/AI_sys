@@ -1,8 +1,10 @@
+# File: enterprise_factory/services/dag_executor.py
 """
 DAG Task Decomposition & Execution Engine cho vnxBox Enterprise.
 Tích hợp Intent Router để phân loại ý định trước khi phân rã task DAG.
-Đã tinh gọn để chặn đứng hiện tượng multi-agent broadcast đồng loạt.
+Chuẩn hóa theo model mới (sender_type, agent foreign key) và logging đầy đủ.
 """
+
 import logging
 import json
 from enterprise_factory.models import AgentTaskDAG, AgentRegistry, AgentDiscussion
@@ -10,6 +12,7 @@ from enterprise_factory.services.orchestrator import ask_local_agent
 from enterprise_factory.services.hr_spawner import HRSpawner
 from enterprise_factory.intent_router import IntentRouter
 
+# Khởi tạo logger chuyên dụng cho module dag_executor
 logger = logging.getLogger(__name__)
 
 
@@ -17,8 +20,11 @@ class DAGTaskEngine:
     """Bộ điều phối biểu đồ công việc tích hợp Intent Router và HR Spawner"""
 
     @staticmethod
-    def decompose_and_create(directive, company):
-        """Bóc tách ý định qua Intent Router trước khi phân rã DAG hoặc phản hồi nhanh"""
+    def decompose_and_create(directive, company) -> bool:
+        """
+        Bóc tách ý định qua IntentRouter trước khi phân rã DAG hoặc phản hồi nhanh.
+        Trả về True nếu xử lý thành công, False nếu có lỗi phát sinh.
+        """
         directive_text = directive.directive_text
         logger.info(f"[*] [DAG_ENGINE] Tiếp nhận chỉ đạo cho directive ID #{directive.id}: '{directive_text}'")
         
@@ -29,16 +35,23 @@ class DAGTaskEngine:
             
             logger.info(f"[*] [DAG_ENGINE] Intent Router xác định ý định: {intent_code}")
 
+            # Lấy object BOD CEO chuẩn từ DB
+            bod_agent = AgentRegistry.objects.select_related('role').filter(agent_id='BOD_CEO_01').first()
+            if not bod_agent:
+                bod_agent = AgentRegistry.objects.select_related('role').filter(role__role_code='BOD').first()
+
             # Nếu là Small Talk hoặc cuộc gọi họp nhanh, CHỈ DUY NHẤT BOD_CEO_01 phản hồi.
-            # Tuyệt đối không kích hoạt HR hay các agent khác nhảy vào tranh luận cùng lúc.
             if intent_code in ['SMALL_TALK', 'MEETING_CALL']:
-                quick_msg = intent_info.get('quick_response') or f"BOD CEO đã ghi nhận chỉ đạo '{directive_text}' từ Sếp và sẵn sàng điều phối toàn hệ thống."
+                quick_msg = intent_info.get('quick_response') or f"Dạ báo cáo Sếp, BOD CEO đã ghi nhận chỉ đạo và sẵn sàng điều phối toàn hệ thống ạ!"
                 
+                # Lưu vào AgentDiscussion theo đúng chuẩn model mới
                 AgentDiscussion.objects.create(
                     company=company,
                     directive=directive,
-                    agent_name='BOD_CEO_01',
-                    message_content=f"🤖 **[BOD CEO (Tổng Giám Đốc AI)]**: {quick_msg}"
+                    sender_type='AGENT',
+                    agent=bod_agent,
+                    message_content=quick_msg,
+                    phase=intent_code
                 )
                 logger.info(f"[+] [DAG_ENGINE] BOD phản hồi nhanh cho Intent {intent_code}, chặn broadcast đa agent thành công.")
                 return True
@@ -50,12 +63,14 @@ class DAGTaskEngine:
                 for agent in all_agents
             ])
             
-            bod_agent = all_agents.filter(role__role_code='BOD').first() or all_agents.first()
+            if not bod_agent:
+                bod_agent = all_agents.first()
 
             # 2. Xây dựng System Prompt cho BOD phân rã task dựa trên Intent
             system_prompt = (
                 f"Bạn là Giám đốc Điều hành (BOD) của vnxBox Enterprise.\n"
                 f"Ý định hệ thống vừa nhận diện: [{intent_code}].\n"
+                "QUY TẮC XƯNG HÔ BẮT BUỘC: Khi giao tiếp hoặc báo cáo công việc, luôn thưa 'Dạ Sếp' hoặc xưng 'em' với Sếp một cách khôn khéo, chuyên nghiệp, tận tụy, tuyệt đối không xưng tôi trịch thượng.\n"
                 "Nhiệm vụ: Phân rã chỉ đạo của Sếp thành từ 2 đến 4 bước công việc tuần tự.\n"
                 "DANH SÁCH NHÂN SỰ ĐANG TRỰC CHIẾN:\n"
                 f"{agent_roster_desc}\n\n"
@@ -83,9 +98,9 @@ class DAGTaskEngine:
                 
                 agent_obj = AgentRegistry.objects.select_related('role').filter(agent_id=target_agent_id).first()
                 
-                # Gọi HR Spawner nếu thiếu nhân sự
+                # Gọi HR Spawner nếu thiếu nhân sự chuyên môn
                 if not agent_obj:
-                    logger.warning(f"[!] [DAG_ENGINE] Thiếu nhân sự '{target_agent_id}', gọi HR Spawner...")
+                    logger.warning(f"[!] [DAG_ENGINE] Thiếu nhân sự '{target_agent_id}', gọi HR Spawner tự động...")
                     agent_obj = HRSpawner.spawn_agent_if_needed(
                         domain_keyword=domain_keyword, 
                         role_code_hint='DEV_BE', 
