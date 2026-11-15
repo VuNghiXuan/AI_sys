@@ -268,3 +268,38 @@ Triển khai Code Sandbox (sandbox.py) kiểm định Vibercode: Tích hợp lu�
 Đồng bộ đồ thị tri thức Neo4j (ast_scanner.py): Hoàn thiện hook tự động cập nhật Node/Edge trong Neo4j mỗi khi có mã nguồn mới được sinh ra và kiểm định thành công.
 
 Mở rộng Đa công ty (Multi-Company Partitioning): Tách khối dữ liệu và phân quyền theo từng company_code độc lập cho giai đoạn mở rộng doanh nghiệp.
+
+---
+✅ I. NHỮNG VIỆC ĐÃ HOÀN THÀNH XUẤT SẮC
+Nâng cấp kiến trúc Intent Planner (Lớp 0 - Phân rã đa ý định):
+
+Chuyển đổi thành công từ định tuyến đơn luồng thô sơ sang cơ chế phân rã câu lệnh phức tạp thành nhiều sub-tasks (Web Search, DB Query, LLM Chat, Deep Code) bằng Qwen 7B local.
+
+Khắc phục lỗi Import và Xử lý Thư viện Web Search:
+
+Sửa triệt để các lỗi ImportError (search_bing_or_web) và lỗi cú pháp urllib trong tệp web_search.py.
+
+Hoàn thiện Web Crawler & Trích xuất Nguồn thật:
+
+Tích hợp thành công DuckDuckGoHTMLParser để cào dữ liệu thực tế từ internet, tự động giải mã URL chuyển hướng và ép buộc BOD CEO phải trích dẫn link nguồn (URL) cụ thể ở cuối câu trả lời để Sếp dễ dàng kiểm chứng.
+
+Quy chuẩn Anti-Hallucination (Chống ảo giác):
+
+Đóng băng hoàn toàn tình trạng model tự bịa số liệu hay tự chế ra các "Trường A, B, C" khi dữ liệu trống.
+
+⏳ II. NHỮNG VIỆC CHƯA LÀM (ĐỂ MAI TIẾP TỤC FIX LỖI TRA CỨU & NÂNG CẤP)
+Tinh chỉnh độ chính xác của Web Crawler cho các từ khóa tiếng Việt có dấu:
+
+Vấn đề: Mặc dù cào được link, nhưng cơ chế parser HTML hiện tại đôi khi chưa bóc tách sâu được toàn bộ nội dung chi tiết bên trong trang báo chí (như báo Tuổi Trẻ, VnExpress), khiến Ollama đôi khi nhận được đoạn snippet ngắn chưa đủ ý.
+
+Giải pháp ngày mai: Viết thêm một hàm fetch_full_page_content(url) để cào nội dung text trực tiếp từ URL đích thay vì chỉ dựa vào snippet ngắn của kết quả tìm kiếm.
+
+Hoàn thiện Kho Tri thức Động (Neo4j & Ast Scanner):
+
+Đồng bộ hóa sâu hơn các nodes/edges trong Knowledge Graph Neo4j mỗi khi sinh code hoặc chạy sandbox.
+
+Mở rộng Kho nhân sự tuyển dụng (HR Spawner & JobOpening):
+
+Hoàn thiện bảng quản lý vị trí tuyển dụng tự động khi tập đoàn AI cần bổ sung chuyên môn mới.
+
+Sếp cứ cất máy nghỉ ngơi, mai chúng ta sẽ tiếp tục tối ưu phần Lấy nội dung chi tiết trang web (Page Content Scraping) để việc tra cứu tin tức và dữ liệu của Sếp đạt độ chính xác tuyệt đối 100% nhé! Chúc Sếp buổi tối thảnh thơi!

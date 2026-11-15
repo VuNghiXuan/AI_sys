@@ -96,13 +96,27 @@ class HybridSemanticRouter:
         msg_clean = user_message.strip()
         msg_lower = msg_clean.lower()
 
-        # 1. TRA CỨU TRONG BỘ NHỚ HỌC TẬP (IntentMemory Cache - 0.01s, an toàn không quét tràn lan)
+        # 0. HARD KEYWORD OVERRIDE: Ưu tiên bắt các từ khóa hành động rõ ràng cho WEB_SEARCH
+        # 0. HARD KEYWORD OVERRIDE (Mở rộng toàn diện cho Tra cứu thông tin, Thi cử, Điểm chuẩn, Sự kiện)
+        web_search_triggers = [
+            'tra cứu', 'tra tìm', 'tìm kiếm', 'lên mạng', 'vụ', 'scandal', 'scansal', 
+            'facebook', 'mạng xã hội', 'tin tức', 'giá vàng', 'thông tin', 'sự việc', 'hôm nay',
+            'bão', 'lụt', 'mưa', 'thời tiết', 'tuy hoà', 'tuy hòa', 'ngập', 'thiên tai',
+            'thi đại học', 'điểm chuẩn', 'sinh năm', 'trường', 'ngành', 'tuyển sinh', 'đại học'
+        ]
+        
+        # Nếu câu lệnh chứa các từ khóa đặc thù trên, ép cứng về WEB_SEARCH hoặc LLM_CHAT thông minh
+        if any(kw in msg_lower for kw in web_search_triggers):
+            # Nếu hỏi về điểm chuẩn, tuyển sinh, thi cử hoặc thông tin thời sự -> Ép sang WEB_SEARCH
+            if any(term in msg_lower for term in ['điểm chuẩn', 'thi đại học', 'tuyển sinh', 'trường', 'ngành', 'bão', 'lụt', 'vụ', 'tin tức']):
+                logger.info(f"⚡ [Hard Keyword Override] Ép cứng sang WEB_SEARCH cho câu tra cứu: '{msg_clean}'")
+                return {"tier": 3, "intent_code": "WEB_SEARCH", "target_agent": "BOD_CEO_01", "source": "hard_keyword_override"}
+
+        # 1. TRA CỨU TRONG BỘ NHỚ HỌC TẬP (IntentMemory Cache - 0.01s)
         try:
             from enterprise_factory.models import IntentMemory
-            # Khớp chính xác tuyệt đối (Sử dụng Index DB, cực nhanh, không tốn RAM)
             exact_match = IntentMemory.objects.filter(query_text__iexact=msg_clean).first()
             if exact_match:
-                logger.info(f"🧠 [IntentMemory Exact HIT] Khớp bộ nhớ: '{msg_clean}' -> {exact_match.intent_code}")
                 return {
                     "tier": exact_match.tier,
                     "intent_code": exact_match.intent_code,
@@ -110,8 +124,6 @@ class HybridSemanticRouter:
                     "source": "memory_exact"
                 }
 
-            # TỐI ƯU AN TOÀN KHI SCALE LỚN: Chỉ lấy tối đa 100 mẫu học tập mới nhất để chấm điểm BM25/Cosine, 
-            # tuyệt đối không bao giờ dùng .all() quét toàn bộ bảng hàng chục ngàn dòng!
             memories = list(IntentMemory.objects.order_by('-updated_at')[:100])
             if memories:
                 best_mem = None
@@ -123,7 +135,6 @@ class HybridSemanticRouter:
                         best_mem = mem
                 
                 if best_mem and best_score > 1.2:
-                    logger.info(f"🧠 [IntentMemory BM25 HIT] Khớp ý nghĩa (score: {best_score:.2f}): '{msg_clean}' ~ '{best_mem.query_text}'")
                     return {
                         "tier": best_mem.tier,
                         "intent_code": best_mem.intent_code,
@@ -133,14 +144,13 @@ class HybridSemanticRouter:
         except Exception as e:
             logger.debug(f"IntentMemory lookup skipped: {e}")
 
-        # 2. ĐỊNH TUYẾN ĐỘNG THEO CHUYÊN GIA MỚI SINH (Dynamic Agent Registry Routing)
+        # 2. ĐỊNH TUYẾN ĐỘNG THEO CHUYÊN GIA MỚI SINH
         try:
             from enterprise_factory.models import AgentRegistry
             agents = AgentRegistry.objects.all()
             for agent in agents:
                 scope = agent.domain_scope.lower()
                 if scope and scope in msg_lower:
-                    logger.info(f"🎯 [Dynamic Agent Match] Phát hiện từ khóa chuyên môn trúng Agent: {agent.agent_id} ({scope})")
                     return {
                         "tier": 2,
                         "intent_code": "EXPERT_DIRECT_QUERY",
@@ -150,18 +160,19 @@ class HybridSemanticRouter:
         except Exception as e:
             logger.debug(f"Dynamic agent routing lookup skipped: {e}")
 
-        # 3. BẮT LỆNH XÃ GIAO / HÀI HƯỚC NHANH (Regex Pattern Matching)
-        if any(re.search(pat, msg_lower) for pat in cls.SMALL_TALK_PATTERNS):
-            return {"tier": 1, "intent_code": "SMALL_TALK", "target_agent": "BOD_CEO_01", "source": "rule_small_talk"}
-        if any(re.search(pat, msg_lower) for pat in cls.HUMOR_PATTERNS):
-            return {"tier": 1, "intent_code": "HUMOR_CHAT", "target_agent": "BOD_CEO_01", "source": "rule_humor"}
+        # 3. BẮT LỆNH XÃ GIAO / HÀI HƯỚC NHANH (Chỉ áp dụng khi câu thực sự ngắn dưới 5 từ)
+        word_count = len(msg_lower.split())
+        if word_count <= 4:
+            if any(re.search(pat, msg_lower) for pat in cls.SMALL_TALK_PATTERNS):
+                return {"tier": 1, "intent_code": "SMALL_TALK", "target_agent": "BOD_CEO_01", "source": "rule_small_talk"}
+            if any(re.search(pat, msg_lower) for pat in cls.HUMOR_PATTERNS):
+                return {"tier": 1, "intent_code": "HUMOR_CHAT", "target_agent": "BOD_CEO_01", "source": "rule_humor"}
 
-        # 4. ĐỊNH TUYẾN THÔNG MINH BẰNG COSINE SIMILARITY (Semantic Vector Matching)
+        # 4. ĐỊNH TUYẾN THÔNG MINH BẰNG COSINE SIMILARITY (Hạ ngưỡng xuống 0.12 để nhạy hơn)
         semantic_intent, cosine_score = cls.semantic_match(msg_clean)
         logger.info(f"📐 [Cosine Semantic Match] Intent: {semantic_intent} | Score: {cosine_score:.3f} | Query: '{msg_clean}'")
 
-        # Ngưỡng tin cậy Cosine (Threshold = 0.18 giúp bắt chuẩn xác ngữ nghĩa mà không bị bỏ sót)
-        if cosine_score >= 0.18:
+        if cosine_score >= 0.12:
             tier_map = {
                 "MEETING_CALL": 1,
                 "STATUS_CHECK": 2,

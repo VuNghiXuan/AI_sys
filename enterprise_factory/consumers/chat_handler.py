@@ -19,9 +19,16 @@ logger = logging.getLogger(__name__)
 
 class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
 
-    async def call_llm_sync(self, system_prompt: str, user_prompt: str) -> str:
-        print(f"[LLM] Đang gọi Ollama... Prompt length: {len(user_prompt)}")
-        return await sync_to_async(ask_local_agent)(system_prompt, user_prompt, timeout_seconds=120)
+    async def call_llm_sync(self, system_prompt: str, user_prompt: str, timeout: int = 120):
+        """Hàm gọi LLM đồng bộ có hỗ trợ nhận tham số timeout"""
+        print(f"[LLM] Đang gọi Ollama... Prompt length: {len(user_prompt)} | Timeout: {timeout}s")
+        try:
+            # Truyền timeout vào hàm gọi thực tế bên dưới (hoặc xử lý tuỳ theo kiến trúc hiện tại của Sếp)
+            return await sync_to_async(ask_local_agent)(system_prompt, user_prompt, timeout_seconds=timeout)
+        except Exception as e:
+            err_msg = str(e)
+            logger.error(f"[-] [LLM_CALL_ERROR] Không thể kết nối Ollama: {err_msg}", exc_info=True)
+            return f"Dạ báo cáo Sếp, em không thể kết nối tới Ollama. Chi tiết lỗi: {err_msg}"
 
     async def broadcast_step(self, sender_type: str, sender: str, target: str, phase: str, content: str, title: str = '', avatar: str = ''):
         """Hàm tiện ích phát từng bước tiến trình hoặc trao đổi lên khung chat War Room"""
@@ -56,68 +63,56 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
         return ""
 
     async def execute_intent_tools(self, intent_code: str, message: str, target_agent: str) -> tuple[str, str]:
-        """
-        Tầng thực thi công cụ thực tế trước khi đưa cho LLM tổng hợp.
-        Đã tích hợp cơ chế thông minh mở rộng từ khóa nếu câu lệnh của Sếp quá ngắn.
-        Trả về: (raw_data_context, execution_status_note)
-        """
         raw_context = ""
         status_note = "Hoàn tất thu thập dữ liệu thuận lợi."
 
-        # 1. THỰC THI WEB SEARCH THỰC TẾ (Lọc từ khóa thông minh bằng Regex / Phép thay thế chuẩn)
+        # 1. THỰC THI WEB SEARCH THỰC TẾ KÈM LINK THAM KHẢO
         if intent_code == 'WEB_SEARCH':
             search_query = message
-            
-            # Danh sách các từ ngữ ra lệnh / rác cần loại bỏ triệt để
             import re
-            # Xóa các cụm từ chỉ hành động tra cứu
             cleaned_query = message.lower()
-            for phrase in ['lên mạng', 'tra cứu', 'tra lại', 'tra đi', 'tìm kiếm', 'hãy tìm', 'giúp tao', 'cho tao', 'mày tra', 'đi']:
-                cleaned_query = cleaned_query.replace(phrase, '')
+            stop_patterns = [
+                r'\btra cứu\b', r'\btra tìm\b', r'\btìm kiếm\b', r'\blên mạng\b', 
+                r'\bhãy tìm\b', r'\bgiúp tao\b', r'\bcho tao\b', r'\bmày tra\b',
+                r'\blập thành bảng so sánh\b', r'\bsức học như thế nào thì vào được trường nào\b',
+                r'\bá\b', r'\bnhé\b', r'\bđi\b'
+            ]
+            for pattern in stop_patterns:
+                cleaned_query = re.sub(pattern, '', cleaned_query)
             
-            # Loại bỏ các từ đệm đứng đầu/cuối như 'lại', 'cụ', 'về', v.v. nếu cần, hoặc giữ lại thực thể chính
-            cleaned_query = re.sub(r'\b(lại|đi|giúp|tao|cho|về)\b', '', cleaned_query)
-            search_query = cleaned_query.strip()
+            cleaned_query = re.sub(r'[,.?!;:]+', ' ', cleaned_query)
+            search_query = re.sub(r'\s+', ' ', cleaned_query).strip()
             
-            # Nếu sau khi lọc mà rỗng hoặc quá ngắn, fallback về nguyên văn tin nhắn của Sếp
             if len(search_query) <= 2:
                 search_query = message
 
             logger.info(f"[*] [SMART WEB SEARCH] Từ khóa gốc: '{message}' -> Từ khóa tối ưu cho Bing: '{search_query}'")
 
             await self.broadcast_step(
-                'AGENT', 'Chuyên viên Tra cứu (Search Specialist)', target_agent, 'PROGRESS',
-                f"🔍 Đã tối ưu từ khóa. Đang kết nối công cụ Web Search với từ khóa: *'{search_query}'*...",
-                'Market & Web Intelligence'
+                'AGENT', 'BOD CEO (Tổng Giám Đốc AI)', target_agent, 'PROGRESS',
+                f"🌐 Đang cào dữ liệu thời gian thực kèm nguồn và link từ Internet: *'{search_query}'*...", 'Web Crawler'
             )
+
             try:
-                from enterprise_factory.services import web_search
-                search_fn = getattr(web_search, 'search_web', None) or getattr(web_search, 'perform_web_search', None) or getattr(web_search, 'run_search', None)
-                if search_fn:
-                    search_res = await sync_to_async(search_fn)(search_query)
-                    raw_context = str(search_res)[:3500]
-                    preview = raw_context[:250].replace('\n', ' ') + "..." if len(raw_context) > 250 else raw_context
-                    await self.broadcast_step(
-                        'AGENT', 'Chuyên viên Tra cứu (Search Specialist)', target_agent, 'PROGRESS',
-                        f"📥 **Dữ liệu thô thu được từ Internet (Từ khóa: '{search_query}'):**\n> {preview}\n\n➡️ Đang chuyển giao dữ liệu thô sang BOD để phân tích và tổng hợp báo cáo.",
-                        'Market & Web Intelligence'
-                    )
+                from enterprise_factory.services.web_search import search_bing_or_web
+                search_results = await sync_to_async(search_bing_or_web)(search_query)
+                if search_results:
+                    # Đảm bảo dữ liệu thô cung cấp đầy đủ Tiêu đề, Nội dung và Link URL
+                    raw_context = f"KẾT QUẢ TÌM KIẾM THỰC TẾ & LINK THAM KHẢO TỪ INTERNET:\n{search_results}"
+                    status_note = "Đã thu thập dữ liệu thô kèm nguồn link thành công."
                 else:
-                    status_note = "Vướng mắc: Module web_search.py chưa định nghĩa hàm search."
-                    await self.broadcast_step(
-                        'SYSTEM', 'Hệ thống vnxBox', target_agent, 'PROGRESS',
-                        f"⚠️ {status_note}", 'System Monitor'
-                    )
+                    raw_context = "Không tìm thấy kết quả trực tuyến phù hợp."
+                    status_note = "Không có dữ liệu thô."
             except Exception as e:
-                status_note = f"Vướng mắc khi cào dữ liệu mạng: {str(e)}"
-                logger.error(f"[-] [WEB_SEARCH TOOL ERROR]: {e}")
+                logger.error(f"[-] Lỗi thực thi Web Search: {e}")
+                raw_context = f"Lỗi cào dữ liệu: {str(e)}"
+                status_note = "Lỗi kết nối mạng."
 
         # 2. THỰC THI TRUY VẤN DỮ LIỆU HỆ THỐNG (DB_QUERY)
         elif intent_code == 'DB_QUERY':
             await self.broadcast_step(
                 'AGENT', 'HR Director (Giám Đốc Nhân Sự AI)', target_agent, 'PROGRESS',
-                "📊 Đang trích xuất dữ liệu trực tiếp từ 4 Tháp Quản Trị (AgentRegistry, ToolRegistry, WorkflowBlueprint)...",
-                'Giám Đốc Nhân Sự'
+                "📊 Đang trích xuất dữ liệu trực tiếp từ Database hệ thống...", 'Giám Đốc Nhân Sự'
             )
             try:
                 from enterprise_factory.models import AgentRegistry, ToolRegistry, WorkflowBlueprint
@@ -129,11 +124,7 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
                     f"Tổng số nhân sự AI: {len(agents_data)}. Chi tiết: {json.dumps(agents_data, ensure_ascii=False)}. "
                     f"Số công cụ động đang bật: {tools_count}. Số quy trình DAG đang bật: {wf_count}."
                 )
-                await self.broadcast_step(
-                    'AGENT', 'HR Director (Giám Đốc Nhân Sự AI)', target_agent, 'PROGRESS',
-                    f"📥 **Dữ liệu thô từ Database:** Tìm thấy {len(agents_data)} nhân sự AI, {tools_count} tools và {wf_count} workflows. Đang tổng hợp báo cáo...",
-                    'Giám Đốc Nhân Sự'
-                )
+                status_note = f"Tìm thấy {len(agents_data)} nhân sự AI."
             except Exception as e:
                 status_note = f"Lỗi truy xuất DB: {str(e)}"
 
@@ -141,8 +132,7 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
         elif intent_code == 'DEEP_CODE':
             await self.broadcast_step(
                 'AGENT', 'Tech Lead AI (Kiến trúc sư trưởng)', target_agent, 'PROGRESS',
-                "🛠️ Đang quét cấu trúc AST Codebase và kiểm tra Sandbox để lên phương án kỹ thuật...",
-                'Chief Technology Officer'
+                "🛠️ Đang quét cấu trúc AST Codebase và kiểm tra Sandbox...", 'Chief Technology Officer'
             )
 
         return raw_context, status_note
@@ -181,21 +171,43 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
             await self.save_and_get_context('USER', message, agent_obj=None)
             await self.broadcast_step('USER', owner_name, target_agent, 'DIRECTIVE', message, 'Chủ sở hữu hệ thống')
 
-            # 2. Định tuyến ý định (HybridSemanticRouter với Cosine Similarity)
-            routing = IntentRouter.route(message)
-            tier = routing.get('tier', 1)
-            intent_code = routing.get('intent_code', 'GENERAL')
-            target_agent = routing.get('target_agent', target_agent)
+            # 2. Phân rã ý định đa tầng thông minh (Intent Planner & Multi-Intent Decomposition)
+            from enterprise_factory.services.intent_planner import IntentPlanner
+            sub_tasks = await IntentPlanner.decompose_directive(message)
+            
+            print(f"🎯 [MULTI-INTENT RESOLVED] Tổng số sub-tasks phân rã: {len(sub_tasks)}")
+            
+            primary_task = sub_tasks[0] if sub_tasks else {}
+            intent_code = primary_task.get('intent', 'LLM_CHAT')
+            target_agent = primary_task.get('target_agent', target_agent)
 
-            if len(message) > 250 and intent_code in ['SMALL_TALK', 'MEETING_CALL']:
-                intent_code = 'DEEP_CODE'
-                tier = 3
-                target_agent = 'ALL'
+            # Gom dữ liệu thô (Raw Context) kèm link từ tất cả các sub-tasks
+            aggregated_raw_context = ""
+            combined_status_notes = []
 
-            print(f"🎯 [INTENT RESOLVED] Code: {intent_code} | Tier: {tier} | Target: {target_agent}")
+            for idx, task in enumerate(sub_tasks):
+                sub_intent = task.get('intent', 'LLM_CHAT')
+                sub_query = task.get('query', message)
+                sub_target = task.get('target_agent', target_agent)
+
+                await self.broadcast_step(
+                    'SYSTEM', 'Hệ thống vnxBox', sub_target, 'PROGRESS',
+                    f"⚙️ **[Sub-task {idx+1}/{len(sub_tasks)}]** Thực thi tác vụ `{sub_intent}` với nội dung: *'{sub_query}'*", 'Workflow Engine'
+                )
+
+                raw_data, status_note = await self.execute_intent_tools(sub_intent, sub_query, sub_target)
+                if raw_data:
+                    aggregated_raw_context += f"\n--- KẾT QUẢ TÁC VỤ {idx+1} ({sub_intent}) ---\n{raw_data}\n"
+                if status_note:
+                    combined_status_notes.append(status_note)
+
+            if not aggregated_raw_context:
+                aggregated_raw_context = message
+            
+            status_note = " | ".join(combined_status_notes) if combined_status_notes else "Hoàn tất thu thập dữ liệu."
 
             # 3. KIỂM TRA CACHE TỐC ĐỘ CAO (IntentMemory Cache - 0.01s)
-            if intent_code not in ['WEB_SEARCH']:  # Tin tức/giá cả thời gian thực luôn cần quét mới
+            if intent_code not in ['WEB_SEARCH']:  
                 cached_reply = await sync_to_async(IntentCacheMiddleware.get_cached_response)(message, intent_code)
                 if cached_reply:
                     await self.broadcast_step(
@@ -214,7 +226,6 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
             sender_name = assigned_agent.display_name if assigned_agent else 'BOD CEO (Tổng Giám Đốc AI)'
             sender_title = getattr(assigned_agent, 'title_name', 'AI Specialist') if assigned_agent else 'Tổng Giám Đốc'
 
-            # Xử lý phản hồi tức thì cho chào hỏi / gọi họp
             if intent_code in ['SMALL_TALK', 'MEETING_CALL']:
                 quick_msg = f"Dạ em nghe thưa Sếp {owner_name}! Ban điều hành và các phòng ban AI đã tề tựu đầy đủ, sẵn sàng nhận chỉ đạo ạ."
                 await self.save_and_get_context('AGENT', quick_msg, agent_obj=bod_agent)
@@ -224,17 +235,13 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
                 )
                 return
 
-            # 5. BOD ĐIỀU PHỐI & GIAO VIỆC TRỰC TIẾP TRÊN KHUNG CHAT
             await self.broadcast_step(
                 'AGENT', 'BOD CEO (Tổng Giám Đốc AI)', target_agent, 'PROGRESS',
-                f"📋 **[BOD Phân công nhiệm vụ]** Nhận diện ý định `{intent_code}`. Giao đầu mối **{sender_name}** chủ trì thực thi và thu thập dữ liệu...",
+                f"📋 **[BOD Phân công nhiệm vụ]** Nhận diện tổng hợp `{len(sub_tasks)}` ý định (Chủ đạo: `{intent_code}`). Giao đầu mối **{sender_name}** chủ trì tổng hợp...",
                 'Tổng Giám Đốc Điều Hành'
             )
 
-            # 6. THỰC THI TOOL LẤY DỮ LIỆU THÔ (Raw Data)
-            raw_data_context, status_note = await self.execute_intent_tools(intent_code, message, target_agent)
-
-            # 7. TỔNG HỢP BÁO CÁO QUA OLLAMA (Cấu hình Timeout động & Map-Reduce cho Prompt dài)
+            # 5. TỔNG HỢP BÁO CÁO QUA OLLAMA (Ép buộc trích dẫn Nguồn và Link)
             all_agents = await self.get_all_active_agents()
             agent_roster_str = "\n".join([f"- {ag.display_name} ({ag.agent_id}): {ag.domain_scope}" for ag in all_agents])
             historical_summary = await self.get_historical_context_summary()
@@ -246,29 +253,28 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
                 f"Thời gian hiện tại: {now_str}.\n"
                 f"Ký ức phiên trước: [{historical_summary}].\n"
                 f"Danh sách nhân sự hiện tại:\n{agent_roster_str}\n\n"
-                f"DỮ LIỆU THÔ THỰC TẾ TỪ INTERNET / DATABASE:\n"
-                f"{raw_data_context if raw_data_context else 'Không có dữ liệu thô bên ngoài.'}\n"
+                f"DỮ LIỆU THÔ THỰC TẾ TỪ INTERNET (KÈM NGUỒN VÀ LINK URL):\n"
+                f"{aggregated_raw_context}\n"
                 f"TRẠNG THÁI THỰC THI: {status_note}\n\n"
-                f"🛡️ QUY CHUẨN BÁO CÁO (ANTI-HALLUCINATION & PRAGMATIC RULES):\n"
+                f"🛡️ QUY CHUẨN BÁO CÁO BẮT BUỘC (ANTI-HALLUCINATION & SOURCE CITATION):\n"
                 f"1. Luôn thưa 'Dạ Sếp {owner_name}' và xưng 'em'.\n"
-                f"2. Dựa vào [DỮ LIỆU THÔ] ở trên để tổng hợp thông tin trả lời Sếp. Tuyệt đối không bịa đặt số liệu hay sự việc không có trong dữ liệu thô.\n"
-                f"3. Nếu dữ liệu thô quá ít hoặc không đủ thông tin, hãy báo cáo trung thực: 'Dạ Sếp, em đã tra cứu nhưng dữ liệu hiện tại chưa có thông tin chi tiết về vấn đề này' và tóm tắt những gì tìm được (nếu có).\n"
+                f"2. BẮT BUỘC DỰA VÀO [DỮ LIỆU THÔ] ở trên để tổng hợp thông tin. TUYỆT ĐỐI KHÔNG BỊA ĐẶT số liệu, tên trường (Cấm tuyệt đối tự chế ra 'Trường A, B, C').\n"
+                f"3. Ở cuối câu trả lời, BẮT BUỘC PHẢI LIỆT KÊ PHẦN 'Nguồn tham khảo:' kèm theo các đường dẫn (URL) cụ thể có trong dữ liệu thô để Sếp bấm vào kiểm chứng. Nếu dữ liệu thô không có link, phải báo cáo trung thực.\n"
                 f"4. Trình bày rõ ràng, mạch lạc, chuyên nghiệp theo phong cách báo cáo điều hành của Tổng Giám Đốc AI."
             )
 
             await self.broadcast_step(
                 'SYSTEM', 'Hệ thống vnxBox', target_agent, 'PROGRESS',
-                f"🧠 [{sender_name}] đang tổng hợp dữ liệu và soạn thảo báo cáo trình Sếp...", 'AI Synthesis'
+                f"🧠 [{sender_name}] đang tổng hợp dữ liệu, kiểm chứng nguồn và soạn thảo báo cáo...", 'AI Synthesis'
             )
 
             llm_timeout = 480 if intent_code == 'DEEP_CODE' else 120
 
-            # Kích hoạt bộ xử lý Map-Reduce thông minh nếu prompt/spec dài hơn 2000 ký tự
             from enterprise_factory.services.long_prompt_handler import LongPromptHandler
             if len(message) > 2000:
                 await self.broadcast_step(
                     'SYSTEM', 'Hệ thống vnxBox', target_agent, 'PROGRESS',
-                    f"🧩 [LONG PROMPT CHUNKER] Phát hiện bản đặc tả lớn ({len(message)} ký tự). Đang bóc tách và chạy Map-Reduce...", 'Chunking Engine'
+                    f"🧩 [LONG PROMPT CHUNKER] Phát hiện bản lớn ({len(message)} ký tự). Đang chạy Map-Reduce...", 'Chunking Engine'
                 )
                 response_text = await LongPromptHandler.process_long_spec_via_map_reduce(system_prompt, message, timeout=llm_timeout)
             else:
@@ -280,7 +286,6 @@ class ChatHandlerConsumer(BaseWarRoomConsumer, MemoryLoaderMixin):
                 if not response_text or "timed out" in response_text:
                     response_text = f"Dạ báo cáo Sếp {owner_name}, tác vụ xử lý trên CPU mất nhiều thời gian nên Ollama đã đạt ngưỡng giới hạn thời gian chờ ({llm_timeout}s). Trạng thái: {status_note}"
 
-            # 8. Lưu vào DB, chỉ cập nhật IntentMemory Cache nếu thành công và câu lệnh ngắn (<= 200 ký tự)
             await self.save_and_get_context('AGENT', response_text, agent_obj=assigned_agent)
             if not is_error_reply and intent_code not in ['WEB_SEARCH'] and len(message) <= 200:
                 await sync_to_async(IntentCacheMiddleware.save_to_cache)(

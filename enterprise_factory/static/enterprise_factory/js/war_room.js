@@ -1,6 +1,6 @@
 /* ==========================================================================
    Đường dẫn: enterprise_factory/static/enterprise_factory/js/war_room.js
-   Chức năng: Tích hợp toàn diện Live War Room (Chat, WebSocket, Feedback, Progress, Dynamic Matrix)
+   Chức năng: vnxBox Enterprise War Room (Bản chuẩn tối ưu Singleton WebSocket & Chống trùng lặp init)
    ========================================================================== */
 
 function warRoomMaster() {
@@ -17,6 +17,10 @@ function warRoomMaster() {
         mentionFilter: '',
         statusText: 'Đang kết nối WebSocket...',
         socket: null,
+        isWsConnected: false,
+        isConnecting: false,
+        reconnectTimer: null,
+        isInitialized: false, // Cờ chống gọi init() 2 lần
 
         // --- 2. State Progress & Terminal ---
         isProgressActive: false,
@@ -34,13 +38,19 @@ function warRoomMaster() {
 
         // --- INIT CHUNG ---
         init() {
+            if (this.isInitialized) {
+                console.warn("[!] [war_room.js] Bỏ qua init() trùng lặp.");
+                return;
+            }
+            this.isInitialized = true;
+
             console.log("[*] [war_room.js] Khởi tạo toàn diện vnxBox Enterprise War Room...");
             this.loadInitData();
             this.connectWebSocket();
             this.initProgressEvents();
         },
 
-        // --- TẢI DỮ LIỆU KHỞI TẠO (API init-data) ---
+        // --- TẢI DỮ LIỆU KHỞI TẠO ---
         loadInitData() {
             console.log("[*] Đang gọi API /api/war-room/init-data/...");
             fetch('/api/war-room/init-data/')
@@ -48,7 +58,6 @@ function warRoomMaster() {
                 .then(data => {
                     console.log("[+] Dữ liệu init-data nhận được:", data);
 
-                    // 1. Agents
                     if (data.agents && Array.isArray(data.agents)) {
                         this.agents = data.agents.map(a => ({
                             agent_id: a.agent_id || '',
@@ -61,15 +70,12 @@ function warRoomMaster() {
                         console.log(`[+] Đã nạp ${this.agents.length} nhân sự vào sidebar.`);
                     }
 
-                    // 2. Discussions / History (Nạp trực tiếp, không reverse nếu backend đã sắp xếp đúng chuẩn)
                     if (data.discussions && Array.isArray(data.discussions)) {
-                        // Gán thẳng mảng nguyên bản từ API để khung chat flex-col-reverse hiển thị chính xác từ dưới lên
                         this.messages = data.discussions;
                         this.discussions = data.discussions;
                         console.log(`[+] Đã nạp toàn bộ ${this.discussions.length} tin nhắn lịch sử vào khung chat.`);
                     }
 
-                    // 3. Tools & Workflows
                     this.dynamicTools = data.tools || [];
                     this.dynamicWorkflows = data.workflows || [];
                     this.isMatrixLoaded = true;
@@ -79,41 +85,64 @@ function warRoomMaster() {
                 });
         },
 
-        // --- WEBSOCKET CHAT & PROGRESS ---
+        // --- WEBSOCKET CHAT & PROGRESS (SINGLETON) ---
         connectWebSocket() {
-            // Nếu đã có socket đang mở hoặc đang kết nối, đóng lại trước khi tạo mới để tránh double connection
+            if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
+                console.log("[*] WebSocket đang hoạt động, bỏ qua lệnh mở trùng.");
+                return;
+            }
+
             if (this.socket) {
                 try {
+                    this.socket.onclose = null;
+                    this.socket.onerror = null;
                     this.socket.close();
                 } catch (e) { }
+                this.socket = null;
             }
 
             const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
             const wsUrl = `${wsScheme}://${window.location.host}/ws/war-room/`;
 
-            console.log(`[*] Kết nối WebSocket tới: ${wsUrl}`);
+            console.log(`[*] Thiết lập kết nối WebSocket tới: ${wsUrl}`);
             this.socket = new WebSocket(wsUrl);
 
             this.socket.onopen = () => {
-                console.log("[+] WebSocket đã sẵn sàng.");
+                console.log("[+] WebSocket đã kết nối ổn định.");
                 this.isWsConnected = true;
+                this.statusText = '🟢 Đã kết nối Live War Room';
+                if (this.reconnectTimer) {
+                    clearTimeout(this.reconnectTimer);
+                    this.reconnectTimer = null;
+                }
             };
 
             this.socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log("[WS INCOMING]:", data);
-                // Xử lý đẩy message vào mảng hiển thị
-                this.handleIncomingMessage(data);
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log("[WS INCOMING]:", data);
+                    this.handleIncomingMessage(data);
+                } catch (e) {
+                    console.error("❌ Lỗi parse JSON từ WebSocket:", e);
+                }
             };
 
-            this.socket.onclose = () => {
-                console.warn("[-] WebSocket ngắt kết nối. Đang thử kết nối lại sau 3s...");
+            this.socket.onclose = (event) => {
+                console.warn(`[-] WebSocket ngắt kết nối (Code: ${event.code}).`);
                 this.isWsConnected = false;
-                setTimeout(() => this.connectWebSocket(), 3000);
+                this.socket = null;
+
+                if (!this.reconnectTimer) {
+                    this.reconnectTimer = setTimeout(() => {
+                        this.reconnectTimer = null;
+                        this.connectWebSocket();
+                    }, 3000);
+                }
             };
 
             this.socket.onerror = (err) => {
-                console.error("[-] Lỗi WebSocket:", err);
+                console.error("[-] Lỗi sự kiện WebSocket:", err);
+                this.isWsConnected = false;
             };
         },
 
@@ -131,7 +160,7 @@ function warRoomMaster() {
                     } else {
                         alert("⚠️ Không thể kết nối tới WebSocket Server!");
                     }
-                }, 500);
+                }, 800);
                 return;
             }
 
@@ -171,7 +200,7 @@ function warRoomMaster() {
             this.sendDirective();
         },
 
-        // --- @MENTION XỬ LÝ ---
+        // --- @MENTION ---
         checkMention(event) {
             const val = event.target.value;
             const cursorIdx = event.target.selectionStart;
@@ -245,19 +274,10 @@ function warRoomMaster() {
                 },
                 body: JSON.stringify(payload)
             })
-                .then(async res => {
-                    const contentType = res.headers.get("content-type");
-                    if (contentType && contentType.includes("application/json")) {
-                        return res.json();
-                    } else {
-                        throw new Error("API endpoint chưa được định nghĩa trên Django (404 HTML Response)");
-                    }
-                })
+                .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
                         console.log(`✅ Đã ghi nhận phản hồi [${feedbackType}] thành công!`);
-                    } else {
-                        console.warn("⚠️ Phản hồi từ server:", data.message);
                     }
                 })
                 .catch(err => {
@@ -292,7 +312,7 @@ function warRoomMaster() {
         },
 
         handleProgressEvent(data) {
-            if (['PROGRESS', 'WEB_SEARCH', 'DEEP_CODE', 'DB_QUERY', 'MEETING_CALL', 'SMALL_TALK'].includes(data.phase)) {
+            if (data.phase && data.phase !== 'GENERAL') {
                 this.isProgressActive = true;
                 this.currentProgressText = data.content || 'Đang xử lý nghiệp vụ...';
                 this.pushLog(data.content);
@@ -301,12 +321,6 @@ function warRoomMaster() {
                 this.hideTimeout = setTimeout(() => {
                     this.isProgressActive = false;
                 }, 12000);
-            } else if (data.sender_type === 'AGENT') {
-                this.pushLog(`[✅ HOÀN TẤT] ${data.sender}: Đã hoàn thành nhiệm vụ.`);
-                if (this.hideTimeout) clearTimeout(this.hideTimeout);
-                this.hideTimeout = setTimeout(() => {
-                    this.isProgressActive = false;
-                }, 2000);
             }
         },
 
@@ -322,6 +336,29 @@ function warRoomMaster() {
         clearLogs() {
             this.progressLogs = [];
             this.isProgressActive = false;
+        },
+
+        // --- XỬ LÝ TIN NHẮN TỪ WEBSOCKET ---
+        handleIncomingMessage(data) {
+            if (data.content && (data.sender_type === 'AGENT' || data.sender_type === 'SYSTEM')) {
+                const newItem = {
+                    id: Date.now() + Math.random(),
+                    sender: data.sender || 'AI Expert',
+                    agent_name: data.sender || 'AI Expert',
+                    title_name: data.title_name || 'Chuyên gia AI',
+                    message_content: data.content,
+                    sender_type: data.sender_type,
+                    created_at: new Date().toLocaleTimeString()
+                };
+
+                this.discussions.unshift(newItem);
+                this.messages = this.discussions;
+
+                this.loading = false;
+                this.isThinking = false;
+            }
+
+            this.handleProgressEvent(data);
         }
     }
 }
