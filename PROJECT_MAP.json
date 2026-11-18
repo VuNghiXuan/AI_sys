@@ -1,0 +1,989 @@
+{
+    "directed": true,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "type": "module",
+            "file_path": "manage.py",
+            "id": "manage.py"
+        },
+        {
+            "type": "function",
+            "name": "main",
+            "file_path": "manage.py",
+            "id": "manage.py.main"
+        },
+        {
+            "type": "module",
+            "file_path": "reset_system.py",
+            "id": "reset_system.py"
+        },
+        {
+            "type": "function",
+            "name": "run_command",
+            "file_path": "reset_system.py",
+            "id": "reset_system.py.run_command"
+        },
+        {
+            "type": "function",
+            "name": "reset_database_and_migrations",
+            "file_path": "reset_system.py",
+            "id": "reset_system.py.reset_database_and_migrations"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\agent_executor.py",
+            "id": "core.agent_executor.py"
+        },
+        {
+            "type": "class",
+            "name": "AgentExecutor",
+            "file_path": "core\\agent_executor.py",
+            "id": "core.agent_executor.py.AgentExecutor"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\agent_executor.py",
+            "id": "core.agent_executor.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "run_agent",
+            "file_path": "core\\agent_executor.py",
+            "id": "core.agent_executor.py.run_agent"
+        },
+        {
+            "type": "function",
+            "name": "run_coder_agent",
+            "file_path": "core\\agent_executor.py",
+            "id": "core.agent_executor.py.run_coder_agent"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py"
+        },
+        {
+            "type": "class",
+            "name": "AgentRegistry",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py.AgentRegistry"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "discover_and_register_agents",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py.discover_and_register_agents"
+        },
+        {
+            "type": "function",
+            "name": "_load_agent_manifest",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py._load_agent_manifest"
+        },
+        {
+            "type": "function",
+            "name": "get_agent_profile",
+            "file_path": "core\\agent_registry.py",
+            "id": "core.agent_registry.py.get_agent_profile"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py"
+        },
+        {
+            "type": "class",
+            "name": "ProjectCodeGraph",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py.ProjectCodeGraph"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "scan_project_directory",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py.scan_project_directory"
+        },
+        {
+            "type": "function",
+            "name": "_parse_python_file",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py._parse_python_file"
+        },
+        {
+            "type": "function",
+            "name": "save_graph_to_disk",
+            "file_path": "core\\code_graph.py",
+            "id": "core.code_graph.py.save_graph_to_disk"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\dag_engine.py",
+            "id": "core.dag_engine.py"
+        },
+        {
+            "type": "class",
+            "name": "BlueprintDAGEngine",
+            "file_path": "core\\dag_engine.py",
+            "id": "core.dag_engine.py.BlueprintDAGEngine"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\dag_engine.py",
+            "id": "core.dag_engine.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "build_dag_from_intent",
+            "file_path": "core\\dag_engine.py",
+            "id": "core.dag_engine.py.build_dag_from_intent"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\hardware_detector.py",
+            "id": "core.hardware_detector.py"
+        },
+        {
+            "type": "function",
+            "name": "check_system_environment",
+            "file_path": "core\\hardware_detector.py",
+            "id": "core.hardware_detector.py.check_system_environment"
+        },
+        {
+            "type": "function",
+            "name": "get_optimal_device",
+            "file_path": "core\\hardware_detector.py",
+            "id": "core.hardware_detector.py.get_optimal_device"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\ollama_client.py",
+            "id": "core.ollama_client.py"
+        },
+        {
+            "type": "class",
+            "name": "OllamaClient",
+            "file_path": "core\\ollama_client.py",
+            "id": "core.ollama_client.py.OllamaClient"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\ollama_client.py",
+            "id": "core.ollama_client.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "generate_code",
+            "file_path": "core\\ollama_client.py",
+            "id": "core.ollama_client.py.generate_code"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\router.py",
+            "id": "core.router.py"
+        },
+        {
+            "type": "class",
+            "name": "UserRequestPayload",
+            "file_path": "core\\router.py",
+            "id": "core.router.py.UserRequestPayload"
+        },
+        {
+            "type": "class",
+            "name": "IntentRouter",
+            "file_path": "core\\router.py",
+            "id": "core.router.py.IntentRouter"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "core\\router.py",
+            "id": "core.router.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "classify_intent",
+            "file_path": "core\\router.py",
+            "id": "core.router.py.classify_intent"
+        },
+        {
+            "type": "function",
+            "name": "process_request",
+            "file_path": "core\\router.py",
+            "id": "core.router.py.process_request"
+        },
+        {
+            "type": "module",
+            "file_path": "core\\__init__.py",
+            "id": "core.__init__.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\admin.py",
+            "id": "hub_core.admin.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\apps.py",
+            "id": "hub_core.apps.py"
+        },
+        {
+            "type": "class",
+            "name": "HubCoreConfig",
+            "file_path": "hub_core\\apps.py",
+            "id": "hub_core.apps.py.HubCoreConfig"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\models.py",
+            "id": "hub_core.models.py"
+        },
+        {
+            "type": "class",
+            "name": "AgentManifestModel",
+            "file_path": "hub_core\\models.py",
+            "id": "hub_core.models.py.AgentManifestModel"
+        },
+        {
+            "type": "class",
+            "name": "RequestJob",
+            "file_path": "hub_core\\models.py",
+            "id": "hub_core.models.py.RequestJob"
+        },
+        {
+            "type": "class",
+            "name": "TaskExecutionLog",
+            "file_path": "hub_core\\models.py",
+            "id": "hub_core.models.py.TaskExecutionLog"
+        },
+        {
+            "type": "function",
+            "name": "__str__",
+            "file_path": "hub_core\\models.py",
+            "id": "hub_core.models.py.__str__"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\tests.py",
+            "id": "hub_core.tests.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\urls.py",
+            "id": "hub_core.urls.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py"
+        },
+        {
+            "type": "function",
+            "name": "run_pipeline_background",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.run_pipeline_background"
+        },
+        {
+            "type": "function",
+            "name": "dashboard_view",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.dashboard_view"
+        },
+        {
+            "type": "function",
+            "name": "job_detail_view",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.job_detail_view"
+        },
+        {
+            "type": "function",
+            "name": "file_content_api",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.file_content_api"
+        },
+        {
+            "type": "function",
+            "name": "job_stream_view",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.job_stream_view"
+        },
+        {
+            "type": "function",
+            "name": "delete_job_api",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.delete_job_api"
+        },
+        {
+            "type": "function",
+            "name": "event_stream",
+            "file_path": "hub_core\\views.py",
+            "id": "hub_core.views.py.event_stream"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\__init__.py",
+            "id": "hub_core.__init__.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\migrations\\0001_initial.py",
+            "id": "hub_core.migrations.0001_initial.py"
+        },
+        {
+            "type": "class",
+            "name": "Migration",
+            "file_path": "hub_core\\migrations\\0001_initial.py",
+            "id": "hub_core.migrations.0001_initial.py.Migration"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\migrations\\__init__.py",
+            "id": "hub_core.migrations.__init__.py"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py"
+        },
+        {
+            "type": "class",
+            "name": "DomainContextInjector",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py.DomainContextInjector"
+        },
+        {
+            "type": "function",
+            "name": "get_domain_context",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py.get_domain_context"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py"
+        },
+        {
+            "type": "class",
+            "name": "DjangoPipelineService",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py.DjangoPipelineService"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "execute_job",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py.execute_job"
+        },
+        {
+            "type": "function",
+            "name": "_init_or_update_job",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._init_or_update_job"
+        },
+        {
+            "type": "function",
+            "name": "_validate_request",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._validate_request"
+        },
+        {
+            "type": "function",
+            "name": "_run_pm_agent_step",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._run_pm_agent_step"
+        },
+        {
+            "type": "function",
+            "name": "_run_coder_agent_step",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._run_coder_agent_step"
+        },
+        {
+            "type": "function",
+            "name": "_run_sandbox_qc_loop",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._run_sandbox_qc_loop"
+        },
+        {
+            "type": "function",
+            "name": "_clean_llm_code_output",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._clean_llm_code_output"
+        },
+        {
+            "type": "function",
+            "name": "_generate_sandbox_test_file",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._generate_sandbox_test_file"
+        },
+        {
+            "type": "function",
+            "name": "_finalize_success_job",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._finalize_success_job"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\services\\sandbox_executor.py",
+            "id": "hub_core.services.sandbox_executor.py"
+        },
+        {
+            "type": "class",
+            "name": "SandboxExecutor",
+            "file_path": "hub_core\\services\\sandbox_executor.py",
+            "id": "hub_core.services.sandbox_executor.py.SandboxExecutor"
+        },
+        {
+            "type": "function",
+            "name": "run_pytest_on_module",
+            "file_path": "hub_core\\services\\sandbox_executor.py",
+            "id": "hub_core.services.sandbox_executor.py.run_pytest_on_module"
+        },
+        {
+            "type": "module",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py"
+        },
+        {
+            "type": "function",
+            "name": "nhap_thong_tin_nhan_vien",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_thong_tin_nhan_vien"
+        },
+        {
+            "type": "function",
+            "name": "nhap_muc_luong_theo_gio",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_muc_luong_theo_gio"
+        },
+        {
+            "type": "function",
+            "name": "tinh_luong",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.tinh_luong"
+        },
+        {
+            "type": "function",
+            "name": "hien_thi_thong_tin",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.hien_thi_thong_tin"
+        },
+        {
+            "type": "function",
+            "name": "main",
+            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.main"
+        },
+        {
+            "type": "module",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py"
+        },
+        {
+            "type": "class",
+            "name": "Product",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.Product"
+        },
+        {
+            "type": "class",
+            "name": "ProductCalculator",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.ProductCalculator"
+        },
+        {
+            "type": "function",
+            "name": "__init__",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.__init__"
+        },
+        {
+            "type": "function",
+            "name": "calculate_total_cost",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_total_cost"
+        },
+        {
+            "type": "function",
+            "name": "calculate_selling_price",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_selling_price"
+        },
+        {
+            "type": "function",
+            "name": "calculate_product_price",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_product_price"
+        },
+        {
+            "type": "function",
+            "name": "calculate_multiple_products",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_multiple_products"
+        },
+        {
+            "type": "function",
+            "name": "display_history",
+            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
+            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.display_history"
+        },
+        {
+            "type": "module",
+            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py"
+        },
+        {
+            "type": "function",
+            "name": "test_module_sanity",
+            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_module_sanity"
+        },
+        {
+            "type": "function",
+            "name": "test_functions_exist",
+            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_functions_exist"
+        },
+        {
+            "type": "module",
+            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
+            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py"
+        },
+        {
+            "type": "function",
+            "name": "test_module_sanity",
+            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
+            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_module_sanity"
+        },
+        {
+            "type": "function",
+            "name": "test_functions_exist",
+            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
+            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_functions_exist"
+        },
+        {
+            "type": "module",
+            "file_path": "vnx_hub\\asgi.py",
+            "id": "vnx_hub.asgi.py"
+        },
+        {
+            "type": "module",
+            "file_path": "vnx_hub\\settings.py",
+            "id": "vnx_hub.settings.py"
+        },
+        {
+            "type": "module",
+            "file_path": "vnx_hub\\urls.py",
+            "id": "vnx_hub.urls.py"
+        },
+        {
+            "type": "module",
+            "file_path": "vnx_hub\\wsgi.py",
+            "id": "vnx_hub.wsgi.py"
+        },
+        {
+            "type": "module",
+            "file_path": "vnx_hub\\__init__.py",
+            "id": "vnx_hub.__init__.py"
+        }
+    ],
+    "edges": [
+        {
+            "relation": "defines_function",
+            "source": "manage.py",
+            "target": "manage.py.main"
+        },
+        {
+            "relation": "defines_function",
+            "source": "reset_system.py",
+            "target": "reset_system.py.run_command"
+        },
+        {
+            "relation": "defines_function",
+            "source": "reset_system.py",
+            "target": "reset_system.py.reset_database_and_migrations"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.agent_executor.py",
+            "target": "core.agent_executor.py.AgentExecutor"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_executor.py",
+            "target": "core.agent_executor.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_executor.py",
+            "target": "core.agent_executor.py.run_agent"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_executor.py",
+            "target": "core.agent_executor.py.run_coder_agent"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.agent_registry.py",
+            "target": "core.agent_registry.py.AgentRegistry"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_registry.py",
+            "target": "core.agent_registry.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_registry.py",
+            "target": "core.agent_registry.py.discover_and_register_agents"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_registry.py",
+            "target": "core.agent_registry.py._load_agent_manifest"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.agent_registry.py",
+            "target": "core.agent_registry.py.get_agent_profile"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.code_graph.py",
+            "target": "core.code_graph.py.ProjectCodeGraph"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.code_graph.py",
+            "target": "core.code_graph.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.code_graph.py",
+            "target": "core.code_graph.py.scan_project_directory"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.code_graph.py",
+            "target": "core.code_graph.py._parse_python_file"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.code_graph.py",
+            "target": "core.code_graph.py.save_graph_to_disk"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.dag_engine.py",
+            "target": "core.dag_engine.py.BlueprintDAGEngine"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.dag_engine.py",
+            "target": "core.dag_engine.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.dag_engine.py",
+            "target": "core.dag_engine.py.build_dag_from_intent"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.hardware_detector.py",
+            "target": "core.hardware_detector.py.check_system_environment"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.hardware_detector.py",
+            "target": "core.hardware_detector.py.get_optimal_device"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.ollama_client.py",
+            "target": "core.ollama_client.py.OllamaClient"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.ollama_client.py",
+            "target": "core.ollama_client.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.ollama_client.py",
+            "target": "core.ollama_client.py.generate_code"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.router.py",
+            "target": "core.router.py.UserRequestPayload"
+        },
+        {
+            "relation": "defines_class",
+            "source": "core.router.py",
+            "target": "core.router.py.IntentRouter"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.router.py",
+            "target": "core.router.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.router.py",
+            "target": "core.router.py.classify_intent"
+        },
+        {
+            "relation": "defines_function",
+            "source": "core.router.py",
+            "target": "core.router.py.process_request"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.apps.py",
+            "target": "hub_core.apps.py.HubCoreConfig"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.models.py",
+            "target": "hub_core.models.py.AgentManifestModel"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.models.py",
+            "target": "hub_core.models.py.RequestJob"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.models.py",
+            "target": "hub_core.models.py.TaskExecutionLog"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.models.py",
+            "target": "hub_core.models.py.__str__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.run_pipeline_background"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.dashboard_view"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.job_detail_view"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.file_content_api"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.job_stream_view"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.delete_job_api"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.py",
+            "target": "hub_core.views.py.event_stream"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.migrations.0001_initial.py",
+            "target": "hub_core.migrations.0001_initial.py.Migration"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.services.domain_injector.py",
+            "target": "hub_core.services.domain_injector.py.DomainContextInjector"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.domain_injector.py",
+            "target": "hub_core.services.domain_injector.py.get_domain_context"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py.DjangoPipelineService"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py.execute_job"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._init_or_update_job"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._validate_request"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._run_pm_agent_step"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._run_coder_agent_step"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._run_sandbox_qc_loop"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._clean_llm_code_output"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._generate_sandbox_test_file"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._finalize_success_job"
+        },
+        {
+            "relation": "defines_class",
+            "source": "hub_core.services.sandbox_executor.py",
+            "target": "hub_core.services.sandbox_executor.py.SandboxExecutor"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.sandbox_executor.py",
+            "target": "hub_core.services.sandbox_executor.py.run_pytest_on_module"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_thong_tin_nhan_vien"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_muc_luong_theo_gio"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.tinh_luong"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.hien_thi_thong_tin"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.main"
+        },
+        {
+            "relation": "defines_class",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.Product"
+        },
+        {
+            "relation": "defines_class",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.ProductCalculator"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.__init__"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_total_cost"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_selling_price"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_product_price"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_multiple_products"
+        },
+        {
+            "relation": "defines_function",
+            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
+            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.display_history"
+        },
+        {
+            "relation": "defines_function",
+            "source": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_module_sanity"
+        },
+        {
+            "relation": "defines_function",
+            "source": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py",
+            "target": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_functions_exist"
+        },
+        {
+            "relation": "defines_function",
+            "source": "tests.test_vi_t_tao_app_t_nh_gi__th.py",
+            "target": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_module_sanity"
+        },
+        {
+            "relation": "defines_function",
+            "source": "tests.test_vi_t_tao_app_t_nh_gi__th.py",
+            "target": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_functions_exist"
+        }
+    ]
+}

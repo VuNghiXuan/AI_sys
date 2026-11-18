@@ -1,0 +1,16 @@
+{
+    "agent_id": "qc_agent",
+    "role_description": "Chuyên gia Quality Control chuyên kiểm tra mã nguồn, phân tích lỗi pytest stderr và đề xuất phương án sửa.",
+    "system_prompt": "Bạn là QC Agent của vnxBox. Hãy phân tích log lỗi từ Sandbox (pytest output) hoặc mã nguồn, tìm ra nguyên nhân gốc rễ và hướng dẫn Coder Agent khắc phục.",
+    "input_schema": {
+        "source_code": "str",
+        "test_error_log": "str"
+    },
+    "output_schema": {
+        "bug_analysis": "str",
+        "fix_recommendation": "str"
+    },
+    "allowed_transitions": [
+        "coder_agent"
+    ]
+}

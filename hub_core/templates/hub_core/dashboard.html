@@ -1,0 +1,220 @@
+<!-- 
+  # File Path: hub_core/templates/hub_core/dashboard.html
+  # Purpose: Trang chủ điều khiển chính, kế thừa từ base.html và kết nối các partials (Sidebar, Chat Room, Code Library).
+-->
+{% extends 'hub_core/base.html' %}
+
+{% block title %}Dashboard - vnxBox Enterprise Control Center{% endblock %}
+
+{% block content %}
+<!-- 1. Cột Trái: Sidebar Lịch sử Job -->
+{% include 'hub_core/partials/_sidebar.html' %}
+
+<!-- 2. Cột Giữa: Khung Chat & War Room Stream -->
+{% include 'hub_core/partials/_chat_room.html' %}
+
+<!-- 3. Cột Phải: Thư viện Code & Xem nhanh -->
+{% include 'hub_core/partials/_code_library.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- 
+  # JavaScript Controller cho toàn bộ tính năng Real-time SSE, Phím tắt Zalo (Alt+Enter) và Quản lý lỗi tường minh.
+-->
+<script>
+    const chatContainer = document.getElementById('chat-stream-container');
+    function scrollToBottom() {
+        if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    window.onload = function () {
+        scrollToBottom();
+        const activeJobId = "{{ active_job.job_id|default:'' }}";
+        const activeJobStatus = "{{ active_job.status|default:'' }}";
+        if (activeJobId && activeJobStatus === 'RUNNING') {
+            console.log(`[SYSTEM_LOG] Kết nối SSE thời gian thực cho Job đang chạy: ${activeJobId}`);
+            connectSSE(activeJobId);
+        }
+    };
+
+    // --- FIX CHUẨN XÁC PHÍM TẮT: Enter gửi, Alt+Enter hoặc Shift+Enter xuống dòng ---
+    const promptInput = document.getElementById('prompt-input');
+    if (promptInput) {
+        promptInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                if (e.altKey || e.shiftKey) {
+                    return; // Cho phép xuống dòng tự nhiên
+                } else {
+                    e.preventDefault();
+                    document.getElementById('prompt-form').dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+            }
+        });
+    }
+
+    const promptForm = document.getElementById('prompt-form');
+    if (promptForm) {
+        promptForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const promptText = promptInput.value.trim();
+            const domain = document.getElementById('prompt-domain').value;
+            if (!promptText) return;
+
+            const banner = document.getElementById('welcome-banner');
+            if (banner) banner.remove();
+
+            chatContainer.innerHTML = `
+                <div id="active-chat-box" class="space-y-6">
+                    <div class="flex flex-col items-end space-y-1">
+                        <span class="text-[10px] text-slate-500 font-mono">User Request (Vừa xong)</span>
+                        <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-2xl text-sm shadow-md">${promptText}</div>
+                    </div>
+                    <div id="task-logs-stream" class="space-y-4">
+                        <div class="text-xs text-amber-400 font-mono animate-pulse flex items-center gap-2">
+                            <span>⚡ [SYSTEM_LOG]</span> Đang khởi tạo luồng ngầm Background Thread & đội ngũ AI Agents (PM ➔ Coder ➔ QC)...
+                        </div>
+                    </div>
+                </div>
+            `;
+            promptInput.value = '';
+            scrollToBottom();
+
+            const formData = new FormData();
+            formData.append('raw_prompt', promptText);
+            formData.append('domain', domain);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            fetch("", { method: "POST", body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.job_id) {
+                        console.log(`[SYSTEM_LOG] Job khởi tạo thành công: ${data.job_id}`);
+                        prependJobToSidebar(data.job_id, data.request_id, "RUNNING");
+                        connectSSE(data.job_id);
+                    } else {
+                        console.error("[SYSTEM_ERROR] Phản hồi từ server không chứa job_id:", data);
+                    }
+                })
+                .catch(err => console.error("[SYSTEM_ERROR] Lỗi kết nối AJAX POST:", err));
+        });
+    }
+
+    function prependJobToSidebar(jobId, requestId, status) {
+        const sidebarList = document.getElementById('sidebar-job-list');
+        if (!sidebarList) return;
+        const emptyMsg = sidebarList.querySelector('.text-center');
+        if (emptyMsg) emptyMsg.remove();
+
+        sidebarList.querySelectorAll('a').forEach(a => {
+            a.classList.remove('bg-indigo-600', 'text-white', 'font-bold', 'shadow');
+        });
+
+        const newJobLink = document.createElement('a');
+        newJobLink.href = `?job_id=${jobId}`;
+        newJobLink.className = `block truncate px-3 py-2 rounded text-xs bg-indigo-600 text-white font-bold shadow animate-pulse transition`;
+        newJobLink.title = `[${status}] ${requestId}`;
+        newJobLink.innerText = `[${status}] ${requestId}`;
+
+        sidebarList.prepend(newJobLink);
+    }
+
+    function connectSSE(jobId) {
+        const evtSource = new EventSource(`/job/${jobId}/stream/`);
+        const badge = document.getElementById('job-status-badge');
+        if (badge) {
+            badge.innerText = "RUNNING";
+            badge.className = "px-3 py-1 text-xs font-semibold rounded-full font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 animate-pulse ml-2";
+        }
+
+        evtSource.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            if (badge) badge.innerText = data.status;
+
+            const container = document.getElementById('task-logs-stream');
+            if (container && data.logs.length > 0) {
+                let html = `<div class="text-xs text-indigo-300 font-mono">🔍 [SSE_STREAM] Đang đồng bộ tiến trình agent real-time (Tổng logs: ${data.logs.length})...</div>`;
+
+                data.logs.forEach(log => {
+                    let dotColor = log.status === 'SUCCESS' ? 'bg-emerald-500' : (log.status === 'RUNNING' ? 'bg-amber-500 animate-ping' : 'bg-rose-500');
+                    let statusText = log.status === 'RUNNING' ? '⏳ [AI_PROCESSING] Đang thực thi tác vụ chuyên sâu...' : '';
+
+                    html += `<div class="flex flex-col items-start space-y-1 mt-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full ${dotColor}"></span>
+                            <span class="text-xs font-mono font-semibold text-indigo-400">🤖 Agent: ${log.agent_assigned}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">[${log.task_name} - ${log.status}]</span>
+                        </div>
+                        <div class="bg-cardbg border border-bordercolor rounded-2xl rounded-tl-sm p-4 max-w-3xl w-full space-y-2 shadow-lg">`;
+
+                    if (statusText && !log.output_result) {
+                        html += `<div class="text-xs text-amber-400 font-mono animate-pulse">${statusText}</div>`;
+                    }
+                    if (log.output_result) {
+                        html += `<pre class="text-xs text-slate-200 bg-slate-950 p-3 rounded-xl overflow-x-auto max-h-80 font-mono leading-relaxed whitespace-pre-wrap">${log.output_result}</pre>`;
+                    }
+                    if (log.error_message) {
+                        html += `<pre class="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/30 p-3 rounded-xl overflow-x-auto max-h-40 font-mono whitespace-pre-wrap">${log.error_message}</pre>`;
+                    }
+
+                    html += `</div></div>`;
+                });
+                container.innerHTML = html;
+                scrollToBottom();
+            }
+
+            if (data.status === 'SUCCESS' || data.status === 'FAILED') {
+                if (badge) {
+                    badge.className = `px-3 py-1 text-xs font-semibold rounded-full font-mono ${data.status === 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'} ml-2`;
+                }
+                evtSource.close();
+                console.log(`[SYSTEM_LOG] Job đã kết thúc với trạng thái: ${data.status}`);
+                setTimeout(() => {
+                    window.location.href = `/?job_id=${jobId}`;
+                }, 1200);
+            }
+        };
+
+        evtSource.onerror = function (err) {
+            console.error("[SSE_ERROR] Lỗi kết nối Server-Sent Events:", err);
+            evtSource.close();
+        };
+    }
+
+    function loadSourceCode(path) {
+        fetch(`/api/file-content/?path=${encodeURIComponent(path)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('preview-filename').innerText = data.filename || path.split('/').pop();
+                    document.getElementById('quick-preview-code').innerText = data.content;
+                } else {
+                    alert("[ERROR] Không thể đọc nội dung tệp: " + (data.error || 'Lỗi không xác định'));
+                }
+            })
+            .catch(err => console.error("[API_ERROR] Lỗi tải nội dung file:", err));
+    }
+
+    let isCollapsed = false;
+    function toggleSidebar() {
+        const sidebar = document.getElementById('left-sidebar');
+        const title = document.getElementById('sidebar-title');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        isCollapsed = !isCollapsed;
+        if (isCollapsed) {
+            sidebar.classList.remove('w-64');
+            sidebar.classList.add('w-16');
+            title.style.display = 'none';
+            toggleIcon.innerText = '▶';
+        } else {
+            sidebar.classList.remove('w-16');
+            sidebar.classList.add('w-64');
+            title.style.display = 'block';
+            toggleIcon.innerText = '◀';
+        }
+
+
+
+    }
+</script>
+{% endblock %}

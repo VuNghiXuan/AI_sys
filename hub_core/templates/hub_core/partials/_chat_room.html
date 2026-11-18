@@ -1,0 +1,90 @@
+<!-- 
+  # File Path: hub_core/templates/hub_core/partials/_chat_room.html
+  # Purpose: Trung tâm Live War Room, hiển thị luồng chat real-time của AI Agents và thanh nhập Prompt (Enter gửi, Alt+Enter xuống dòng).
+-->
+<main class="flex-1 flex flex-col bg-darkbg relative overflow-hidden">
+
+    <!-- Chat Stream Container -->
+    <div id="chat-stream-container" class="flex-1 p-6 overflow-y-auto space-y-6">
+        {% if active_job %}
+        <div id="active-chat-box" class="space-y-6">
+            <div class="flex flex-col items-end space-y-1">
+                <span class="text-[10px] text-slate-500 font-mono">User Request ({{ active_job.created_at }})</span>
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-2xl text-sm shadow-md">
+                    {{ active_job.raw_prompt }}
+                </div>
+            </div>
+
+            <div id="task-logs-stream" class="space-y-4">
+                {% for log in task_logs %}
+                <div class="flex flex-col items-start space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="w-2 h-2 rounded-full {% if log.status == 'SUCCESS' %}bg-emerald-500{% elif log.status == 'RUNNING' %}bg-amber-500 animate-ping{% else %}bg-rose-500{% endif %}"></span>
+                        <span class="text-xs font-mono font-semibold text-indigo-400">🤖 Agent:
+                            {{ log.agent_assigned }}</span>
+                        <span class="text-[10px] text-slate-500 font-mono">
+                            [{{ log.task_name }} - {{ log.status }}]</span>
+                    </div>
+                    <div
+                        class="bg-cardbg border border-bordercolor rounded-2xl rounded-tl-sm p-4 max-w-3xl w-full space-y-2 shadow-lg">
+                        {% if log.status == 'RUNNING' %}
+                        <div class="text-xs text-amber-400 font-mono animate-pulse">⏳ Đang xử lý tác vụ, vui lòng chờ
+                            trong giây lát...</div>
+                        {% endif %}
+                        {% if log.output_result %}
+                        <pre
+                            class="text-xs text-slate-200 bg-slate-950 p-3 rounded-xl overflow-x-auto max-h-80 font-mono leading-relaxed whitespace-pre-wrap">{{ log.output_result }}</pre>
+                        {% endif %}
+                        {% if log.error_message %}
+                        <pre
+                            class="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/30 p-3 rounded-xl overflow-x-auto max-h-40 font-mono whitespace-pre-wrap">{{ log.error_message }}</pre>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div id="welcome-banner"
+            class="text-center py-16 space-y-3 max-w-lg mx-auto bg-cardbg border border-bordercolor p-8 rounded-2xl shadow-2xl">
+            <div
+                class="w-14 h-14 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center justify-center mx-auto text-indigo-400 text-2xl animate-pulse">
+                ⚡</div>
+            <h3 class="text-lg font-bold text-white">Live War Room - Autonomous Multi-Agent</h3>
+            <p class="text-slate-400 text-xs leading-relaxed">Gõ mô tả tính năng cần phát triển bên dưới hoặc chọn một
+                Job từ lịch sử bên trái để quan sát các Agent làm việc thời gian thực.</p>
+        </div>
+        <div id="task-logs-stream" class="space-y-4"></div>
+        {% endif %}
+    </div>
+
+    <!-- Floating Prompt Bar at Bottom (Hỗ trợ Enter gửi, Alt+Enter xuống dòng chuẩn Zalo) -->
+    <div class="p-4 bg-sidebarbg border-t border-bordercolor shrink-0 shadow-2xl">
+        <form id="prompt-form" class="max-w-4xl mx-auto space-y-2">
+            {% csrf_token %}
+            <div class="flex gap-2 items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <select name="domain" id="prompt-domain"
+                        class="bg-slate-900 border border-bordercolor rounded-lg px-3 py-1.5 text-xs text-indigo-300 focus:outline-none">
+                        <option value="software">💻 Software Engineering</option>
+                        <option value="legal">⚖️ Legal & Compliance</option>
+                        <option value="construction">🏗️ Construction Mgmt</option>
+                    </select>
+                    <span class="text-xs text-slate-500">| Nhấn <strong class="text-indigo-400">Enter</strong> để gửi,
+                        <strong class="text-indigo-400">Shift + Enter</strong> xuống dòng</span>
+                </div>
+            </div>
+            <div class="relative flex items-center">
+                <textarea name="raw_prompt" id="prompt-input" rows="2" required
+                    placeholder="Nhập yêu cầu phát triển tính năng (VD: Viết app đọc số tiền thành chữ...)"
+                    class="w-full bg-slate-900 border border-bordercolor rounded-xl p-3 pr-32 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition resize-none"></textarea>
+
+                <button type="submit" id="submit-btn"
+                    class="absolute right-3 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition shadow-lg flex items-center gap-2">
+                    <span>🚀</span> Kích hoạt
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

@@ -1,0 +1,13 @@
+{
+    "domain_name": "Gold & Jewelry ERP",
+    "rules": [
+        "Quản lý tuổi vàng: Vàng 24K (99.99), Vàng 18K (75%), Vàng 14K (58.3%).",
+        "Quy tắc tính tiền công chế tác cộng dồn vào giá trị hóa đơn.",
+        "Quản lý công nợ nhà cung cấp vàng nguyên liệu theo trọng lượng (chỉ vàng/lượng vàng) và tiền mặt.",
+        "Nghiệp vụ tách lô vàng, đổi trả hàng và tích điểm khách hàng thân thiết."
+    ],
+    "code_standards": [
+        "Sử dụng kiểu dữ liệu Decimal cho mọi tính toán tiền tệ và trọng lượng vàng để tránh sai số dấu phẩy động.",
+        "Mỗi module Python phải dưới 300 dòng, có header chú thích file path và log tường minh bằng logging."
+    ]
+}
