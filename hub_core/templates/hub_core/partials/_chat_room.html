@@ -1,6 +1,7 @@
 <!-- 
   # File Path: hub_core/templates/hub_core/partials/_chat_room.html
-  # Purpose: Trung tâm Live War Room, hiển thị luồng chat real-time của AI Agents và thanh nhập Prompt (Enter gửi, Alt+Enter xuống dòng).
+  # Purpose: Trung tâm Live War Room, hiển thị luồng chat real-time của AI Agents và thanh nhập Prompt (Enter gửi, Alt/Shift+Enter xuống dòng).
+  # Connected Files: [hub_core/templates/hub_core/dashboard.html, hub_core/views/dashboard_views.py]
 -->
 <main class="flex-1 flex flex-col bg-darkbg relative overflow-hidden">
 
@@ -59,25 +60,34 @@
         {% endif %}
     </div>
 
-    <!-- Floating Prompt Bar at Bottom (Hỗ trợ Enter gửi, Alt+Enter xuống dòng chuẩn Zalo) -->
+    <!-- Floating Prompt Bar at Bottom (Hỗ trợ Enter gửi, Alt/Shift+Enter xuống dòng chuẩn Zalo) -->
     <div class="p-4 bg-sidebarbg border-t border-bordercolor shrink-0 shadow-2xl">
         <form id="prompt-form" class="max-w-4xl mx-auto space-y-2">
             {% csrf_token %}
-            <div class="flex gap-2 items-center justify-between">
-                <div class="flex items-center gap-2">
+            <div class="flex flex-wrap gap-2 items-center justify-between">
+                <div class="flex flex-wrap items-center gap-2">
                     <select name="domain" id="prompt-domain"
                         class="bg-slate-900 border border-bordercolor rounded-lg px-3 py-1.5 text-xs text-indigo-300 focus:outline-none">
+                        <option value="gold_silver" selected>🥇 Vàng Bạc (gold_silver)</option>
+                        <option value="accounting_reconciliation">📊 Đối Soát Kế Toán (accounting_reconciliation)
+                        </option>
                         <option value="software">💻 Software Engineering</option>
                         <option value="legal">⚖️ Legal & Compliance</option>
                         <option value="construction">🏗️ Construction Mgmt</option>
                     </select>
+
+                    <select name="sub_domain" id="prompt-sub-domain"
+                        class="bg-slate-900 border border-bordercolor rounded-lg px-3 py-1.5 text-xs text-emerald-300 focus:outline-none">
+                        <option value="">-- Sub-domain (Mặc định / Log) --</option>
+                    </select>
+
                     <span class="text-xs text-slate-500">| Nhấn <strong class="text-indigo-400">Enter</strong> để gửi,
                         <strong class="text-indigo-400">Shift + Enter</strong> xuống dòng</span>
                 </div>
             </div>
             <div class="relative flex items-center">
                 <textarea name="raw_prompt" id="prompt-input" rows="2" required
-                    placeholder="Nhập yêu cầu phát triển tính năng (VD: Viết app đọc số tiền thành chữ...)"
+                    placeholder="Nhập yêu cầu phát triển tính năng (VD: Viết module tính toán báo cáo vàng bạc bằng pandas...)"
                     class="w-full bg-slate-900 border border-bordercolor rounded-xl p-3 pr-32 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition resize-none"></textarea>
 
                 <button type="submit" id="submit-btn"
@@ -88,3 +98,43 @@
         </form>
     </div>
 </main>
+
+<script>
+    (function () {
+        const domainSelect = document.getElementById("prompt-domain");
+        const subDomainSelect = document.getElementById("prompt-sub-domain");
+
+        const subDomainOptionsByDomain = {
+            gold_silver: [
+                { value: "report_summary", label: "Tổng hợp báo cáo (report_summary)" },
+                { value: "purity_conversion", label: "Quy đổi tuổi/hàm lượng (purity_conversion)" }
+            ],
+            accounting_reconciliation: [
+                { value: "debt_reconciliation", label: "Đối soát công nợ (debt_reconciliation)" },
+                { value: "report_summary", label: "Tổng hợp số liệu kế toán (report_summary)" }
+            ]
+        };
+
+        function syncSubDomainOptions() {
+            if (!domainSelect || !subDomainSelect) return;
+            const currentDomain = domainSelect.value;
+            const items = subDomainOptionsByDomain[currentDomain] || [];
+
+            subDomainSelect.innerHTML = '<option value="">-- Sub-domain (Mặc định / Log) --</option>';
+            items.forEach(item => {
+                const opt = document.createElement("option");
+                opt.value = item.value;
+                opt.textContent = item.label;
+                if (currentDomain === "gold_silver" && item.value === "report_summary") {
+                    opt.selected = true;
+                }
+                subDomainSelect.appendChild(opt);
+            });
+        }
+
+        if (domainSelect) {
+            domainSelect.addEventListener("change", syncSubDomainOptions);
+            syncSubDomainOptions();
+        }
+    })();
+</script>

@@ -154,6 +154,12 @@
             "id": "core.dag_engine.py.build_dag_from_intent"
         },
         {
+            "type": "function",
+            "name": "build_dag_from_multiple_intents",
+            "file_path": "core\\dag_engine.py",
+            "id": "core.dag_engine.py.build_dag_from_multiple_intents"
+        },
+        {
             "type": "module",
             "file_path": "core\\hardware_detector.py",
             "id": "core.hardware_detector.py"
@@ -218,9 +224,9 @@
         },
         {
             "type": "function",
-            "name": "classify_intent",
+            "name": "classify_intents",
             "file_path": "core\\router.py",
-            "id": "core.router.py.classify_intent"
+            "id": "core.router.py.classify_intents"
         },
         {
             "type": "function",
@@ -232,6 +238,86 @@
             "type": "module",
             "file_path": "core\\__init__.py",
             "id": "core.__init__.py"
+        },
+        {
+            "type": "module",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py"
+        },
+        {
+            "type": "function",
+            "name": "reconcile_records",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.reconcile_records"
+        },
+        {
+            "type": "function",
+            "name": "summarize_accounting_df",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.summarize_accounting_df"
+        },
+        {
+            "type": "module",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py"
+        },
+        {
+            "type": "function",
+            "name": "test_module_sanity",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_module_sanity"
+        },
+        {
+            "type": "function",
+            "name": "test_functions_exist",
+            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
+            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_functions_exist"
+        },
+        {
+            "type": "module",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py"
+        },
+        {
+            "type": "function",
+            "name": "standardize_numeric_columns",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.standardize_numeric_columns"
+        },
+        {
+            "type": "function",
+            "name": "separate_weight_types",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.separate_weight_types"
+        },
+        {
+            "type": "function",
+            "name": "summarize_gold_silver_report",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.summarize_gold_silver_report"
+        },
+        {
+            "type": "function",
+            "name": "convert_purity_weight",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.convert_purity_weight"
+        },
+        {
+            "type": "module",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py"
+        },
+        {
+            "type": "function",
+            "name": "test_module_sanity",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_module_sanity"
+        },
+        {
+            "type": "function",
+            "name": "test_functions_exist",
+            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
+            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_functions_exist"
         },
         {
             "type": "module",
@@ -290,53 +376,6 @@
         },
         {
             "type": "module",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py"
-        },
-        {
-            "type": "function",
-            "name": "run_pipeline_background",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.run_pipeline_background"
-        },
-        {
-            "type": "function",
-            "name": "dashboard_view",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.dashboard_view"
-        },
-        {
-            "type": "function",
-            "name": "job_detail_view",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.job_detail_view"
-        },
-        {
-            "type": "function",
-            "name": "file_content_api",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.file_content_api"
-        },
-        {
-            "type": "function",
-            "name": "job_stream_view",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.job_stream_view"
-        },
-        {
-            "type": "function",
-            "name": "delete_job_api",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.delete_job_api"
-        },
-        {
-            "type": "function",
-            "name": "event_stream",
-            "file_path": "hub_core\\views.py",
-            "id": "hub_core.views.py.event_stream"
-        },
-        {
-            "type": "module",
             "file_path": "hub_core\\__init__.py",
             "id": "hub_core.__init__.py"
         },
@@ -369,6 +408,24 @@
         },
         {
             "type": "function",
+            "name": "_load_domain_data",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py._load_domain_data"
+        },
+        {
+            "type": "function",
+            "name": "_extract_sub_domain_section",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py._extract_sub_domain_section"
+        },
+        {
+            "type": "function",
+            "name": "_format_skeletons",
+            "file_path": "hub_core\\services\\domain_injector.py",
+            "id": "hub_core.services.domain_injector.py._format_skeletons"
+        },
+        {
+            "type": "function",
             "name": "get_domain_context",
             "file_path": "hub_core\\services\\domain_injector.py",
             "id": "hub_core.services.domain_injector.py.get_domain_context"
@@ -398,6 +455,12 @@
         },
         {
             "type": "function",
+            "name": "_slugify_vietnamese",
+            "file_path": "hub_core\\services\\pipeline_service.py",
+            "id": "hub_core.services.pipeline_service.py._slugify_vietnamese"
+        },
+        {
+            "type": "function",
             "name": "_init_or_update_job",
             "file_path": "hub_core\\services\\pipeline_service.py",
             "id": "hub_core.services.pipeline_service.py._init_or_update_job"
@@ -422,21 +485,15 @@
         },
         {
             "type": "function",
-            "name": "_run_sandbox_qc_loop",
+            "name": "_run_isolated_sandbox_qc_loop",
             "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._run_sandbox_qc_loop"
+            "id": "hub_core.services.pipeline_service.py._run_isolated_sandbox_qc_loop"
         },
         {
             "type": "function",
             "name": "_clean_llm_code_output",
             "file_path": "hub_core\\services\\pipeline_service.py",
             "id": "hub_core.services.pipeline_service.py._clean_llm_code_output"
-        },
-        {
-            "type": "function",
-            "name": "_generate_sandbox_test_file",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._generate_sandbox_test_file"
         },
         {
             "type": "function",
@@ -463,125 +520,107 @@
         },
         {
             "type": "module",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py"
-        },
-        {
-            "type": "function",
-            "name": "nhap_thong_tin_nhan_vien",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_thong_tin_nhan_vien"
-        },
-        {
-            "type": "function",
-            "name": "nhap_muc_luong_theo_gio",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_muc_luong_theo_gio"
-        },
-        {
-            "type": "function",
-            "name": "tinh_luong",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.tinh_luong"
-        },
-        {
-            "type": "function",
-            "name": "hien_thi_thong_tin",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.hien_thi_thong_tin"
-        },
-        {
-            "type": "function",
-            "name": "main",
-            "file_path": "modules\\vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.main"
-        },
-        {
-            "type": "module",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py"
+            "file_path": "hub_core\\services\\workspace_manager.py",
+            "id": "hub_core.services.workspace_manager.py"
         },
         {
             "type": "class",
-            "name": "Product",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.Product"
-        },
-        {
-            "type": "class",
-            "name": "ProductCalculator",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.ProductCalculator"
+            "name": "IsolatedWorkspaceManager",
+            "file_path": "hub_core\\services\\workspace_manager.py",
+            "id": "hub_core.services.workspace_manager.py.IsolatedWorkspaceManager"
         },
         {
             "type": "function",
             "name": "__init__",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.__init__"
+            "file_path": "hub_core\\services\\workspace_manager.py",
+            "id": "hub_core.services.workspace_manager.py.__init__"
         },
         {
             "type": "function",
-            "name": "calculate_total_cost",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_total_cost"
+            "name": "extract_third_party_libs",
+            "file_path": "hub_core\\services\\workspace_manager.py",
+            "id": "hub_core.services.workspace_manager.py.extract_third_party_libs"
         },
         {
             "type": "function",
-            "name": "calculate_selling_price",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_selling_price"
-        },
-        {
-            "type": "function",
-            "name": "calculate_product_price",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_product_price"
-        },
-        {
-            "type": "function",
-            "name": "calculate_multiple_products",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_multiple_products"
-        },
-        {
-            "type": "function",
-            "name": "display_history",
-            "file_path": "modules\\vi_t_tao_app_t_nh_gi__th.py",
-            "id": "modules.vi_t_tao_app_t_nh_gi__th.py.display_history"
+            "name": "prepare_isolated_workspace",
+            "file_path": "hub_core\\services\\workspace_manager.py",
+            "id": "hub_core.services.workspace_manager.py.prepare_isolated_workspace"
         },
         {
             "type": "module",
-            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py"
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py"
         },
         {
             "type": "function",
-            "name": "test_module_sanity",
-            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_module_sanity"
+            "name": "_list_generated_modules",
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py._list_generated_modules"
         },
         {
             "type": "function",
-            "name": "test_functions_exist",
-            "file_path": "tests\\test_vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "id": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_functions_exist"
+            "name": "run_pipeline_background",
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py.run_pipeline_background"
+        },
+        {
+            "type": "function",
+            "name": "_extract_sub_domain_from_request",
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py._extract_sub_domain_from_request"
+        },
+        {
+            "type": "function",
+            "name": "dashboard_view",
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py.dashboard_view"
+        },
+        {
+            "type": "function",
+            "name": "job_detail_view",
+            "file_path": "hub_core\\views\\dashboard_views.py",
+            "id": "hub_core.views.dashboard_views.py.job_detail_view"
         },
         {
             "type": "module",
-            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
-            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py"
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py"
         },
         {
             "type": "function",
-            "name": "test_module_sanity",
-            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
-            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_module_sanity"
+            "name": "_is_safe_preview_path",
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py._is_safe_preview_path"
         },
         {
             "type": "function",
-            "name": "test_functions_exist",
-            "file_path": "tests\\test_vi_t_tao_app_t_nh_gi__th.py",
-            "id": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_functions_exist"
+            "name": "file_content_api",
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py.file_content_api"
+        },
+        {
+            "type": "function",
+            "name": "job_stream_view",
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py.job_stream_view"
+        },
+        {
+            "type": "function",
+            "name": "delete_job_api",
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py.delete_job_api"
+        },
+        {
+            "type": "function",
+            "name": "event_stream",
+            "file_path": "hub_core\\views\\stream_api_views.py",
+            "id": "hub_core.views.stream_api_views.py.event_stream"
+        },
+        {
+            "type": "module",
+            "file_path": "hub_core\\views\\__init__.py",
+            "id": "hub_core.views.__init__.py"
         },
         {
             "type": "module",
@@ -712,6 +751,11 @@
         },
         {
             "relation": "defines_function",
+            "source": "core.dag_engine.py",
+            "target": "core.dag_engine.py.build_dag_from_multiple_intents"
+        },
+        {
+            "relation": "defines_function",
             "source": "core.hardware_detector.py",
             "target": "core.hardware_detector.py.check_system_environment"
         },
@@ -753,12 +797,62 @@
         {
             "relation": "defines_function",
             "source": "core.router.py",
-            "target": "core.router.py.classify_intent"
+            "target": "core.router.py.classify_intents"
         },
         {
             "relation": "defines_function",
             "source": "core.router.py",
             "target": "core.router.py.process_request"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py",
+            "target": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.reconcile_records"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py",
+            "target": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.summarize_accounting_df"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py",
+            "target": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_module_sanity"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py",
+            "target": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_functions_exist"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.standardize_numeric_columns"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.separate_weight_types"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.summarize_gold_silver_report"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.convert_purity_weight"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_module_sanity"
+        },
+        {
+            "relation": "defines_function",
+            "source": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py",
+            "target": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_functions_exist"
         },
         {
             "relation": "defines_class",
@@ -786,41 +880,6 @@
             "target": "hub_core.models.py.__str__"
         },
         {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.run_pipeline_background"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.dashboard_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.job_detail_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.file_content_api"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.job_stream_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.delete_job_api"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.py",
-            "target": "hub_core.views.py.event_stream"
-        },
-        {
             "relation": "defines_class",
             "source": "hub_core.migrations.0001_initial.py",
             "target": "hub_core.migrations.0001_initial.py.Migration"
@@ -829,6 +888,21 @@
             "relation": "defines_class",
             "source": "hub_core.services.domain_injector.py",
             "target": "hub_core.services.domain_injector.py.DomainContextInjector"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.domain_injector.py",
+            "target": "hub_core.services.domain_injector.py._load_domain_data"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.domain_injector.py",
+            "target": "hub_core.services.domain_injector.py._extract_sub_domain_section"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.domain_injector.py",
+            "target": "hub_core.services.domain_injector.py._format_skeletons"
         },
         {
             "relation": "defines_function",
@@ -853,6 +927,11 @@
         {
             "relation": "defines_function",
             "source": "hub_core.services.pipeline_service.py",
+            "target": "hub_core.services.pipeline_service.py._slugify_vietnamese"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.services.pipeline_service.py",
             "target": "hub_core.services.pipeline_service.py._init_or_update_job"
         },
         {
@@ -873,17 +952,12 @@
         {
             "relation": "defines_function",
             "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._run_sandbox_qc_loop"
+            "target": "hub_core.services.pipeline_service.py._run_isolated_sandbox_qc_loop"
         },
         {
             "relation": "defines_function",
             "source": "hub_core.services.pipeline_service.py",
             "target": "hub_core.services.pipeline_service.py._clean_llm_code_output"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._generate_sandbox_test_file"
         },
         {
             "relation": "defines_function",
@@ -901,89 +975,74 @@
             "target": "hub_core.services.sandbox_executor.py.run_pytest_on_module"
         },
         {
-            "relation": "defines_function",
-            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_thong_tin_nhan_vien"
-        },
-        {
-            "relation": "defines_function",
-            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.nhap_muc_luong_theo_gio"
-        },
-        {
-            "relation": "defines_function",
-            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.tinh_luong"
-        },
-        {
-            "relation": "defines_function",
-            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.hien_thi_thong_tin"
-        },
-        {
-            "relation": "defines_function",
-            "source": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "modules.vi_t_ch__ng_tr_nh_t_nh_l.py.main"
-        },
-        {
             "relation": "defines_class",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.Product"
-        },
-        {
-            "relation": "defines_class",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.ProductCalculator"
+            "source": "hub_core.services.workspace_manager.py",
+            "target": "hub_core.services.workspace_manager.py.IsolatedWorkspaceManager"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.__init__"
+            "source": "hub_core.services.workspace_manager.py",
+            "target": "hub_core.services.workspace_manager.py.__init__"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_total_cost"
+            "source": "hub_core.services.workspace_manager.py",
+            "target": "hub_core.services.workspace_manager.py.extract_third_party_libs"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_selling_price"
+            "source": "hub_core.services.workspace_manager.py",
+            "target": "hub_core.services.workspace_manager.py.prepare_isolated_workspace"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_product_price"
+            "source": "hub_core.views.dashboard_views.py",
+            "target": "hub_core.views.dashboard_views.py._list_generated_modules"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.calculate_multiple_products"
+            "source": "hub_core.views.dashboard_views.py",
+            "target": "hub_core.views.dashboard_views.py.run_pipeline_background"
         },
         {
             "relation": "defines_function",
-            "source": "modules.vi_t_tao_app_t_nh_gi__th.py",
-            "target": "modules.vi_t_tao_app_t_nh_gi__th.py.display_history"
+            "source": "hub_core.views.dashboard_views.py",
+            "target": "hub_core.views.dashboard_views.py._extract_sub_domain_from_request"
         },
         {
             "relation": "defines_function",
-            "source": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_module_sanity"
+            "source": "hub_core.views.dashboard_views.py",
+            "target": "hub_core.views.dashboard_views.py.dashboard_view"
         },
         {
             "relation": "defines_function",
-            "source": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py",
-            "target": "tests.test_vi_t_ch__ng_tr_nh_t_nh_l.py.test_functions_exist"
+            "source": "hub_core.views.dashboard_views.py",
+            "target": "hub_core.views.dashboard_views.py.job_detail_view"
         },
         {
             "relation": "defines_function",
-            "source": "tests.test_vi_t_tao_app_t_nh_gi__th.py",
-            "target": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_module_sanity"
+            "source": "hub_core.views.stream_api_views.py",
+            "target": "hub_core.views.stream_api_views.py._is_safe_preview_path"
         },
         {
             "relation": "defines_function",
-            "source": "tests.test_vi_t_tao_app_t_nh_gi__th.py",
-            "target": "tests.test_vi_t_tao_app_t_nh_gi__th.py.test_functions_exist"
+            "source": "hub_core.views.stream_api_views.py",
+            "target": "hub_core.views.stream_api_views.py.file_content_api"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.stream_api_views.py",
+            "target": "hub_core.views.stream_api_views.py.job_stream_view"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.stream_api_views.py",
+            "target": "hub_core.views.stream_api_views.py.delete_job_api"
+        },
+        {
+            "relation": "defines_function",
+            "source": "hub_core.views.stream_api_views.py",
+            "target": "hub_core.views.stream_api_views.py.event_stream"
         }
     ]
 }

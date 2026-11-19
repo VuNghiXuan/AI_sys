@@ -1,0 +1,35 @@
+{
+    "domain_key": "gold_silver",
+    "domain_name": "Nghiệp vụ & Báo cáo Vàng Bạc",
+    "description": "Quy tắc nghiệp vụ, tiêu chuẩn mã nguồn và khung hàm mẫu cho tính toán, quy đổi và tổng hợp báo cáo vàng bạc bằng pandas.",
+    "rules": [
+        "Phân biệt rõ trọng lượng thô/tổng trọng lượng, trọng lượng đá/tạp chất (nếu có) và trọng lượng tinh/quy đổi.",
+        "Chuẩn hóa kiểu số (numeric) và xử lý giá trị thiếu/rỗng rõ ràng trước khi tính toán báo cáo.",
+        "Không tự suy diễn hệ số quy đổi hoặc công thức nghiệp vụ ngoài dữ liệu đầu vào hoặc tham số truyền vào."
+    ],
+    "sub_domains": {
+        "report_summary": {
+            "title": "Tổng hợp báo cáo vàng bạc",
+            "rules": [
+                "Nhóm theo loại vàng/bạc, loại giao dịch hoặc kỳ báo cáo; tính tổng, trung bình, min, max rõ ràng.",
+                "Giữ nguyên độ chính xác số thập phân khi tổng hợp và xuất báo cáo."
+            ],
+            "skeleton_ref": "summarize_gold_silver_report"
+        },
+        "purity_conversion": {
+            "title": "Quy đổi tuổi vàng / hàm lượng",
+            "rules": [
+                "Quy đổi trọng lượng theo tỷ lệ hàm lượng/tuổi vàng được truyền vào tường minh, tránh làm tròn sớm giữa chừng."
+            ],
+            "skeleton_ref": "convert_purity_weight"
+        }
+    },
+    "code_standards": [
+        "Mỗi file dưới 300 dòng, chia nhỏ hàm đơn nhiệm, có docstring giải thích tham số và giá trị trả về.",
+        "Ưu tiên xử lý vector hóa với pandas và trả về DataFrame hoặc dict kết quả có cấu trúc rõ ràng."
+    ],
+    "code_skeletons": {
+        "summarize_gold_silver_report": "import pandas as pd\n\ndef summarize_gold_silver_report(df: pd.DataFrame, group_cols: list[str], weight_col: str, amount_col: str) -> pd.DataFrame:\n    \"\"\"Tổng hợp các chỉ số báo cáo vàng bạc theo nhóm cột.\"\"\"\n    pass",
+        "convert_purity_weight": "import pandas as pd\n\ndef convert_purity_weight(df: pd.DataFrame, weight_col: str, purity_col: str, target_purity: float) -> pd.Series:\n    \"\"\"Quy đổi trọng lượng theo tỷ lệ hàm lượng mục tiêu.\"\"\"\n    pass"
+    }
+}

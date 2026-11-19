@@ -1,0 +1,33 @@
+{
+    "domain_key": "software",
+    "domain_name": "Kỹ thuật Phần mềm & Tự động hóa Python",
+    "description": "Quy tắc nghiệp vụ, tiêu chuẩn mã nguồn và khung hàm mẫu cho các module/tool Python xử lý dữ liệu và tự động hóa.",
+    "rules": [
+        "Tách rõ hàm xử lý logic, hàm kiểm tra/chuẩn hóa dữ liệu đầu vào và hàm điều phối/xuất kết quả.",
+        "Xử lý rõ các trường hợp dữ liệu rỗng, thiếu cột, kiểu dữ liệu sai hoặc ngoại lệ thay vì để lỗi ngầm."
+    ],
+    "sub_domains": {
+        "data_processing": {
+            "title": "Xử lý & Biến đổi dữ liệu",
+            "rules": [
+                "Kiểm tra cấu trúc dữ liệu đầu vào trước khi tính toán và giữ nguyên tính toàn vẹn dữ liệu gốc."
+            ],
+            "skeleton_ref": "process_records"
+        },
+        "utility_module": {
+            "title": "Module tiện ích / công cụ độc lập",
+            "rules": [
+                "Thiết kế hàm rõ ràng, dễ import và dễ viết unit test bằng pytest."
+            ],
+            "skeleton_ref": "run_utility"
+        }
+    },
+    "code_standards": [
+        "Mỗi file dưới 300 dòng, chia hàm nhỏ đơn nhiệm, có docstring giải thích tham số và kiểu trả về.",
+        "Có logging rõ ràng tại các bước chính và tránh hardcode tham số cấu hình cứng nhắc."
+    ],
+    "code_skeletons": {
+        "process_records": "def process_records(items: list[dict]) -> list[dict]:\n    \"\"\"Chuẩn hóa và xử lý danh sách bản ghi đầu vào.\"\"\"\n    pass",
+        "run_utility": "def run_task(payload: dict) -> dict:\n    \"\"\"Thực thi tác vụ tiện ích và trả về kết quả có cấu trúc.\"\"\"\n    pass"
+    }
+}

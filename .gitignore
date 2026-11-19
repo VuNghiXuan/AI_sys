@@ -62,6 +62,9 @@ db.sqlite3-journal
 media/
 staticfiles/
 
+#File tự sinh app sau khi AI build
+generated_apps/
+
 # Flask stuff
 instance/
 .webassets-cache

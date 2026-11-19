@@ -1,89 +1,75 @@
-# Author: Coder Agent
-# Date: [Ngày hiện tại]
-# Description: Module tính toán báo cáo vàng bạc bằng pandas
-# Version: 1.0
+# Header Comment chuẩn vnxBox
+"""
+Module tính toán báo cáo vàng bạc bằng pandas
+
+Đặc tả kỹ thuật:
+1. Chuẩn hóa kiểu số (numeric) và xử lý giá trị thiếu/rỗng rõ ràng trước khi tính toán báo cáo.
+2. Phân biệt rõ trọng lượng thô/tổng trọng lượng, trọng lượng đá/tạp chất (nếu có) và trọng lượng tinh/quy đổi.
+3. Tính tổng, trung bình, min, max rõ ràng.
+4. Giữ nguyên độ chính xác số thập phân khi tổng hợp và xuất báo cáo.
+5. Trả về DataFrame hoặc dict kết quả có cấu trúc rõ ràng.
+"""
 
 import pandas as pd
-import numpy as np
-import logging
 
-# Configuring logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-def read_data(file_path):
+def standardize_numeric_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     """
-    Đọc dữ liệu từ file CSV hoặc Excel.
+    Chuẩn hóa kiểu số (numeric) và xử lý giá trị thiếu/rỗng rõ ràng.
+
+    :param df: DataFrame cần chuẩn hóa
+    :param columns: danh sách các cột cần chuẩn hóa
+    :return: DataFrame đã chuẩn hóa
+    """
+    for col in columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        df[col].fillna(0, inplace=True)
+    return df
+
+def separate_weight_types(df: pd.DataFrame, weight_col: str) -> pd.DataFrame:
+    """
+    Phân biệt rõ trọng lượng thô/tổng trọng lượng, trọng lượng đá/tạp chất (nếu có) và trọng lượng tinh/quy đổi.
+
+    :param df: DataFrame chứa dữ liệu
+    :param weight_col: cột chứa trọng lượng
+    :return: DataFrame đã phân biệt trọng lượng
+    """
+    df['weight_type'] = df[weight_col].apply(lambda x: 'tinh' if 'tinh' in str(x).lower() else 'thô')
+    return df
+
+def summarize_gold_silver_report(df: pd.DataFrame, group_cols: list[str], weight_col: str, amount_col: str) -> pd.DataFrame:
+    """
+    Tổng hợp các chỉ số báo cáo vàng bạc theo nhóm cột.
+
+    :param df: DataFrame chứa dữ liệu
+    :param group_cols: danh sách các cột cần nhóm
+    :param weight_col: cột chứa trọng lượng
+    :param amount_col: cột chứa số lượng
+    :return: DataFrame kết quả tổng hợp
+    """
+    df = standardize_numeric_columns(df, [weight_col, amount_col])
+    df = separate_weight_types(df, weight_col)
     
-    :param file_path: Đường dẫn đến file CSV hoặc Excel
-    :return: DataFrame chứa dữ liệu
-    """
-    try:
-        if file_path.endswith('.csv'):
-            data = pd.read_csv(file_path)
-        elif file_path.endswith('.xlsx'):
-            data = pd.read_excel(file_path)
-        else:
-            raise ValueError("Định dạng file không hỗ trợ")
-        return data
-    except Exception as e:
-        logging.error(f"Lỗi khi đọc file: {e}")
-        raise
-
-def calculate_statistics(data):
-    """
-    Tính toán các chỉ số và thông số cần thiết cho báo cáo vàng bạc.
+    result = df.groupby(group_cols).agg({
+        weight_col: ['sum', 'mean', 'min', 'max'],
+        amount_col: ['sum', 'mean', 'min', 'max']
+    }).round(2)
     
-    :param data: DataFrame chứa dữ liệu
-    :return: Dictionary chứa các chỉ số và thông số
-    """
-    try:
-        statistics = {
-            'Giá trị trung bình': data.mean(),
-            'Giá trị tối đa': data.max(),
-            'Giá trị tối thiểu': data.min(),
-            'Phân phối dữ liệu': data.describe()
-        }
-        return statistics
-    except Exception as e:
-        logging.error(f"Lỗi khi tính toán thống kê: {e}")
-        raise
+    result.columns = ['_'.join(col).strip() for col in result.columns.values]
+    return result
 
-def save_report(statistics, output_path):
+def convert_purity_weight(df: pd.DataFrame, weight_col: str, purity_col: str, target_purity: float) -> pd.Series:
     """
-    Xuất báo cáo dưới dạng file CSV hoặc Excel.
+    Quy đổi trọng lượng theo tỷ lệ hàm lượng mục tiêu.
+
+    :param df: DataFrame chứa dữ liệu
+    :param weight_col: cột chứa trọng lượng
+    :param purity_col: cột chứa hàm lượng
+    :param target_purity: tỷ lệ hàm lượng mục tiêu
+    :return: Series kết quả quy đổi trọng lượng
+    """
+    df = standardize_numeric_columns(df, [weight_col, purity_col])
     
-    :param statistics: Dictionary chứa các chỉ số và thông số
-    :param output_path: Đường dẫn đến file xuất báo cáo
-    """
-    try:
-        if output_path.endswith('.csv'):
-            pd.DataFrame(statistics).to_csv(output_path, index=False)
-        elif output_path.endswith('.xlsx'):
-            pd.DataFrame(statistics).to_excel(output_path, index=False)
-        else:
-            raise ValueError("Định dạng file không hỗ trợ")
-        logging.info(f"Báo cáo đã được lưu tại {output_path}")
-    except Exception as e:
-        logging.error(f"Lỗi khi lưu báo cáo: {e}")
-        raise
-
-def main(file_path, output_path):
-    """
-    Hàm chính để thực hiện tính toán báo cáo vàng bạc.
+    conversion_factor = target_purity / df[purity_col]
+    converted_weight = df[weight_col] * conversion_factor
     
-    :param file_path: Đường dẫn đến file CSV hoặc Excel
-    :param output_path: Đường dẫn đến file xuất báo cáo
-    """
-    try:
-        data = read_data(file_path)
-        statistics = calculate_statistics(data)
-        save_report(statistics, output_path)
-        logging.info("Tính toán báo cáo vàng bạc hoàn tất")
-    except Exception as e:
-        logging.error(f"Lỗi chung: {e}")
-        raise
-
-if __name__ == "__main__":
-    file_path = 'data.csv'  # Đường dẫn đến file CSV hoặc Excel
-    output_path = 'report.csv'  # Đường dẫn đến file xuất báo cáo
-    main(file_path, output_path)
+    return converted_weight.rename(f'{weight_col}_converted')

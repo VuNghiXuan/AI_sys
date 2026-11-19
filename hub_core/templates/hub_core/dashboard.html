@@ -1,6 +1,7 @@
 <!-- 
   # File Path: hub_core/templates/hub_core/dashboard.html
   # Purpose: Trang chủ điều khiển chính, kế thừa từ base.html và kết nối các partials (Sidebar, Chat Room, Code Library).
+  # Connected Files: [base.html, partials/_sidebar.html, partials/_chat_room.html, partials/_code_library.html, hub_core/views/dashboard_views.py]
 -->
 {% extends 'hub_core/base.html' %}
 
@@ -19,7 +20,7 @@
 
 {% block extra_js %}
 <!-- 
-  # JavaScript Controller cho toàn bộ tính năng Real-time SSE, Phím tắt Zalo (Alt+Enter) và Quản lý lỗi tường minh.
+  # JavaScript Controller cho toàn bộ tính năng Real-time SSE, Domain/Sub-Domain, Phím tắt Zalo (Alt+Enter) và Quản lý lỗi tường minh.
 -->
 <script>
     const chatContainer = document.getElementById('chat-stream-container');
@@ -57,16 +58,28 @@
         promptForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const promptText = promptInput.value.trim();
-            const domain = document.getElementById('prompt-domain').value;
+            const domainEl = document.getElementById('prompt-domain');
+            const subDomainEl = document.getElementById('prompt-sub-domain');
+
+            const domain = domainEl ? domainEl.value : 'software';
+            const subDomain = subDomainEl ? subDomainEl.value.trim() : '';
+
             if (!promptText) return;
+
+            if (subDomain) {
+                console.log(`[SYSTEM_LOG] Gửi request với domain="${domain}", sub_domain="${subDomain}".`);
+            } else {
+                console.log(`[SYSTEM_LOG] Gửi request với domain="${domain}" và không có sub_domain (dùng ngữ cảnh mặc định; có thể thêm #prompt-sub-domain khi nâng cấp UI).`);
+            }
 
             const banner = document.getElementById('welcome-banner');
             if (banner) banner.remove();
 
+            const metaBadge = subDomain ? `${domain} / ${subDomain}` : domain;
             chatContainer.innerHTML = `
                 <div id="active-chat-box" class="space-y-6">
                     <div class="flex flex-col items-end space-y-1">
-                        <span class="text-[10px] text-slate-500 font-mono">User Request (Vừa xong)</span>
+                        <span class="text-[10px] text-slate-500 font-mono">User Request (${metaBadge} - Vừa xong)</span>
                         <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-2xl text-sm shadow-md">${promptText}</div>
                     </div>
                     <div id="task-logs-stream" class="space-y-4">
@@ -79,16 +92,22 @@
             promptInput.value = '';
             scrollToBottom();
 
+            const csrfTokenEl = document.querySelector('[name=csrfmiddlewaretoken]');
             const formData = new FormData();
             formData.append('raw_prompt', promptText);
             formData.append('domain', domain);
-            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            if (subDomain) {
+                formData.append('sub_domain', subDomain);
+            }
+            if (csrfTokenEl) {
+                formData.append('csrfmiddlewaretoken', csrfTokenEl.value);
+            }
 
             fetch("", { method: "POST", body: formData })
                 .then(res => res.json())
                 .then(data => {
                     if (data.job_id) {
-                        console.log(`[SYSTEM_LOG] Job khởi tạo thành công: ${data.job_id}`);
+                        console.log(`[SYSTEM_LOG] Job khởi tạo thành công: ${data.job_id} (domain=${data.domain || domain}, sub_domain=${data.sub_domain || 'NONE'})`);
                         prependJobToSidebar(data.job_id, data.request_id, "RUNNING");
                         connectSSE(data.job_id);
                     } else {
@@ -212,9 +231,6 @@
             title.style.display = 'block';
             toggleIcon.innerText = '◀';
         }
-
-
-
     }
 </script>
 {% endblock %}
