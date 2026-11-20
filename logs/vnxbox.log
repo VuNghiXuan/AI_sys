@@ -1,0 +1,345 @@
+2026-11-20 09:40:20 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 10:04:34 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 10:08:19 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 10:20:44 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 10:41:54 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 10:47:04 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 11:07:38 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 11:08:45 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 14:05:26 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 14:12:12 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 14:50:25 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 14:59:15 | INFO    | vnxbox | Khởi tạo logger 'vnxbox' thành công -> logs\vnxbox.log
+2026-11-20 15:19:04 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\core\background_jobs.py changed, reloading.
+2026-11-20 15:19:30 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:19:30 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:19:30 | WARNING | django.request | Not Found: /favicon.ico
+2026-11-20 15:19:53 | INFO    | core.router | Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:19:53 | INFO    | core.router | Bắt đầu định tuyến prompt (độ dài=29 ký tự)
+2026-11-20 15:19:53 | INFO    | core.router | Kết quả định tuyến: mode=conversational | domain=general | sub_domain=utility_app | hits=[]
+2026-11-20 15:19:53 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:19:53 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:19:53 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:19:53 | INFO    | core.graph_indexer | Impact Radius của 'slices/doc_reconcile/core.py': 15 file tồn tại trên đĩa -> ['slices/doc_reconcile/contract.py', 'slices/doc_reconcile/ui_view.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:19:53 | INFO    | core.jit_context | JIT Context cho 'slices/doc_reconcile/core.py': nạp 9 file (23840/24000 ký tự), bỏ qua 7 file.
+2026-11-20 15:19:53 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:19:53 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:19:53 | INFO    | core.background_jobs | Đã xếp hàng job nền id=0df4d8fd5720 | type=scaffold_slice
+2026-11-20 15:19:53 | INFO    | core.background_jobs | Bắt đầu thực thi job nền id=0df4d8fd5720
+2026-11-20 15:19:53 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=0df4d8fd5720 cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:19:53 | INFO    | core.background_jobs | [Job 0df4d8fd5720] Bắt đầu job sinh lát cắt từ prompt: '@tao-app tính lương nhân viên'. (Đang sinh khung lát cắt)
+2026-11-20 15:19:53 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=0df4d8fd5720 cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:19:53 | INFO    | hub_core.views | [scaffold_slice job=0df4d8fd5720] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:19:53 | INFO    | hub_core.views | [scaffold_slice job=0df4d8fd5720] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:19:53 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'.
+2026-11-20 15:19:53 | INFO    | core.background_jobs | [Job 0df4d8fd5720] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'. (Bước 1/4: Phân tích tên lát cắt)
+2026-11-20 15:19:53 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:19:53 | INFO    | core.background_jobs | [Job 0df4d8fd5720] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:19:53 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn.
+2026-11-20 15:19:53 | INFO    | core.background_jobs | [Job 0df4d8fd5720] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn. (Bước 2/4: Sinh file khung)
+2026-11-20 15:19:53 | INFO    | core.background_jobs | [Job 0df4d8fd5720] Thất bại khi sinh lát cắt: name 'items_count' is not defined
+2026-11-20 15:19:53 | ERROR   | hub_core.views | [scaffold_slice job=0df4d8fd5720] Thất bại khi sinh lát cắt: name 'items_count' is not defined
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 231, in scaffold_slice_from_prompt
+    "core.py": _build_core_content(slug, tag_upper),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 122, in _build_core_content
+    summary=f"Lát cắt '{slug}' đã chạy khung xử lý thành công ({items_count} trường dữ liệu).",
+                                                                ^^^^^^^^^^^
+NameError: name 'items_count' is not defined
+2026-11-20 15:19:53 | ERROR   | hub_core.views | [scaffold_slice job=0df4d8fd5720] Thất bại khi sinh lát cắt: name 'items_count' is not defined
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 231, in scaffold_slice_from_prompt
+    "core.py": _build_core_content(slug, tag_upper),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 122, in _build_core_content
+    summary=f"Lát cắt '{slug}' đã chạy khung xử lý thành công ({items_count} trường dữ liệu).",
+                                                                ^^^^^^^^^^^
+NameError: name 'items_count' is not defined
+2026-11-20 15:19:53 | ERROR   | core.background_jobs | Job nền id=0df4d8fd5720 gặp lỗi: name 'items_count' is not defined
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\core\background_jobs.py", line 136, in _run_wrapper
+    output = fn(*args, **call_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 231, in scaffold_slice_from_prompt
+    "core.py": _build_core_content(slug, tag_upper),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 122, in _build_core_content
+    summary=f"Lát cắt '{slug}' đã chạy khung xử lý thành công ({items_count} trường dữ liệu).",
+                                                                ^^^^^^^^^^^
+NameError: name 'items_count' is not defined
+2026-11-20 15:21:13 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py changed, reloading.
+2026-11-20 15:22:22 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:22:22 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:22:28 | INFO    | core.router | Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:22:28 | INFO    | core.router | Bắt đầu định tuyến prompt (độ dài=24 ký tự)
+2026-11-20 15:22:28 | INFO    | core.router | Kết quả định tuyến: mode=conversational | domain=general | sub_domain=utility_app | hits=[]
+2026-11-20 15:22:28 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:22:28 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:22:28 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:22:28 | INFO    | core.graph_indexer | Impact Radius của 'slices/doc_reconcile/core.py': 15 file tồn tại trên đĩa -> ['slices/doc_reconcile/contract.py', 'slices/doc_reconcile/ui_view.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:22:28 | INFO    | core.jit_context | JIT Context cho 'slices/doc_reconcile/core.py': nạp 7 file (23996/24000 ký tự), bỏ qua 9 file.
+2026-11-20 15:22:28 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:22:28 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:22:28 | INFO    | core.background_jobs | Đã xếp hàng job nền id=980cb4159cd9 | type=scaffold_slice
+2026-11-20 15:22:28 | INFO    | core.background_jobs | Bắt đầu thực thi job nền id=980cb4159cd9
+2026-11-20 15:22:28 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=980cb4159cd9 cho prompt='@tao-app tinh_luong_nhan'
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Bắt đầu job sinh lát cắt từ prompt: '@tao-app tinh_luong_nhan'. (Đang sinh khung lát cắt)
+2026-11-20 15:22:28 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=980cb4159cd9 cho prompt='@tao-app tinh_luong_nhan'
+2026-11-20 15:22:28 | INFO    | hub_core.views | [scaffold_slice job=980cb4159cd9] prompt='@tao-app tinh_luong_nhan' slice_name=None overwrite=False reindex=True
+2026-11-20 15:22:28 | INFO    | hub_core.views | [scaffold_slice job=980cb4159cd9] prompt='@tao-app tinh_luong_nhan' slice_name=None overwrite=False reindex=True
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4: Phân tích prompt '@tao-app tinh_luong_nhan' tại root='D:\ThanhVu\ChatBox\AI_sys'.
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Bước 1/4: Phân tích prompt '@tao-app tinh_luong_nhan' tại root='D:\ThanhVu\ChatBox\AI_sys'. (Bước 1/4: Phân tích tên lát cắt)
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn.
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn. (Bước 2/4: Sinh file khung)
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:22:28 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json...
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json... (Bước 3/4: Cập nhật Graph)
+2026-11-20 15:22:28 | ERROR   | core.slice_scaffolder | [Scaffolder] Lỗi khi chạy ProjectGraphIndexer: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Lỗi khi chạy ProjectGraphIndexer: 'ProjectGraphIndexer' object has no attribute 'build_and_save' (Lỗi cập nhật Graph)
+2026-11-20 15:22:28 | INFO    | core.background_jobs | [Job 980cb4159cd9] Thất bại khi sinh lát cắt: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+2026-11-20 15:22:28 | ERROR   | hub_core.views | [scaffold_slice job=980cb4159cd9] Thất bại khi sinh lát cắt: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 267, in scaffold_slice_from_prompt
+    map_data = indexer.build_and_save()
+               ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+2026-11-20 15:22:28 | ERROR   | hub_core.views | [scaffold_slice job=980cb4159cd9] Thất bại khi sinh lát cắt: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 267, in scaffold_slice_from_prompt
+    map_data = indexer.build_and_save()
+               ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+2026-11-20 15:22:28 | ERROR   | core.background_jobs | Job nền id=980cb4159cd9 gặp lỗi: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\core\background_jobs.py", line 136, in _run_wrapper
+    output = fn(*args, **call_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 267, in scaffold_slice_from_prompt
+    map_data = indexer.build_and_save()
+               ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProjectGraphIndexer' object has no attribute 'build_and_save'
+2026-11-20 15:24:24 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py changed, reloading.
+2026-11-20 15:25:03 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:25:03 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:25:07 | INFO    | core.router | Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:25:07 | INFO    | core.router | Bắt đầu định tuyến prompt (độ dài=24 ký tự)
+2026-11-20 15:25:07 | INFO    | core.router | Kết quả định tuyến: mode=conversational | domain=general | sub_domain=utility_app | hits=[]
+2026-11-20 15:25:07 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:25:07 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:25:07 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:25:07 | INFO    | core.graph_indexer | Impact Radius của 'slices/doc_reconcile/core.py': 15 file tồn tại trên đĩa -> ['slices/doc_reconcile/contract.py', 'slices/doc_reconcile/ui_view.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:25:07 | INFO    | core.jit_context | JIT Context cho 'slices/doc_reconcile/core.py': nạp 7 file (23996/24000 ký tự), bỏ qua 9 file.
+2026-11-20 15:25:07 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:25:07 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:25:07 | INFO    | core.background_jobs | Đã xếp hàng job nền id=4f76539f7c6b | type=scaffold_slice
+2026-11-20 15:25:07 | INFO    | core.background_jobs | Bắt đầu thực thi job nền id=4f76539f7c6b
+2026-11-20 15:25:07 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=4f76539f7c6b cho prompt='@tao-app tinh_luong_nhan'
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Bắt đầu job sinh lát cắt từ prompt: '@tao-app tinh_luong_nhan'. (Đang sinh khung lát cắt)
+2026-11-20 15:25:07 | INFO    | hub_core.views | [scaffold_slice job=4f76539f7c6b] prompt='@tao-app tinh_luong_nhan' slice_name=None overwrite=False reindex=True
+2026-11-20 15:25:07 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=4f76539f7c6b cho prompt='@tao-app tinh_luong_nhan'
+2026-11-20 15:25:07 | INFO    | hub_core.views | [scaffold_slice job=4f76539f7c6b] prompt='@tao-app tinh_luong_nhan' slice_name=None overwrite=False reindex=True
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4: Phân tích prompt '@tao-app tinh_luong_nhan' tại root='D:\ThanhVu\ChatBox\AI_sys'.
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Bước 1/4: Phân tích prompt '@tao-app tinh_luong_nhan' tại root='D:\ThanhVu\ChatBox\AI_sys'. (Bước 1/4: Phân tích tên lát cắt)
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn.
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn. (Bước 2/4: Sinh file khung)
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:25:07 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json...
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json... (Bước 3/4: Cập nhật Graph)
+2026-11-20 15:25:07 | ERROR   | core.slice_scaffolder | [Scaffolder] Lỗi khi chạy ProjectGraphIndexer: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Lỗi khi chạy ProjectGraphIndexer: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root'] (Lỗi cập nhật Graph)
+2026-11-20 15:25:07 | INFO    | core.background_jobs | [Job 4f76539f7c6b] Thất bại khi sinh lát cắt: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+2026-11-20 15:25:07 | ERROR   | hub_core.views | [scaffold_slice job=4f76539f7c6b] Thất bại khi sinh lát cắt: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 298, in scaffold_slice_from_prompt
+    graph_summary = _run_graph_indexer(indexer, root, job_id)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 229, in _run_graph_indexer
+    raise AttributeError(
+AttributeError: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+2026-11-20 15:25:07 | ERROR   | hub_core.views | [scaffold_slice job=4f76539f7c6b] Thất bại khi sinh lát cắt: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 298, in scaffold_slice_from_prompt
+    graph_summary = _run_graph_indexer(indexer, root, job_id)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 229, in _run_graph_indexer
+    raise AttributeError(
+AttributeError: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+2026-11-20 15:25:07 | ERROR   | core.background_jobs | Job nền id=4f76539f7c6b gặp lỗi: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+Traceback (most recent call last):
+  File "D:\ThanhVu\ChatBox\AI_sys\core\background_jobs.py", line 136, in _run_wrapper
+    output = fn(*args, **call_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py", line 126, in _execute_scaffold_slice
+    res = scaffold_slice_from_prompt(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 298, in scaffold_slice_from_prompt
+    graph_summary = _run_graph_indexer(indexer, root, job_id)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py", line 229, in _run_graph_indexer
+    raise AttributeError(
+AttributeError: ProjectGraphIndexer không có method index quen thuộc (['build_and_save', 'build_index', 'index_project', 'scan_and_save', 'scan_project', 'run', 'build', 'save']). Public attrs hiện có: ['build_map', 'get_impact_radius', 'load_or_build_map', 'map_path', 'project_root']
+2026-11-20 15:26:12 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\core\slice_scaffolder.py changed, reloading.
+2026-11-20 15:26:34 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:26:34 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:26:44 | INFO    | core.router | Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:26:44 | INFO    | core.router | Bắt đầu định tuyến prompt (độ dài=29 ký tự)
+2026-11-20 15:26:44 | INFO    | core.router | Kết quả định tuyến: mode=conversational | domain=general | sub_domain=utility_app | hits=[]
+2026-11-20 15:26:44 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:26:44 | INFO    | hub_core.views | API jit_context_view cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:26:44 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/doc_reconcile/core.py' (depth=1)
+2026-11-20 15:26:44 | INFO    | core.graph_indexer | Impact Radius của 'slices/doc_reconcile/core.py': 15 file tồn tại trên đĩa -> ['slices/doc_reconcile/contract.py', 'slices/doc_reconcile/ui_view.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:26:44 | INFO    | core.jit_context | JIT Context cho 'slices/doc_reconcile/core.py': nạp 9 file (23840/24000 ký tự), bỏ qua 7 file.
+2026-11-20 15:26:44 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:26:44 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:26:44 | INFO    | core.background_jobs | Đã xếp hàng job nền id=259aafcd8c42 | type=scaffold_slice
+2026-11-20 15:26:44 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=259aafcd8c42 cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:26:44 | INFO    | core.background_jobs | Bắt đầu thực thi job nền id=259aafcd8c42
+2026-11-20 15:26:44 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=259aafcd8c42 cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bắt đầu job sinh lát cắt từ prompt: '@tao-app tính lương nhân viên'. (Đang sinh khung lát cắt)
+2026-11-20 15:26:44 | INFO    | hub_core.views | [scaffold_slice job=259aafcd8c42] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:26:44 | INFO    | hub_core.views | [scaffold_slice job=259aafcd8c42] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'.
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'. (Bước 1/4: Phân tích tên lát cắt)
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn.
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn. (Bước 2/4: Sinh file khung)
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json...
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json... (Bước 3/4: Cập nhật Graph)
+2026-11-20 15:26:44 | INFO    | core.slice_scaffolder | [Scaffolder] Gọi ProjectGraphIndexer.build_map()...
+2026-11-20 15:26:44 | INFO    | core.background_jobs | [Job 259aafcd8c42] Gọi ProjectGraphIndexer.build_map()...
+2026-11-20 15:26:44 | INFO    | core.graph_indexer | Bắt đầu quét AST dự án tại: D:\ThanhVu\ChatBox\AI_sys
+2026-11-20 15:26:45 | INFO    | core.graph_indexer | Đã xuất PROJECT_MAP.json: 34 file Python, 253 liên kết, 2 file vượt 300 dòng.
+2026-11-20 15:26:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4 xong: PROJECT_MAP.json cập nhật -> {'total_py_files': 34, 'total_edges': 253, 'oversized_count': 2}.
+2026-11-20 15:26:45 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 3/4 xong: PROJECT_MAP.json cập nhật -> {'total_py_files': 34, 'total_edges': 253, 'oversized_count': 2}.
+2026-11-20 15:26:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 4/4 hoàn tất: Đã tạo lát cắt 'tinh_luong_nhan' với 4 file.
+2026-11-20 15:26:45 | INFO    | core.background_jobs | [Job 259aafcd8c42] Bước 4/4 hoàn tất: Đã tạo lát cắt 'tinh_luong_nhan' với 4 file. (4/4 Hoàn tất)
+2026-11-20 15:26:45 | INFO    | core.background_jobs | [Job 259aafcd8c42] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:26:45 | INFO    | hub_core.views | [scaffold_slice job=259aafcd8c42] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:26:45 | INFO    | hub_core.views | [scaffold_slice job=259aafcd8c42] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:26:45 | INFO    | core.background_jobs | Hoàn tất job nền id=259aafcd8c42
+2026-11-20 15:31:47 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\core\router.py changed, reloading.
+2026-11-20 15:32:42 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py changed, reloading.
+2026-11-20 15:33:10 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:33:10 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:33:45 | INFO    | core.router | [Router] Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:33:45 | INFO    | core.router | [Router] Bắt đầu định tuyến prompt (độ dài=29 ký tự): '@tao-app tính lương nhân viên'
+2026-11-20 15:33:45 | INFO    | core.router | [Router] Khớp tag đặc biệt ['@tao-app'] -> mode=code_module, domain=slice_scaffold, sub=new_slice
+2026-11-20 15:33:45 | INFO    | core.router | [Router] Kết quả định tuyến: mode=code_module | domain=slice_scaffold | sub_domain=new_slice | hits=['@tao-app']
+2026-11-20 15:33:45 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='core/slice_scaffolder.py' (depth=0, tag='tao-app')
+2026-11-20 15:33:45 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='core/slice_scaffolder.py' (depth=0, tag='tao-app')
+2026-11-20 15:33:45 | INFO    | core.graph_indexer | Tính Impact Radius cho 'core/slice_scaffolder.py' (depth=0)
+2026-11-20 15:33:45 | INFO    | core.graph_indexer | Impact Radius của 'core/slice_scaffolder.py': 4 file tồn tại trên đĩa -> ['core/background_jobs.py', 'core/graph_indexer.py', 'core/logger_setup.py', 'hub_core/views.py']
+2026-11-20 15:33:45 | INFO    | core.jit_context | JIT Context cho 'core/slice_scaffolder.py': nạp 3 file (22973/24000 ký tự), bỏ qua 2 file.
+2026-11-20 15:33:45 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:33:45 | INFO    | hub_core.views | Nhận request POST tới scaffold_app_view
+2026-11-20 15:33:45 | INFO    | core.background_jobs | Đã xếp hàng job nền id=4efaaf9d8d7a | type=scaffold_slice
+2026-11-20 15:33:45 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=4efaaf9d8d7a cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:33:45 | INFO    | core.background_jobs | Bắt đầu thực thi job nền id=4efaaf9d8d7a
+2026-11-20 15:33:45 | INFO    | hub_core.views | Đã tạo job sinh lát cắt job_id=4efaaf9d8d7a cho prompt='@tao-app tính lương nhân viên'
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bắt đầu job sinh lát cắt từ prompt: '@tao-app tính lương nhân viên'. (Đang sinh khung lát cắt)
+2026-11-20 15:33:45 | INFO    | hub_core.views | [scaffold_slice job=4efaaf9d8d7a] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:33:45 | INFO    | hub_core.views | [scaffold_slice job=4efaaf9d8d7a] prompt='@tao-app tính lương nhân viên' slice_name=None overwrite=False reindex=True
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'.
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 1/4: Phân tích prompt '@tao-app tính lương nhân viên' tại root='D:\ThanhVu\ChatBox\AI_sys'. (Bước 1/4: Phân tích tên lát cắt)
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 1/4 xong: slug='tinh_luong_nhan', thư mục đích='D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan'.
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn.
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 2/4: Tạo thư mục 'D:\ThanhVu\ChatBox\AI_sys\slices\tinh_luong_nhan' và sinh 4 file chuẩn. (Bước 2/4: Sinh file khung)
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Đã ghi 'slices/tinh_luong_nhan/contract.py' (29 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Đã ghi 'slices/tinh_luong_nhan/core.py' (40 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Đã ghi 'slices/tinh_luong_nhan/ui_view.py' (39 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Đã ghi 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py' (17 dòng, limit=300).
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json...
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 3/4: Quét AST & cập nhật PROJECT_MAP.json... (Bước 3/4: Cập nhật Graph)
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Gọi ProjectGraphIndexer.build_map()...
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Gọi ProjectGraphIndexer.build_map()...
+2026-11-20 15:33:45 | INFO    | core.graph_indexer | Bắt đầu quét AST dự án tại: D:\ThanhVu\ChatBox\AI_sys
+2026-11-20 15:33:45 | INFO    | core.graph_indexer | Đã xuất PROJECT_MAP.json: 34 file Python, 255 liên kết, 2 file vượt 300 dòng.
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 3/4 xong: PROJECT_MAP.json cập nhật -> {'total_py_files': 34, 'total_edges': 255, 'oversized_count': 2}.
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 3/4 xong: PROJECT_MAP.json cập nhật -> {'total_py_files': 34, 'total_edges': 255, 'oversized_count': 2}.
+2026-11-20 15:33:45 | INFO    | core.slice_scaffolder | [Scaffolder] Bước 4/4 hoàn tất: Đã tạo lát cắt 'tinh_luong_nhan' với 4 file.
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Bước 4/4 hoàn tất: Đã tạo lát cắt 'tinh_luong_nhan' với 4 file. (4/4 Hoàn tất)
+2026-11-20 15:33:45 | INFO    | core.background_jobs | [Job 4efaaf9d8d7a] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:33:45 | INFO    | hub_core.views | [scaffold_slice job=4efaaf9d8d7a] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:33:45 | INFO    | hub_core.views | [scaffold_slice job=4efaaf9d8d7a] Hoàn tất tạo lát cắt 'tinh_luong_nhan' -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/core.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py'].
+2026-11-20 15:33:45 | INFO    | core.background_jobs | Hoàn tất job nền id=4efaaf9d8d7a
+2026-11-20 15:35:11 | INFO    | core.router | [Router] Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:35:11 | INFO    | core.router | [Router] Bắt đầu định tuyến prompt (độ dài=30 ký tự): '@mo-rong mở rộng tính lương đi'
+2026-11-20 15:35:11 | INFO    | core.router | [Router] Khớp tag đặc biệt ['@mo-rong'] -> mode=code_module, domain=slice_expand, sub=expand_slice
+2026-11-20 15:35:11 | INFO    | core.router | [Router] Kết quả định tuyến: mode=code_module | domain=slice_expand | sub_domain=expand_slice | hits=['@mo-rong']
+2026-11-20 15:35:11 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='slices/tinh_luong_nhan/core.py' (depth=1, tag='mo-rong')
+2026-11-20 15:35:11 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='slices/tinh_luong_nhan/core.py' (depth=1, tag='mo-rong')
+2026-11-20 15:35:11 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/tinh_luong_nhan/core.py' (depth=1)
+2026-11-20 15:35:11 | INFO    | core.graph_indexer | Impact Radius của 'slices/tinh_luong_nhan/core.py': 18 file tồn tại trên đĩa -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'core/slice_scaffolder.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'slices/doc_reconcile/ui_view.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:35:11 | INFO    | core.jit_context | JIT Context cho 'slices/tinh_luong_nhan/core.py': nạp 10 file (23970/24000 ký tự), bỏ qua 9 file.
+2026-11-20 15:38:02 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\hub_core\views.py changed, reloading.
+2026-11-20 15:38:28 | INFO    | django.utils.autoreload | D:\ThanhVu\ChatBox\AI_sys\hub_core\urls.py changed, reloading.
+2026-11-20 15:39:58 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:39:58 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:40:07 | INFO    | core.router | [Router] Đã nạp cấu hình định tuyến từ config\domains.json
+2026-11-20 15:40:07 | INFO    | core.router | [Router] Bắt đầu định tuyến prompt (độ dài=30 ký tự): '@mo-rong mở rộng tính lương đi'
+2026-11-20 15:40:07 | INFO    | core.router | [Router] Khớp tag đặc biệt ['@mo-rong'] -> mode=code_module, domain=slice_expand, sub=expand_slice
+2026-11-20 15:40:07 | INFO    | core.router | [Router] Kết quả định tuyến: mode=code_module | domain=slice_expand | sub_domain=expand_slice | hits=['@mo-rong']
+2026-11-20 15:40:07 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='slices/tinh_luong_nhan/core.py' (depth=1, tag='mo-rong')
+2026-11-20 15:40:07 | INFO    | hub_core.views | API jit_context_view: raw_target='slices/doc_reconcile/core.py' -> target='slices/tinh_luong_nhan/core.py' (depth=1, tag='mo-rong')
+2026-11-20 15:40:07 | INFO    | core.graph_indexer | Tính Impact Radius cho 'slices/tinh_luong_nhan/core.py' (depth=1)
+2026-11-20 15:40:07 | INFO    | core.graph_indexer | Impact Radius của 'slices/tinh_luong_nhan/core.py': 18 file tồn tại trên đĩa -> ['slices/tinh_luong_nhan/contract.py', 'slices/tinh_luong_nhan/ui_view.py', 'slices/tinh_luong_nhan/test_tinh_luong_nhan.py', 'core/auto_model_setup.py', 'core/graph_indexer.py', 'core/graph_query.py', 'core/jit_context.py', 'core/repair_runner.py', 'core/slice_scaffolder.py', 'hub_core/apps.py', 'hub_core/urls.py', 'hub_core/views.py', 'manage.py', 'slices/doc_reconcile/test_doc_reconcile.py', 'slices/doc_reconcile/ui_view.py', 'vnx_project/asgi.py', 'vnx_project/urls.py', 'vnx_project/wsgi.py']
+2026-11-20 15:40:07 | INFO    | core.jit_context | JIT Context cho 'slices/tinh_luong_nhan/core.py': nạp 10 file (23970/24000 ký tự), bỏ qua 9 file.
+2026-11-20 15:41:53 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/
+2026-11-20 15:41:53 | INFO    | hub_core.views | Đang render giao diện workbench cho path=/

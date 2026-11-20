@@ -1,107 +1,135 @@
-<!-- 
-  # File Path: hub_core/templates/hub_core/base.html
-  # Purpose: Layout khung xương gốc toàn hệ thống, chứa hàm global deleteJob phục vụ xóa job trực tiếp từ sidebar.
--->
+<!-- File Path: hub_core/templates/hub_core/base.html -->
+<!-- Description: Khung giao diện chuẩn cho hệ thống đa app, có sidebar, top tabs, live stream, right panel và prompt @mention. -->
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}vnxBox Enterprise - Autonomous AI Control Center{% endblock %}</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#0b0f19',
-                        sidebarbg: '#111827',
-                        cardbg: '#1f2937',
-                        bordercolor: '#374151',
-                        accent: '#6366f1'
-                    }
-                }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}vnxBox — Studio & Điều Phối{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #334155;
+            --accent: #38bdf8;
+            --ok: #22c55e;
+            --warn: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Segoe UI, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            height: 48px;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            gap: 12px;
+        }
+
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 260px 1fr 300px;
+            min-height: 0;
+        }
+
+        .sidebar,
+        .main-stage,
+        .right-panel {
+            overflow-y: auto;
+            padding: 12px;
+            border-right: 1px solid var(--border);
+        }
+
+        .right-panel {
+            border-right: none;
+            border-left: 1px solid var(--border);
+        }
+
+        .bottom-bar {
+            border-top: 1px solid var(--border);
+            background: var(--panel);
+            padding: 10px 14px;
+        }
+
+        .block {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 960px) {
+            .workspace {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+            }
+
+            body {
+                height: auto;
+                overflow: auto;
             }
         }
-    </script>
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="bg-darkbg text-slate-100 h-screen overflow-hidden font-sans antialiased flex flex-col">
+<body>
+    {% block top_tabs %}{% include "hub_core/partials/top_tabs_bar.html" %}{% endblock %}
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="h-14 border-b border-bordercolor bg-sidebarbg px-4 flex justify-between items-center z-50 shrink-0">
-        <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" id="live-indicator"></div>
-            <span class="font-bold text-lg tracking-tight text-white">vnxBox <span
-                    class="text-indigo-400">Enterprise</span></span>
-            <span
-                class="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono">Live
-                War Room</span>
-        </div>
+    <div class="workspace">
+        <aside class="sidebar">
+            {% block left_sidebar %}{% include "hub_core/partials/left_sidebar.html" %}{% endblock %}
+        </aside>
 
-        <div class="flex items-center space-x-3 text-sm">
-            <button onclick="alert('Cấu hình hệ thống: Local Ollama Qwen2.5-coder, RAM 32GB, CPU Multi-thread tối ưu.')"
-                class="bg-slate-800 hover:bg-slate-700 border border-bordercolor px-3 py-1.5 rounded-lg flex items-center gap-2 transition text-slate-300 text-xs font-medium">
-                <span>⚙️</span> Cấu hình Hệ thống
-            </button>
-            <button
-                onclick="alert('Nhân viên AI Swarm: PM Agent (Đặc tả), Coder Agent (Vibe Code), QC Agent (Sandbox Pytest).')"
-                class="bg-slate-800 hover:bg-slate-700 border border-bordercolor px-3 py-1.5 rounded-lg flex items-center gap-2 transition text-slate-300 text-xs font-medium">
-                <span>🤖</span> Nhân viên AI
-            </button>
-            <button onclick="alert('Quy trình DAG: Blueprint-Driven Task Decomposition & Circuit Breaker tự sửa lỗi.')"
-                class="bg-slate-800 hover:bg-slate-700 border border-bordercolor px-3 py-1.5 rounded-lg flex items-center gap-2 transition text-slate-300 text-xs font-medium">
-                <span>📊</span> Quy trình DAG
-            </button>
-            <span id="job-status-badge" class="px-3 py-1 text-xs font-semibold rounded-full font-mono 
-                {% if active_job.status == 'SUCCESS' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20
-                {% elif active_job.status == 'RUNNING' %}bg-amber-500/10 text-amber-400 border border-amber-500/20 animate-pulse
-                {% else %}bg-indigo-500/10 text-indigo-300 border border-indigo-500/20{% endif %} ml-2">
-                {{ active_job.status|default:"READY" }}
-            </span>
-        </div>
-    </header>
+        <main class="main-stage">
+            {% block main_content %}{% include "hub_core/partials/live_stream_feed.html" %}{% endblock %}
+        </main>
 
-    <!-- MAIN BODY LAYOUT (3 COLUMNS CONTAINER) -->
-    <div class="flex-1 flex overflow-hidden">
-        {% block content %}{% endblock %}
+        <aside class="right-panel">
+            {% block right_panel %}{% include "hub_core/partials/right_inspector_panel.html" %}{% endblock %}
+        </aside>
     </div>
 
-    <!-- GLOBAL JAVASCRIPT FUNCTIONS (Đảm bảo các hàm global như deleteJob luôn khả dụng) -->
+    <footer class="bottom-bar">
+        {% block prompt_bar %}{% include "hub_core/partials/prompt_composer_bar.html" %}{% endblock %}
+    </footer>
+
     <script>
-        function deleteJob(jobId, event) {
-            event.stopPropagation(); // Ngăn sự kiện bấm nhầm vào thẻ a xung quanh
-            if (!confirm("Bạn có chắc chắn muốn xóa Job này khỏi lịch sử không?")) return;
-
-            // Lấy CSRF Token từ trang
-            const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
-            const csrfToken = csrfInput ? csrfInput.value : '';
-
-            fetch(`/api/job/${jobId}/delete/`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": csrfToken,
-                    "Content-Type": "application/json"
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log(`[SYSTEM_LOG] Đã xóa thành công job: ${jobId}`);
-                        window.location.href = "/"; // Reload về trang chủ sau khi xóa
-                    } else {
-                        alert("[ERROR] Không thể xóa job: " + (data.error || 'Lỗi không xác định'));
-                    }
-                })
-                .catch(err => console.error("[API_ERROR] Lỗi khi gọi API xóa job:", err));
-        }
+        // Luồng nhả trạng thái nền để màn hình không bao giờ đứng trống
+        window.VnxUI = window.VnxUI || {
+            pushStream(item) {
+                window.dispatchEvent(new CustomEvent("vnxbox:stream", { detail: item }));
+            }
+        };
     </script>
-
-    {% block extra_js %}{% endblock %}
+    {% block extra_scripts %}{% endblock %}
 </body>
 
 </html>

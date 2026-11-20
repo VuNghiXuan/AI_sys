@@ -1,0 +1,79 @@
+<!-- File Path: hub_core/templates/hub_core/partials/left_sidebar.html -->
+<!-- Description: Sidebar trái quản lý app hệ thống, app đơn vị ngoài và các danh mục cần thiết. -->
+<div class="block">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px;">App Hệ Thống</div>
+    <div id="systemAppsList" style="display:flex;flex-direction:column;gap:6px;">
+        <button type="button" class="nav-item active" data-app="vibe_studio" data-scope="system">
+            Vibe Code Builder <span class="muted">(Lõi)</span>
+        </button>
+        <button type="button" class="nav-item" data-app="agent_orchestrator" data-scope="system">
+            Điều phối đa tác tử <span class="muted">(Lõi)</span>
+        </button>
+        <button type="button" class="nav-item" data-app="doc_reconcile" data-scope="system">
+            Lát cắt Đối soát mẫu <span class="muted">(Slice)</span>
+        </button>
+    </div>
+</div>
+
+<div class="block">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-weight:600;font-size:13px;">App Ngoài Hệ Thống</span>
+        <span class="muted">External</span>
+    </div>
+    <div id="externalAppsList" style="display:flex;flex-direction:column;gap:6px;">
+        <button type="button" class="nav-item" data-app="ext_client_template" data-scope="external">
+            + Mẫu App Đơn vị ngoài
+        </button>
+    </div>
+    <div class="muted" style="margin-top:6px;">Các app build riêng cho khách/đơn vị ngoài sẽ tự hiện tại đây.</div>
+</div>
+
+<div class="block">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Danh Mục Cần Thiết</div>
+    <ul id="essentialLists"
+        style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;font-size:12px;">
+        <li>• Danh mục lĩnh vực &amp; ngành</li>
+        <li>• Danh sách lát cắt &amp; module (&lt;300 dòng)</li>
+        <li>• Danh sách tác vụ &amp; kiểm thử</li>
+    </ul>
+</div>
+
+<style>
+    .nav-item {
+        width: 100%;
+        text-align: left;
+        background: var(--panel);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 7px 9px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .nav-item.active {
+        border-color: var(--accent);
+        background: #0c4a6e;
+    }
+</style>
+
+<script>
+    (function () {
+        const root = document.currentScript.parentElement;
+        root.addEventListener("click", (e) => {
+            const btn = e.target.closest(".nav-item");
+            if (!btn) return;
+            document.querySelectorAll(".sidebar .nav-item").forEach((el) => el.classList.remove("active"));
+            btn.classList.add("active");
+            const app = btn.dataset.app;
+            const scope = btn.dataset.scope;
+            window.dispatchEvent(new CustomEvent("vnxbox:app-select", { detail: { app, scope } }));
+            window.VnxUI?.pushStream({
+                agent: "WorkspaceRouter",
+                action: `Chọn app '${app}' (${scope})`,
+                detail: `Nạp danh mục, lộ trình và ngữ cảnh gắn với ${app}.`,
+                progress: "Đang chuyển ngữ cảnh"
+            });
+        });
+    })();
+</script>

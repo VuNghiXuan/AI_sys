@@ -1,0 +1,107 @@
+{
+    "default_domain": "general",
+    "default_sub_domain": "utility_app",
+    "modes": {
+        "chit_chat": {
+            "keywords": [
+                "chào",
+                "khỏe không",
+                "ngủ ngon",
+                "tán gẫu",
+                "chuyện phiếm"
+            ]
+        },
+        "conversational": {
+            "keywords": [
+                "giải thích",
+                "so sánh",
+                "nên chọn",
+                "tư vấn",
+                "là gì",
+                "khác nhau"
+            ]
+        },
+        "code_module": {
+            "keywords": [
+                "tạo app",
+                "giao diện",
+                "viết code",
+                "sửa lỗi",
+                "đối soát",
+                "báo cáo",
+                "quy đổi",
+                "công nợ",
+                "lát cắt",
+                "module",
+                "api"
+            ]
+        }
+    },
+    "domains": {
+        "accounting_reconciliation": {
+            "label": "Kế toán, Công nợ & Đối soát",
+            "sub_domains": {
+                "invoice_reconcile": {
+                    "keywords": [
+                        "đối soát",
+                        "bảng kê",
+                        "phiếu nhập",
+                        "công nợ",
+                        "chênh lệch"
+                    ],
+                    "default_tolerance": "0"
+                },
+                "report_export": {
+                    "keywords": [
+                        "báo cáo",
+                        "tổng hợp",
+                        "xuất file",
+                        "lọc dữ liệu"
+                    ],
+                    "default_tolerance": "0"
+                }
+            }
+        },
+        "precious_metals_erp": {
+            "label": "Vàng bạc, Trang sức & Quy đổi",
+            "sub_domains": {
+                "purity_conversion": {
+                    "keywords": [
+                        "tuổi vàng",
+                        "quy đổi",
+                        "trọng lượng",
+                        "chỉ",
+                        "phân",
+                        "ly",
+                        "hao hụt"
+                    ],
+                    "default_tolerance": "0.001"
+                },
+                "inventory_serial": {
+                    "keywords": [
+                        "mã vạch",
+                        "serial",
+                        "tồn kho",
+                        "gia công",
+                        "nhà cung cấp"
+                    ],
+                    "default_tolerance": "0"
+                }
+            }
+        },
+        "general": {
+            "label": "Tiện ích & Ứng dụng chung",
+            "sub_domains": {
+                "utility_app": {
+                    "keywords": [
+                        "ứng dụng",
+                        "tool",
+                        "màn hình",
+                        "bảng tính"
+                    ],
+                    "default_tolerance": "0"
+                }
+            }
+        }
+    }
+}

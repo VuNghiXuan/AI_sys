@@ -1,0 +1,127 @@
+<!-- File Path: hub_core/templates/hub_core/partials/live_stream_feed.html -->
+<!-- Description: Luồng thời gian thực hiển thị AI đang làm, lấy/lọc gì, tiến độ, báo cáo và lộ trình công việc. -->
+<div class="block" id="jobRoadmapBox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <strong style="font-size:13px;">Danh Mục &amp; Lộ Trình Công Việc</strong>
+        <span id="roadmapSummary" class="muted">4 chặng chuẩn</span>
+    </div>
+    <div id="roadmapSteps"
+        style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:12px;">
+        <div class="step-pill active">1. Phân tích &amp; Định tuyến</div>
+        <div class="step-pill">2. Lấy &amp; Lọc ngữ cảnh</div>
+        <div class="step-pill">3. Sinh / Nâng cấp &amp; Kiểm thử</div>
+        <div class="step-pill">4. Báo cáo &amp; Ghi nhận</div>
+    </div>
+</div>
+
+<div class="block" id="liveStreamBox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong style="font-size:13px;">Luồng Hoạt Động Thời Gian Thực</strong>
+        <span id="heartbeatTicker" class="muted">Đang nhịp theo dõi...</span>
+    </div>
+    <div id="streamLogList" style="display:flex;flex-direction:column;gap:8px;max-height:54vh;overflow-y:auto;"></div>
+</div>
+
+<div class="block" id="itemReportBox">
+    <strong style="font-size:13px;">Tiến Độ &amp; Kết Quả / Báo Cáo Từng Mục</strong>
+    <div id="itemReportsList" class="muted" style="margin-top:6px;">
+        • Mục khởi tạo: Khung điều phối sẵn sàng nhận prompt hoặc tiếp tục mở rộng lát cắt.
+    </div>
+</div>
+
+<style>
+    .step-pill {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 6px 8px;
+        color: var(--muted);
+    }
+
+    .step-pill.active {
+        border-color: var(--ok);
+        color: var(--text);
+    }
+
+    .stream-entry {
+        background: var(--panel);
+        border-left: 3px solid var(--accent);
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .stream-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+</style>
+
+<script>
+    (function () {
+        const listEl = document.getElementById("streamLogList");
+        const reportsEl = document.getElementById("itemReportsList");
+        const tickerEl = document.getElementById("heartbeatTicker");
+        if (!listEl) return;
+
+        const idlePulses = [
+            "Đang trực luồng: sẵn sàng phân tích prompt mới hoặc mở rộng app con.",
+            "Đang rà bản đồ & cấu hình: chờ lệnh @ hoặc chế độ Auto tiếp theo.",
+            "Đang giữ nhịp luồng: mọi bước đều ghi nhận tiến độ theo thời gian thực."
+        ];
+        let pulseIdx = 0;
+
+        function appendEntry(item) {
+            const now = new Date().toLocaleTimeString("vi-VN");
+            const agent = item.agent || "AI-Coordinator";
+            const action = item.action || "Đang xử lý";
+            const fetchInfo = item.fetched || "Bản đồ dự án & cấu hình hiện hành";
+            const filterInfo = item.filtered || "Lọc đúng phạm vi liên quan";
+            const progress = item.progress || "Đang chạy";
+            const detail = item.detail || "";
+
+            const div = document.createElement("div");
+            div.className = "stream-entry";
+            div.innerHTML = `
+        <div class="stream-meta">
+          <span><strong style="color:var(--accent);">${agent}</strong> • ${action}</span>
+          <span>${now} | <strong>${progress}</strong></span>
+        </div>
+        <div>Lấy: <span class="muted">${fetchInfo}</span> | Lọc: <span class="muted">${filterInfo}</span></div>
+        ${detail ? `<div style="margin-top:4px;">${detail}</div>` : ""}
+      `;
+            listEl.prepend(div);
+
+            if (item.report && reportsEl) {
+                const rep = document.createElement("div");
+                rep.style.marginTop = "4px";
+                rep.textContent = `• [${now}] ${item.report}`;
+                reportsEl.prepend(rep);
+            }
+        }
+
+        // Nhả dòng khởi tạo ngay để không bao giờ trống
+        appendEntry({
+            agent: "SystemStream",
+            action: "Mở luồng theo dõi trực tiếp",
+            fetched: "Khung base.html & danh mục partials",
+            filtered: "Kích hoạt chế độ hiển thị liên tục",
+            progress: "100% sẵn sàng",
+            detail: "Màn hình luôn hiển thị tiến độ, nguồn lấy dữ liệu, bộ lọc và báo cáo từng mục.",
+            report: "Khởi tạo luồng thành công — sẵn sàng nhận prompt."
+        });
+
+        window.addEventListener("vnxbox:stream", (e) => appendEntry(e.detail || {}));
+
+        // Nhả chữ nhịp nhàng để người dùng luôn thấy hệ thống sống & phản hồi
+        setInterval(() => {
+            const msg = idlePulses[pulseIdx % idlePulses.length];
+            pulseIdx += 1;
+            if (tickerEl) tickerEl.textContent = msg;
+        }, 4000);
+    })();
+</script>

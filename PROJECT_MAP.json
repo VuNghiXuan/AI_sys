@@ -1,1048 +1,2160 @@
 {
-    "directed": true,
-    "multigraph": false,
-    "graph": {},
-    "nodes": [
-        {
-            "type": "module",
-            "file_path": "manage.py",
-            "id": "manage.py"
-        },
-        {
-            "type": "function",
-            "name": "main",
-            "file_path": "manage.py",
-            "id": "manage.py.main"
-        },
-        {
-            "type": "module",
-            "file_path": "reset_system.py",
-            "id": "reset_system.py"
-        },
-        {
-            "type": "function",
-            "name": "run_command",
-            "file_path": "reset_system.py",
-            "id": "reset_system.py.run_command"
-        },
-        {
-            "type": "function",
-            "name": "reset_database_and_migrations",
-            "file_path": "reset_system.py",
-            "id": "reset_system.py.reset_database_and_migrations"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\agent_executor.py",
-            "id": "core.agent_executor.py"
-        },
-        {
-            "type": "class",
-            "name": "AgentExecutor",
-            "file_path": "core\\agent_executor.py",
-            "id": "core.agent_executor.py.AgentExecutor"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\agent_executor.py",
-            "id": "core.agent_executor.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "run_agent",
-            "file_path": "core\\agent_executor.py",
-            "id": "core.agent_executor.py.run_agent"
-        },
-        {
-            "type": "function",
-            "name": "run_coder_agent",
-            "file_path": "core\\agent_executor.py",
-            "id": "core.agent_executor.py.run_coder_agent"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py"
-        },
-        {
-            "type": "class",
-            "name": "AgentRegistry",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py.AgentRegistry"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "discover_and_register_agents",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py.discover_and_register_agents"
-        },
-        {
-            "type": "function",
-            "name": "_load_agent_manifest",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py._load_agent_manifest"
-        },
-        {
-            "type": "function",
-            "name": "get_agent_profile",
-            "file_path": "core\\agent_registry.py",
-            "id": "core.agent_registry.py.get_agent_profile"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py"
-        },
-        {
-            "type": "class",
-            "name": "ProjectCodeGraph",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py.ProjectCodeGraph"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "scan_project_directory",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py.scan_project_directory"
-        },
-        {
-            "type": "function",
-            "name": "_parse_python_file",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py._parse_python_file"
-        },
-        {
-            "type": "function",
-            "name": "save_graph_to_disk",
-            "file_path": "core\\code_graph.py",
-            "id": "core.code_graph.py.save_graph_to_disk"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\dag_engine.py",
-            "id": "core.dag_engine.py"
-        },
-        {
-            "type": "class",
-            "name": "BlueprintDAGEngine",
-            "file_path": "core\\dag_engine.py",
-            "id": "core.dag_engine.py.BlueprintDAGEngine"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\dag_engine.py",
-            "id": "core.dag_engine.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "build_dag_from_intent",
-            "file_path": "core\\dag_engine.py",
-            "id": "core.dag_engine.py.build_dag_from_intent"
-        },
-        {
-            "type": "function",
-            "name": "build_dag_from_multiple_intents",
-            "file_path": "core\\dag_engine.py",
-            "id": "core.dag_engine.py.build_dag_from_multiple_intents"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\hardware_detector.py",
-            "id": "core.hardware_detector.py"
-        },
-        {
-            "type": "function",
-            "name": "check_system_environment",
-            "file_path": "core\\hardware_detector.py",
-            "id": "core.hardware_detector.py.check_system_environment"
-        },
-        {
-            "type": "function",
-            "name": "get_optimal_device",
-            "file_path": "core\\hardware_detector.py",
-            "id": "core.hardware_detector.py.get_optimal_device"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\ollama_client.py",
-            "id": "core.ollama_client.py"
-        },
-        {
-            "type": "class",
-            "name": "OllamaClient",
-            "file_path": "core\\ollama_client.py",
-            "id": "core.ollama_client.py.OllamaClient"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\ollama_client.py",
-            "id": "core.ollama_client.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "generate_code",
-            "file_path": "core\\ollama_client.py",
-            "id": "core.ollama_client.py.generate_code"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\router.py",
-            "id": "core.router.py"
-        },
-        {
-            "type": "class",
-            "name": "UserRequestPayload",
-            "file_path": "core\\router.py",
-            "id": "core.router.py.UserRequestPayload"
-        },
-        {
-            "type": "class",
-            "name": "IntentRouter",
-            "file_path": "core\\router.py",
-            "id": "core.router.py.IntentRouter"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "core\\router.py",
-            "id": "core.router.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "classify_intents",
-            "file_path": "core\\router.py",
-            "id": "core.router.py.classify_intents"
-        },
-        {
-            "type": "function",
-            "name": "process_request",
-            "file_path": "core\\router.py",
-            "id": "core.router.py.process_request"
-        },
-        {
-            "type": "module",
-            "file_path": "core\\__init__.py",
-            "id": "core.__init__.py"
-        },
-        {
-            "type": "module",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py"
-        },
-        {
-            "type": "function",
-            "name": "reconcile_records",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.reconcile_records"
-        },
-        {
-            "type": "function",
-            "name": "summarize_accounting_df",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.summarize_accounting_df"
-        },
-        {
-            "type": "module",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py"
-        },
-        {
-            "type": "function",
-            "name": "test_module_sanity",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_module_sanity"
-        },
-        {
-            "type": "function",
-            "name": "test_functions_exist",
-            "file_path": "generated_apps\\viet_module_oi_soat_cong\\tests\\test_viet_module_oi_soat_cong.py",
-            "id": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_functions_exist"
-        },
-        {
-            "type": "module",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py"
-        },
-        {
-            "type": "function",
-            "name": "standardize_numeric_columns",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.standardize_numeric_columns"
-        },
-        {
-            "type": "function",
-            "name": "separate_weight_types",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.separate_weight_types"
-        },
-        {
-            "type": "function",
-            "name": "summarize_gold_silver_report",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.summarize_gold_silver_report"
-        },
-        {
-            "type": "function",
-            "name": "convert_purity_weight",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.convert_purity_weight"
-        },
-        {
-            "type": "module",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py"
-        },
-        {
-            "type": "function",
-            "name": "test_module_sanity",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_module_sanity"
-        },
-        {
-            "type": "function",
-            "name": "test_functions_exist",
-            "file_path": "generated_apps\\viet_module_tinh_toan_bao\\tests\\test_viet_module_tinh_toan_bao.py",
-            "id": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_functions_exist"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\admin.py",
-            "id": "hub_core.admin.py"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\apps.py",
-            "id": "hub_core.apps.py"
-        },
-        {
-            "type": "class",
-            "name": "HubCoreConfig",
-            "file_path": "hub_core\\apps.py",
-            "id": "hub_core.apps.py.HubCoreConfig"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\models.py",
-            "id": "hub_core.models.py"
-        },
-        {
-            "type": "class",
-            "name": "AgentManifestModel",
-            "file_path": "hub_core\\models.py",
-            "id": "hub_core.models.py.AgentManifestModel"
-        },
-        {
-            "type": "class",
-            "name": "RequestJob",
-            "file_path": "hub_core\\models.py",
-            "id": "hub_core.models.py.RequestJob"
-        },
-        {
-            "type": "class",
-            "name": "TaskExecutionLog",
-            "file_path": "hub_core\\models.py",
-            "id": "hub_core.models.py.TaskExecutionLog"
-        },
-        {
-            "type": "function",
-            "name": "__str__",
-            "file_path": "hub_core\\models.py",
-            "id": "hub_core.models.py.__str__"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\tests.py",
-            "id": "hub_core.tests.py"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\urls.py",
-            "id": "hub_core.urls.py"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\__init__.py",
-            "id": "hub_core.__init__.py"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\migrations\\0001_initial.py",
-            "id": "hub_core.migrations.0001_initial.py"
-        },
-        {
-            "type": "class",
-            "name": "Migration",
-            "file_path": "hub_core\\migrations\\0001_initial.py",
-            "id": "hub_core.migrations.0001_initial.py.Migration"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\migrations\\__init__.py",
-            "id": "hub_core.migrations.__init__.py"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py"
-        },
-        {
-            "type": "class",
-            "name": "DomainContextInjector",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py.DomainContextInjector"
-        },
-        {
-            "type": "function",
-            "name": "_load_domain_data",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py._load_domain_data"
-        },
-        {
-            "type": "function",
-            "name": "_extract_sub_domain_section",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py._extract_sub_domain_section"
-        },
-        {
-            "type": "function",
-            "name": "_format_skeletons",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py._format_skeletons"
-        },
-        {
-            "type": "function",
-            "name": "get_domain_context",
-            "file_path": "hub_core\\services\\domain_injector.py",
-            "id": "hub_core.services.domain_injector.py.get_domain_context"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py"
-        },
-        {
-            "type": "class",
-            "name": "DjangoPipelineService",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py.DjangoPipelineService"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "execute_job",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py.execute_job"
-        },
-        {
-            "type": "function",
-            "name": "_slugify_vietnamese",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._slugify_vietnamese"
-        },
-        {
-            "type": "function",
-            "name": "_init_or_update_job",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._init_or_update_job"
-        },
-        {
-            "type": "function",
-            "name": "_validate_request",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._validate_request"
-        },
-        {
-            "type": "function",
-            "name": "_run_pm_agent_step",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._run_pm_agent_step"
-        },
-        {
-            "type": "function",
-            "name": "_run_coder_agent_step",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._run_coder_agent_step"
-        },
-        {
-            "type": "function",
-            "name": "_run_isolated_sandbox_qc_loop",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._run_isolated_sandbox_qc_loop"
-        },
-        {
-            "type": "function",
-            "name": "_clean_llm_code_output",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._clean_llm_code_output"
-        },
-        {
-            "type": "function",
-            "name": "_finalize_success_job",
-            "file_path": "hub_core\\services\\pipeline_service.py",
-            "id": "hub_core.services.pipeline_service.py._finalize_success_job"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\services\\sandbox_executor.py",
-            "id": "hub_core.services.sandbox_executor.py"
-        },
-        {
-            "type": "class",
-            "name": "SandboxExecutor",
-            "file_path": "hub_core\\services\\sandbox_executor.py",
-            "id": "hub_core.services.sandbox_executor.py.SandboxExecutor"
-        },
-        {
-            "type": "function",
-            "name": "run_pytest_on_module",
-            "file_path": "hub_core\\services\\sandbox_executor.py",
-            "id": "hub_core.services.sandbox_executor.py.run_pytest_on_module"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\services\\workspace_manager.py",
-            "id": "hub_core.services.workspace_manager.py"
-        },
-        {
-            "type": "class",
-            "name": "IsolatedWorkspaceManager",
-            "file_path": "hub_core\\services\\workspace_manager.py",
-            "id": "hub_core.services.workspace_manager.py.IsolatedWorkspaceManager"
-        },
-        {
-            "type": "function",
-            "name": "__init__",
-            "file_path": "hub_core\\services\\workspace_manager.py",
-            "id": "hub_core.services.workspace_manager.py.__init__"
-        },
-        {
-            "type": "function",
-            "name": "extract_third_party_libs",
-            "file_path": "hub_core\\services\\workspace_manager.py",
-            "id": "hub_core.services.workspace_manager.py.extract_third_party_libs"
-        },
-        {
-            "type": "function",
-            "name": "prepare_isolated_workspace",
-            "file_path": "hub_core\\services\\workspace_manager.py",
-            "id": "hub_core.services.workspace_manager.py.prepare_isolated_workspace"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py"
-        },
-        {
-            "type": "function",
-            "name": "_list_generated_modules",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py._list_generated_modules"
-        },
-        {
-            "type": "function",
-            "name": "run_pipeline_background",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py.run_pipeline_background"
-        },
-        {
-            "type": "function",
-            "name": "_extract_sub_domain_from_request",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py._extract_sub_domain_from_request"
-        },
-        {
-            "type": "function",
-            "name": "dashboard_view",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py.dashboard_view"
-        },
-        {
-            "type": "function",
-            "name": "job_detail_view",
-            "file_path": "hub_core\\views\\dashboard_views.py",
-            "id": "hub_core.views.dashboard_views.py.job_detail_view"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py"
-        },
-        {
-            "type": "function",
-            "name": "_is_safe_preview_path",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py._is_safe_preview_path"
-        },
-        {
-            "type": "function",
-            "name": "file_content_api",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py.file_content_api"
-        },
-        {
-            "type": "function",
-            "name": "job_stream_view",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py.job_stream_view"
-        },
-        {
-            "type": "function",
-            "name": "delete_job_api",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py.delete_job_api"
-        },
-        {
-            "type": "function",
-            "name": "event_stream",
-            "file_path": "hub_core\\views\\stream_api_views.py",
-            "id": "hub_core.views.stream_api_views.py.event_stream"
-        },
-        {
-            "type": "module",
-            "file_path": "hub_core\\views\\__init__.py",
-            "id": "hub_core.views.__init__.py"
-        },
-        {
-            "type": "module",
-            "file_path": "vnx_hub\\asgi.py",
-            "id": "vnx_hub.asgi.py"
-        },
-        {
-            "type": "module",
-            "file_path": "vnx_hub\\settings.py",
-            "id": "vnx_hub.settings.py"
-        },
-        {
-            "type": "module",
-            "file_path": "vnx_hub\\urls.py",
-            "id": "vnx_hub.urls.py"
-        },
-        {
-            "type": "module",
-            "file_path": "vnx_hub\\wsgi.py",
-            "id": "vnx_hub.wsgi.py"
-        },
-        {
-            "type": "module",
-            "file_path": "vnx_hub\\__init__.py",
-            "id": "vnx_hub.__init__.py"
-        }
-    ],
-    "edges": [
-        {
-            "relation": "defines_function",
-            "source": "manage.py",
-            "target": "manage.py.main"
-        },
-        {
-            "relation": "defines_function",
-            "source": "reset_system.py",
-            "target": "reset_system.py.run_command"
-        },
-        {
-            "relation": "defines_function",
-            "source": "reset_system.py",
-            "target": "reset_system.py.reset_database_and_migrations"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.agent_executor.py",
-            "target": "core.agent_executor.py.AgentExecutor"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_executor.py",
-            "target": "core.agent_executor.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_executor.py",
-            "target": "core.agent_executor.py.run_agent"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_executor.py",
-            "target": "core.agent_executor.py.run_coder_agent"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.agent_registry.py",
-            "target": "core.agent_registry.py.AgentRegistry"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_registry.py",
-            "target": "core.agent_registry.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_registry.py",
-            "target": "core.agent_registry.py.discover_and_register_agents"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_registry.py",
-            "target": "core.agent_registry.py._load_agent_manifest"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.agent_registry.py",
-            "target": "core.agent_registry.py.get_agent_profile"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.code_graph.py",
-            "target": "core.code_graph.py.ProjectCodeGraph"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.code_graph.py",
-            "target": "core.code_graph.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.code_graph.py",
-            "target": "core.code_graph.py.scan_project_directory"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.code_graph.py",
-            "target": "core.code_graph.py._parse_python_file"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.code_graph.py",
-            "target": "core.code_graph.py.save_graph_to_disk"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.dag_engine.py",
-            "target": "core.dag_engine.py.BlueprintDAGEngine"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.dag_engine.py",
-            "target": "core.dag_engine.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.dag_engine.py",
-            "target": "core.dag_engine.py.build_dag_from_intent"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.dag_engine.py",
-            "target": "core.dag_engine.py.build_dag_from_multiple_intents"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.hardware_detector.py",
-            "target": "core.hardware_detector.py.check_system_environment"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.hardware_detector.py",
-            "target": "core.hardware_detector.py.get_optimal_device"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.ollama_client.py",
-            "target": "core.ollama_client.py.OllamaClient"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.ollama_client.py",
-            "target": "core.ollama_client.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.ollama_client.py",
-            "target": "core.ollama_client.py.generate_code"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.router.py",
-            "target": "core.router.py.UserRequestPayload"
-        },
-        {
-            "relation": "defines_class",
-            "source": "core.router.py",
-            "target": "core.router.py.IntentRouter"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.router.py",
-            "target": "core.router.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.router.py",
-            "target": "core.router.py.classify_intents"
-        },
-        {
-            "relation": "defines_function",
-            "source": "core.router.py",
-            "target": "core.router.py.process_request"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py",
-            "target": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.reconcile_records"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py",
-            "target": "generated_apps.viet_module_oi_soat_cong.viet_module_oi_soat_cong.py.summarize_accounting_df"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py",
-            "target": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_module_sanity"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py",
-            "target": "generated_apps.viet_module_oi_soat_cong.tests.test_viet_module_oi_soat_cong.py.test_functions_exist"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.standardize_numeric_columns"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.separate_weight_types"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.summarize_gold_silver_report"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.viet_module_tinh_toan_bao.py.convert_purity_weight"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_module_sanity"
-        },
-        {
-            "relation": "defines_function",
-            "source": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py",
-            "target": "generated_apps.viet_module_tinh_toan_bao.tests.test_viet_module_tinh_toan_bao.py.test_functions_exist"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.apps.py",
-            "target": "hub_core.apps.py.HubCoreConfig"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.models.py",
-            "target": "hub_core.models.py.AgentManifestModel"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.models.py",
-            "target": "hub_core.models.py.RequestJob"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.models.py",
-            "target": "hub_core.models.py.TaskExecutionLog"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.models.py",
-            "target": "hub_core.models.py.__str__"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.migrations.0001_initial.py",
-            "target": "hub_core.migrations.0001_initial.py.Migration"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.services.domain_injector.py",
-            "target": "hub_core.services.domain_injector.py.DomainContextInjector"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.domain_injector.py",
-            "target": "hub_core.services.domain_injector.py._load_domain_data"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.domain_injector.py",
-            "target": "hub_core.services.domain_injector.py._extract_sub_domain_section"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.domain_injector.py",
-            "target": "hub_core.services.domain_injector.py._format_skeletons"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.domain_injector.py",
-            "target": "hub_core.services.domain_injector.py.get_domain_context"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py.DjangoPipelineService"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py.execute_job"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._slugify_vietnamese"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._init_or_update_job"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._validate_request"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._run_pm_agent_step"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._run_coder_agent_step"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._run_isolated_sandbox_qc_loop"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._clean_llm_code_output"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.pipeline_service.py",
-            "target": "hub_core.services.pipeline_service.py._finalize_success_job"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.services.sandbox_executor.py",
-            "target": "hub_core.services.sandbox_executor.py.SandboxExecutor"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.sandbox_executor.py",
-            "target": "hub_core.services.sandbox_executor.py.run_pytest_on_module"
-        },
-        {
-            "relation": "defines_class",
-            "source": "hub_core.services.workspace_manager.py",
-            "target": "hub_core.services.workspace_manager.py.IsolatedWorkspaceManager"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.workspace_manager.py",
-            "target": "hub_core.services.workspace_manager.py.__init__"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.workspace_manager.py",
-            "target": "hub_core.services.workspace_manager.py.extract_third_party_libs"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.services.workspace_manager.py",
-            "target": "hub_core.services.workspace_manager.py.prepare_isolated_workspace"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.dashboard_views.py",
-            "target": "hub_core.views.dashboard_views.py._list_generated_modules"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.dashboard_views.py",
-            "target": "hub_core.views.dashboard_views.py.run_pipeline_background"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.dashboard_views.py",
-            "target": "hub_core.views.dashboard_views.py._extract_sub_domain_from_request"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.dashboard_views.py",
-            "target": "hub_core.views.dashboard_views.py.dashboard_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.dashboard_views.py",
-            "target": "hub_core.views.dashboard_views.py.job_detail_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.stream_api_views.py",
-            "target": "hub_core.views.stream_api_views.py._is_safe_preview_path"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.stream_api_views.py",
-            "target": "hub_core.views.stream_api_views.py.file_content_api"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.stream_api_views.py",
-            "target": "hub_core.views.stream_api_views.py.job_stream_view"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.stream_api_views.py",
-            "target": "hub_core.views.stream_api_views.py.delete_job_api"
-        },
-        {
-            "relation": "defines_function",
-            "source": "hub_core.views.stream_api_views.py",
-            "target": "hub_core.views.stream_api_views.py.event_stream"
-        }
-    ]
+  "generated_at": "2026-11-20T08:43:07.290950+00:00",
+  "project_root": "D:\\ThanhVu\\ChatBox\\AI_sys",
+  "max_lines_limit": 300,
+  "summary": {
+    "total_py_files": 35,
+    "total_edges": 270,
+    "oversized_count": 3
+  },
+  "oversized_files": [
+    {
+      "file": "core/slice_expander.py",
+      "lines": 378
+    },
+    {
+      "file": "core/slice_scaffolder.py",
+      "lines": 330
+    },
+    {
+      "file": "hub_core/views.py",
+      "lines": 449
+    }
+  ],
+  "nodes": {
+    "core/__init__.py": {
+      "path": "core/__init__.py",
+      "lines": 6,
+      "oversized": false,
+      "slice_tag": "CORE: PACKAGE_INIT",
+      "classes": [],
+      "functions": [],
+      "imports": [],
+      "header_linked_files": [
+        "core/router.py",
+        "core/graph_indexer.py",
+        "core/llm_client.py",
+        "core/jit_context.py",
+        "core/circuit_breaker.py"
+      ]
+    },
+    "core/auto_model_setup.py": {
+      "path": "core/auto_model_setup.py",
+      "lines": 132,
+      "oversized": false,
+      "slice_tag": "CORE: AUTO_MODEL_SETUP",
+      "classes": [
+        "HardwareProfile"
+      ],
+      "functions": [
+        "apply_runtime_config",
+        "choose_model_for_hardware",
+        "detect_hardware",
+        "ensure_ollama_model",
+        "get_nvidia_vram_gb",
+        "get_windows_memory_gb"
+      ],
+      "imports": [
+        "core.logger_setup.setup_logger",
+        "ctypes",
+        "dataclasses.dataclass",
+        "json",
+        "logging",
+        "os",
+        "pathlib.Path",
+        "subprocess"
+      ],
+      "header_linked_files": [
+        "config/runtime_profiles.json",
+        "core/llm_client.py",
+        "core/logger_setup.py"
+      ]
+    },
+    "core/background_jobs.py": {
+      "path": "core/background_jobs.py",
+      "lines": 216,
+      "oversized": false,
+      "slice_tag": "CORE: BACKGROUND_JOBS",
+      "classes": [
+        "BackgroundJobManager",
+        "JobRecord"
+      ],
+      "functions": [
+        "_utc_now_iso",
+        "get_job_manager"
+      ],
+      "imports": [
+        "concurrent.futures.ThreadPoolExecutor",
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "datetime.datetime",
+        "datetime.timezone",
+        "logging",
+        "threading",
+        "typing.Any",
+        "typing.Callable",
+        "uuid"
+      ],
+      "header_linked_files": [
+        "core/logger_setup.py",
+        "hub_core/views.py",
+        "hub_core/urls.py"
+      ]
+    },
+    "core/circuit_breaker.py": {
+      "path": "core/circuit_breaker.py",
+      "lines": 107,
+      "oversized": false,
+      "slice_tag": "CORE: CIRCUIT_BREAKER",
+      "classes": [
+        "BreakerStatus",
+        "RepairAttempt",
+        "RepairCircuitBreaker"
+      ],
+      "functions": [],
+      "imports": [
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "hashlib",
+        "json",
+        "logging",
+        "pathlib.Path"
+      ],
+      "header_linked_files": [
+        "config/runtime_profiles.json",
+        "core/logger_setup.py"
+      ]
+    },
+    "core/graph_indexer.py": {
+      "path": "core/graph_indexer.py",
+      "lines": 255,
+      "oversized": false,
+      "slice_tag": "CORE: AST_GRAPH_INDEXER",
+      "classes": [
+        "ProjectGraphIndexer"
+      ],
+      "functions": [
+        "_count_lines",
+        "_extract_ast_symbols",
+        "_parse_header_metadata"
+      ],
+      "imports": [
+        "ast",
+        "core.logger_setup.setup_logger",
+        "datetime.datetime",
+        "datetime.timezone",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re"
+      ],
+      "header_linked_files": [
+        "core/logger_setup.py",
+        "core/graph_query.py",
+        "PROJECT_MAP.json"
+      ]
+    },
+    "core/graph_query.py": {
+      "path": "core/graph_query.py",
+      "lines": 39,
+      "oversized": false,
+      "slice_tag": "CORE: GRAPH_NEIGHBOR_QUERY",
+      "classes": [
+        "GraphIndexer"
+      ],
+      "functions": [],
+      "imports": [
+        "core.graph_indexer.ProjectGraphIndexer",
+        "logging"
+      ],
+      "header_linked_files": [
+        "core/graph_indexer.py",
+        "core/jit_context.py",
+        "PROJECT_MAP.json"
+      ]
+    },
+    "core/jit_context.py": {
+      "path": "core/jit_context.py",
+      "lines": 81,
+      "oversized": false,
+      "slice_tag": "CORE: JIT_CONTEXT_BUILDER",
+      "classes": [
+        "JITContextBuilder"
+      ],
+      "functions": [],
+      "imports": [
+        "core.graph_indexer.ProjectGraphIndexer",
+        "logging",
+        "pathlib.Path"
+      ],
+      "header_linked_files": [
+        "core/graph_indexer.py",
+        "core/graph_query.py",
+        "core/logger_setup.py",
+        "PROJECT_MAP.json"
+      ]
+    },
+    "core/llm_client.py": {
+      "path": "core/llm_client.py",
+      "lines": 97,
+      "oversized": false,
+      "slice_tag": "CORE: LLM_RUNTIME_CLIENT",
+      "classes": [
+        "LocalLLMClient"
+      ],
+      "functions": [],
+      "imports": [
+        "json",
+        "logging",
+        "pathlib.Path",
+        "requests"
+      ],
+      "header_linked_files": [
+        "config/runtime_profiles.json",
+        "core/logger_setup.py"
+      ]
+    },
+    "core/logger_setup.py": {
+      "path": "core/logger_setup.py",
+      "lines": 41,
+      "oversized": false,
+      "slice_tag": "CORE: LOGGER_SETUP",
+      "classes": [],
+      "functions": [
+        "setup_logger"
+      ],
+      "imports": [
+        "logging",
+        "pathlib.Path"
+      ],
+      "header_linked_files": [
+        "config/runtime_profiles.json",
+        "core/router.py",
+        "core/llm_client.py"
+      ]
+    },
+    "core/repair_runner.py": {
+      "path": "core/repair_runner.py",
+      "lines": 212,
+      "oversized": false,
+      "slice_tag": "CORE: REPAIR_RUNNER",
+      "classes": [
+        "RepairLoopRunner",
+        "RepairRunResult"
+      ],
+      "functions": [],
+      "imports": [
+        "core.auto_model_setup.apply_runtime_config",
+        "core.auto_model_setup.choose_model_for_hardware",
+        "core.auto_model_setup.detect_hardware",
+        "core.auto_model_setup.ensure_ollama_model",
+        "core.circuit_breaker.BreakerStatus",
+        "core.circuit_breaker.RepairCircuitBreaker",
+        "core.jit_context.JITContextBuilder",
+        "core.llm_client.LocalLLMClient",
+        "core.logger_setup.setup_logger",
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "logging",
+        "pathlib.Path",
+        "subprocess",
+        "sys",
+        "typing.Callable"
+      ],
+      "header_linked_files": [
+        "core/auto_model_setup.py",
+        "core/circuit_breaker.py",
+        "core/jit_context.py",
+        "core/llm_client.py",
+        "core/logger_setup.py"
+      ]
+    },
+    "core/router.py": {
+      "path": "core/router.py",
+      "lines": 163,
+      "oversized": false,
+      "slice_tag": "CORE: TWO_LAYER_ROUTER",
+      "classes": [
+        "RouteDecision",
+        "TwoLayerRouter"
+      ],
+      "functions": [],
+      "imports": [
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re"
+      ],
+      "header_linked_files": [
+        "config/domains.json",
+        "core/logger_setup.py",
+        "slices/doc_reconcile/ui_view.py",
+        "hub_core/views.py"
+      ]
+    },
+    "core/slice_expander.py": {
+      "path": "core/slice_expander.py",
+      "lines": 378,
+      "oversized": true,
+      "slice_tag": "CORE: SLICE_EXPANDER",
+      "classes": [],
+      "functions": [
+        "_build_expanded_contract",
+        "_build_expanded_core",
+        "_build_expanded_test",
+        "_build_expanded_ui_view",
+        "_emit",
+        "_normalize_ascii",
+        "_reindex_graph",
+        "expand_slice_from_prompt",
+        "resolve_target_slice"
+      ],
+      "imports": [
+        "core.background_jobs.get_job_manager",
+        "core.graph_indexer.ProjectGraphIndexer",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re",
+        "typing.Any",
+        "unicodedata"
+      ],
+      "header_linked_files": [
+        "core/background_jobs.py",
+        "core/graph_indexer.py",
+        "core/slice_scaffolder.py",
+        "hub_core/views.py"
+      ]
+    },
+    "core/slice_scaffolder.py": {
+      "path": "core/slice_scaffolder.py",
+      "lines": 330,
+      "oversized": true,
+      "slice_tag": "CORE: SLICE_SCAFFOLDER",
+      "classes": [],
+      "functions": [
+        "_build_contract_content",
+        "_build_core_content",
+        "_build_test_content",
+        "_build_ui_view_content",
+        "_emit",
+        "_run_graph_indexer",
+        "scaffold_slice_from_prompt",
+        "slugify_slice_name"
+      ],
+      "imports": [
+        "core.background_jobs.get_job_manager",
+        "core.graph_indexer.ProjectGraphIndexer",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "re",
+        "typing.Any",
+        "unicodedata"
+      ],
+      "header_linked_files": [
+        "core/background_jobs.py",
+        "core/graph_indexer.py",
+        "core/logger_setup.py",
+        "hub_core/views.py"
+      ]
+    },
+    "hub_core/__init__.py": {
+      "path": "hub_core/__init__.py",
+      "lines": 0,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [],
+      "header_linked_files": []
+    },
+    "hub_core/admin.py": {
+      "path": "hub_core/admin.py",
+      "lines": 3,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.contrib.admin"
+      ],
+      "header_linked_files": []
+    },
+    "hub_core/apps.py": {
+      "path": "hub_core/apps.py",
+      "lines": 23,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [
+        "HubCoreConfig"
+      ],
+      "functions": [],
+      "imports": [
+        "core.auto_model_setup.apply_runtime_config",
+        "core.auto_model_setup.choose_model_for_hardware",
+        "core.auto_model_setup.detect_hardware",
+        "core.auto_model_setup.ensure_ollama_model",
+        "django.apps.AppConfig",
+        "os"
+      ],
+      "header_linked_files": []
+    },
+    "hub_core/models.py": {
+      "path": "hub_core/models.py",
+      "lines": 3,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.db.models"
+      ],
+      "header_linked_files": []
+    },
+    "hub_core/tests.py": {
+      "path": "hub_core/tests.py",
+      "lines": 3,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.test.TestCase"
+      ],
+      "header_linked_files": []
+    },
+    "hub_core/urls.py": {
+      "path": "hub_core/urls.py",
+      "lines": 37,
+      "oversized": false,
+      "slice_tag": "HUB_CORE: URLS",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.urls.path",
+        "hub_core.views.doc_reconcile_api_view",
+        "hub_core.views.expand_slice_view",
+        "hub_core.views.graph_neighbors_view",
+        "hub_core.views.health_check_view",
+        "hub_core.views.jit_context_view",
+        "hub_core.views.job_list_view",
+        "hub_core.views.job_status_view",
+        "hub_core.views.repair_loop_view",
+        "hub_core.views.route_prompt_view",
+        "hub_core.views.scaffold_app_view",
+        "hub_core.views.workbench_view"
+      ],
+      "header_linked_files": [
+        "hub_core/views.py",
+        "core/background_jobs.py",
+        "slices/doc_reconcile/ui_view.py",
+        "hub_core/templates/hub_core/workbench.html"
+      ]
+    },
+    "hub_core/views.py": {
+      "path": "hub_core/views.py",
+      "lines": 449,
+      "oversized": true,
+      "slice_tag": "HUB_CORE: VIEWS",
+      "classes": [],
+      "functions": [
+        "_ensure_diagnostic_logging",
+        "_execute_expand_slice",
+        "_execute_repair_loop",
+        "_execute_scaffold_slice",
+        "_resolve_jit_target",
+        "expand_slice_view",
+        "graph_neighbors_view",
+        "health_check_view",
+        "jit_context_view",
+        "job_list_view",
+        "job_status_view",
+        "repair_loop_view",
+        "route_prompt_view",
+        "scaffold_app_view",
+        "workbench_view"
+      ],
+      "imports": [
+        "core.background_jobs.get_job_manager",
+        "core.graph_query.GraphIndexer",
+        "core.jit_context.JITContextBuilder",
+        "core.repair_runner.RepairLoopRunner",
+        "core.router.TwoLayerRouter",
+        "core.slice_expander.expand_slice_from_prompt",
+        "core.slice_scaffolder.scaffold_slice_from_prompt",
+        "dataclasses.asdict",
+        "django.http.HttpRequest",
+        "django.http.JsonResponse",
+        "django.shortcuts.render",
+        "django.views.decorators.csrf.csrf_exempt",
+        "django.views.decorators.http.require_http_methods",
+        "json",
+        "logging",
+        "pathlib.Path",
+        "slices.doc_reconcile.ui_view.doc_reconcile_api_view",
+        "sys",
+        "time",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "core/router.py",
+        "core/graph_query.py",
+        "core/jit_context.py",
+        "core/repair_runner.py",
+        "core/background_jobs.py",
+        "core/slice_scaffolder.py",
+        "slices/doc_reconcile/ui_view.py",
+        "hub_core/urls.py",
+        "hub_core/templates/hub_core/workbench.html"
+      ]
+    },
+    "manage.py": {
+      "path": "manage.py",
+      "lines": 22,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [
+        "main"
+      ],
+      "imports": [
+        "django.core.management.execute_from_command_line",
+        "os",
+        "sys"
+      ],
+      "header_linked_files": []
+    },
+    "slices/__init__.py": {
+      "path": "slices/__init__.py",
+      "lines": 6,
+      "oversized": false,
+      "slice_tag": "CORE: PACKAGE_INIT",
+      "classes": [],
+      "functions": [],
+      "imports": [],
+      "header_linked_files": [
+        "core/router.py",
+        "core/graph_indexer.py",
+        "core/llm_client.py",
+        "core/jit_context.py",
+        "core/circuit_breaker.py"
+      ]
+    },
+    "slices/doc_reconcile/contract.py": {
+      "path": "slices/doc_reconcile/contract.py",
+      "lines": 82,
+      "oversized": false,
+      "slice_tag": "SLICE: DOC_RECONCILE_CONTRACT",
+      "classes": [
+        "ReconcileConfig",
+        "ReconcileItemResult",
+        "ReconcileReport",
+        "ReconcileRule"
+      ],
+      "functions": [
+        "build_config_from_dict"
+      ],
+      "imports": [
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "decimal.Decimal",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/doc_reconcile/core.py",
+        "slices/doc_reconcile/ui_view.py",
+        "slices/doc_reconcile/test_doc_reconcile.py"
+      ]
+    },
+    "slices/doc_reconcile/core.py": {
+      "path": "slices/doc_reconcile/core.py",
+      "lines": 200,
+      "oversized": false,
+      "slice_tag": "SLICE: DOC_RECONCILE_CORE",
+      "classes": [],
+      "functions": [
+        "_compare_field",
+        "_make_row_key",
+        "_to_decimal",
+        "reconcile_records"
+      ],
+      "imports": [
+        "decimal.Decimal",
+        "decimal.InvalidOperation",
+        "logging",
+        "slices.doc_reconcile.contract.ReconcileConfig",
+        "slices.doc_reconcile.contract.ReconcileItemResult",
+        "slices.doc_reconcile.contract.ReconcileReport",
+        "slices.doc_reconcile.contract.ReconcileRule",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/doc_reconcile/contract.py",
+        "slices/doc_reconcile/ui_view.py",
+        "slices/doc_reconcile/test_doc_reconcile.py"
+      ]
+    },
+    "slices/doc_reconcile/test_doc_reconcile.py": {
+      "path": "slices/doc_reconcile/test_doc_reconcile.py",
+      "lines": 50,
+      "oversized": false,
+      "slice_tag": "SLICE: DOC_RECONCILE_TEST",
+      "classes": [],
+      "functions": [
+        "test_reconcile_matches_tolerance_and_mismatch",
+        "test_reconcile_missing_and_extra_rows"
+      ],
+      "imports": [
+        "slices.doc_reconcile.contract.build_config_from_dict",
+        "slices.doc_reconcile.core.reconcile_records",
+        "slices.doc_reconcile.ui_view.format_reconcile_summary"
+      ],
+      "header_linked_files": [
+        "slices/doc_reconcile/contract.py",
+        "slices/doc_reconcile/core.py",
+        "slices/doc_reconcile/ui_view.py"
+      ]
+    },
+    "slices/doc_reconcile/ui_view.py": {
+      "path": "slices/doc_reconcile/ui_view.py",
+      "lines": 69,
+      "oversized": false,
+      "slice_tag": "SLICE: DOC_RECONCILE_UI_VIEW",
+      "classes": [],
+      "functions": [
+        "doc_reconcile_api_view",
+        "format_reconcile_summary"
+      ],
+      "imports": [
+        "django.http.HttpRequest",
+        "django.http.JsonResponse",
+        "django.views.decorators.csrf.csrf_exempt",
+        "django.views.decorators.http.require_http_methods",
+        "json",
+        "logging",
+        "slices.doc_reconcile.contract.ReconcileReport",
+        "slices.doc_reconcile.contract.build_config_from_dict",
+        "slices.doc_reconcile.core.reconcile_records",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/doc_reconcile/contract.py",
+        "slices/doc_reconcile/core.py",
+        "slices/doc_reconcile/test_doc_reconcile.py",
+        "hub_core/urls.py",
+        "hub_core/views.py"
+      ]
+    },
+    "slices/tinh_luong_nhan/contract.py": {
+      "path": "slices/tinh_luong_nhan/contract.py",
+      "lines": 31,
+      "oversized": false,
+      "slice_tag": "SLICE: TINH_LUONG_NHAN_CONTRACT",
+      "classes": [
+        "SliceRequest",
+        "SliceResult"
+      ],
+      "functions": [],
+      "imports": [
+        "dataclasses.dataclass",
+        "dataclasses.field",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/tinh_luong_nhan/core.py",
+        "slices/tinh_luong_nhan/ui_view.py",
+        "slices/tinh_luong_nhan/test_tinh_luong_nhan.py"
+      ]
+    },
+    "slices/tinh_luong_nhan/core.py": {
+      "path": "slices/tinh_luong_nhan/core.py",
+      "lines": 76,
+      "oversized": false,
+      "slice_tag": "SLICE: TINH_LUONG_NHAN_CORE",
+      "classes": [],
+      "functions": [
+        "_apply_numeric_rules",
+        "_extract_records",
+        "execute_slice"
+      ],
+      "imports": [
+        "logging",
+        "slices.tinh_luong_nhan.contract.LAST_EXPANSION_PROMPT",
+        "slices.tinh_luong_nhan.contract.SOURCE_PROMPT",
+        "slices.tinh_luong_nhan.contract.SliceRequest",
+        "slices.tinh_luong_nhan.contract.SliceResult",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/tinh_luong_nhan/contract.py",
+        "slices/tinh_luong_nhan/ui_view.py",
+        "slices/tinh_luong_nhan/test_tinh_luong_nhan.py"
+      ]
+    },
+    "slices/tinh_luong_nhan/test_tinh_luong_nhan.py": {
+      "path": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "lines": 23,
+      "oversized": false,
+      "slice_tag": "SLICE: TINH_LUONG_NHAN_TEST",
+      "classes": [],
+      "functions": [
+        "test_tinh_luong_nhan_expanded_records_and_rules"
+      ],
+      "imports": [
+        "slices.tinh_luong_nhan.contract.SliceRequest",
+        "slices.tinh_luong_nhan.core.execute_slice"
+      ],
+      "header_linked_files": [
+        "slices/tinh_luong_nhan/contract.py",
+        "slices/tinh_luong_nhan/core.py",
+        "slices/tinh_luong_nhan/ui_view.py"
+      ]
+    },
+    "slices/tinh_luong_nhan/ui_view.py": {
+      "path": "slices/tinh_luong_nhan/ui_view.py",
+      "lines": 40,
+      "oversized": false,
+      "slice_tag": "SLICE: TINH_LUONG_NHAN_UI_VIEW",
+      "classes": [],
+      "functions": [
+        "slice_api_view"
+      ],
+      "imports": [
+        "dataclasses.asdict",
+        "django.http.HttpRequest",
+        "django.http.JsonResponse",
+        "django.views.decorators.csrf.csrf_exempt",
+        "django.views.decorators.http.require_http_methods",
+        "json",
+        "logging",
+        "slices.tinh_luong_nhan.contract.SliceRequest",
+        "slices.tinh_luong_nhan.core.execute_slice",
+        "typing.Any"
+      ],
+      "header_linked_files": [
+        "slices/tinh_luong_nhan/contract.py",
+        "slices/tinh_luong_nhan/core.py",
+        "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+        "hub_core/urls.py"
+      ]
+    },
+    "vnx_project/__init__.py": {
+      "path": "vnx_project/__init__.py",
+      "lines": 0,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [],
+      "header_linked_files": []
+    },
+    "vnx_project/asgi.py": {
+      "path": "vnx_project/asgi.py",
+      "lines": 16,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.core.asgi.get_asgi_application",
+        "os"
+      ],
+      "header_linked_files": []
+    },
+    "vnx_project/settings.py": {
+      "path": "vnx_project/settings.py",
+      "lines": 126,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "pathlib.Path"
+      ],
+      "header_linked_files": []
+    },
+    "vnx_project/urls.py": {
+      "path": "vnx_project/urls.py",
+      "lines": 10,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.contrib.admin",
+        "django.urls.include",
+        "django.urls.path",
+        "hub_core.views.workbench_view"
+      ],
+      "header_linked_files": []
+    },
+    "vnx_project/wsgi.py": {
+      "path": "vnx_project/wsgi.py",
+      "lines": 16,
+      "oversized": false,
+      "slice_tag": "",
+      "classes": [],
+      "functions": [],
+      "imports": [
+        "django.core.wsgi.get_wsgi_application",
+        "os"
+      ],
+      "header_linked_files": []
+    }
+  },
+  "edges": [
+    {
+      "from": "core/__init__.py",
+      "to": "core/router.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/__init__.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/__init__.py",
+      "to": "core/llm_client.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/__init__.py",
+      "to": "core/jit_context.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/__init__.py",
+      "to": "core/circuit_breaker.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "config/runtime_profiles.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "core/llm_client.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "core.logger_setup.setup_logger",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "ctypes",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "os",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/auto_model_setup.py",
+      "to": "subprocess",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "hub_core/urls.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "concurrent.futures.ThreadPoolExecutor",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "datetime.datetime",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "datetime.timezone",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "threading",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "typing.Callable",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/background_jobs.py",
+      "to": "uuid",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "config/runtime_profiles.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "hashlib",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/circuit_breaker.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "core/graph_query.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "PROJECT_MAP.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "ast",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "core.logger_setup.setup_logger",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "datetime.datetime",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "datetime.timezone",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_indexer.py",
+      "to": "re",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_query.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_query.py",
+      "to": "core/jit_context.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_query.py",
+      "to": "PROJECT_MAP.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/graph_query.py",
+      "to": "core.graph_indexer.ProjectGraphIndexer",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/graph_query.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "core/graph_query.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "PROJECT_MAP.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "core.graph_indexer.ProjectGraphIndexer",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/jit_context.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "config/runtime_profiles.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/llm_client.py",
+      "to": "requests",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/logger_setup.py",
+      "to": "config/runtime_profiles.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/logger_setup.py",
+      "to": "core/router.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/logger_setup.py",
+      "to": "core/llm_client.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/logger_setup.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/logger_setup.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core/auto_model_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core/circuit_breaker.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core/jit_context.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core/llm_client.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.auto_model_setup.apply_runtime_config",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.auto_model_setup.choose_model_for_hardware",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.auto_model_setup.detect_hardware",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.auto_model_setup.ensure_ollama_model",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.circuit_breaker.BreakerStatus",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.circuit_breaker.RepairCircuitBreaker",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.jit_context.JITContextBuilder",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.llm_client.LocalLLMClient",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "core.logger_setup.setup_logger",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "subprocess",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "sys",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/repair_runner.py",
+      "to": "typing.Callable",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "config/domains.json",
+      "type": "header_link"
+    },
+    {
+      "from": "core/router.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/router.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/router.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/router.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/router.py",
+      "to": "re",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "core/background_jobs.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "core/slice_scaffolder.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "core.background_jobs.get_job_manager",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "core.graph_indexer.ProjectGraphIndexer",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "re",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_expander.py",
+      "to": "unicodedata",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "core/background_jobs.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "core/logger_setup.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "core.background_jobs.get_job_manager",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "core.graph_indexer.ProjectGraphIndexer",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "re",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "core/slice_scaffolder.py",
+      "to": "unicodedata",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/admin.py",
+      "to": "django.contrib.admin",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "core.auto_model_setup.apply_runtime_config",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "core.auto_model_setup.choose_model_for_hardware",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "core.auto_model_setup.detect_hardware",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "core.auto_model_setup.ensure_ollama_model",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "django.apps.AppConfig",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/apps.py",
+      "to": "os",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/models.py",
+      "to": "django.db.models",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/tests.py",
+      "to": "django.test.TestCase",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "core/background_jobs.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core/templates/hub_core/workbench.html",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "django.urls.path",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.doc_reconcile_api_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.expand_slice_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.graph_neighbors_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.health_check_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.jit_context_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.job_list_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.job_status_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.repair_loop_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.route_prompt_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.scaffold_app_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/urls.py",
+      "to": "hub_core.views.workbench_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/router.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/graph_query.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/jit_context.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/repair_runner.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/background_jobs.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core/slice_scaffolder.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "hub_core/urls.py",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "hub_core/templates/hub_core/workbench.html",
+      "type": "header_link"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.background_jobs.get_job_manager",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.graph_query.GraphIndexer",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.jit_context.JITContextBuilder",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.repair_runner.RepairLoopRunner",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.router.TwoLayerRouter",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.slice_expander.expand_slice_from_prompt",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "core.slice_scaffolder.scaffold_slice_from_prompt",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "dataclasses.asdict",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "django.http.HttpRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "django.http.JsonResponse",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "django.shortcuts.render",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "django.views.decorators.csrf.csrf_exempt",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "django.views.decorators.http.require_http_methods",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "slices.doc_reconcile.ui_view.doc_reconcile_api_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "sys",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "time",
+      "type": "ast_import"
+    },
+    {
+      "from": "hub_core/views.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "manage.py",
+      "to": "django.core.management.execute_from_command_line",
+      "type": "ast_import"
+    },
+    {
+      "from": "manage.py",
+      "to": "os",
+      "type": "ast_import"
+    },
+    {
+      "from": "manage.py",
+      "to": "sys",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/__init__.py",
+      "to": "core/router.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/__init__.py",
+      "to": "core/graph_indexer.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/__init__.py",
+      "to": "core/llm_client.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/__init__.py",
+      "to": "core/jit_context.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/__init__.py",
+      "to": "core/circuit_breaker.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "slices/doc_reconcile/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "slices/doc_reconcile/test_doc_reconcile.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "decimal.Decimal",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/contract.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices/doc_reconcile/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices/doc_reconcile/test_doc_reconcile.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "decimal.Decimal",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "decimal.InvalidOperation",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices.doc_reconcile.contract.ReconcileConfig",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices.doc_reconcile.contract.ReconcileItemResult",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices.doc_reconcile.contract.ReconcileReport",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "slices.doc_reconcile.contract.ReconcileRule",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/core.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices/doc_reconcile/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices/doc_reconcile/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices/doc_reconcile/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices.doc_reconcile.contract.build_config_from_dict",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices.doc_reconcile.core.reconcile_records",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/test_doc_reconcile.py",
+      "to": "slices.doc_reconcile.ui_view.format_reconcile_summary",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices/doc_reconcile/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices/doc_reconcile/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices/doc_reconcile/test_doc_reconcile.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "hub_core/urls.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "hub_core/views.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "django.http.HttpRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "django.http.JsonResponse",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "django.views.decorators.csrf.csrf_exempt",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "django.views.decorators.http.require_http_methods",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices.doc_reconcile.contract.ReconcileReport",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices.doc_reconcile.contract.build_config_from_dict",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "slices.doc_reconcile.core.reconcile_records",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/doc_reconcile/ui_view.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "slices/tinh_luong_nhan/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "slices/tinh_luong_nhan/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "dataclasses.dataclass",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "dataclasses.field",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/contract.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices/tinh_luong_nhan/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices/tinh_luong_nhan/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices.tinh_luong_nhan.contract.LAST_EXPANSION_PROMPT",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices.tinh_luong_nhan.contract.SOURCE_PROMPT",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices.tinh_luong_nhan.contract.SliceRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "slices.tinh_luong_nhan.contract.SliceResult",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/core.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "to": "slices/tinh_luong_nhan/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "to": "slices/tinh_luong_nhan/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "to": "slices/tinh_luong_nhan/ui_view.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "to": "slices.tinh_luong_nhan.contract.SliceRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "to": "slices.tinh_luong_nhan.core.execute_slice",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "slices/tinh_luong_nhan/contract.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "slices/tinh_luong_nhan/core.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "slices/tinh_luong_nhan/test_tinh_luong_nhan.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "hub_core/urls.py",
+      "type": "header_link"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "dataclasses.asdict",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "django.http.HttpRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "django.http.JsonResponse",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "django.views.decorators.csrf.csrf_exempt",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "django.views.decorators.http.require_http_methods",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "json",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "logging",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "slices.tinh_luong_nhan.contract.SliceRequest",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "slices.tinh_luong_nhan.core.execute_slice",
+      "type": "ast_import"
+    },
+    {
+      "from": "slices/tinh_luong_nhan/ui_view.py",
+      "to": "typing.Any",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/asgi.py",
+      "to": "django.core.asgi.get_asgi_application",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/asgi.py",
+      "to": "os",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/settings.py",
+      "to": "pathlib.Path",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/urls.py",
+      "to": "django.contrib.admin",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/urls.py",
+      "to": "django.urls.include",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/urls.py",
+      "to": "django.urls.path",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/urls.py",
+      "to": "hub_core.views.workbench_view",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/wsgi.py",
+      "to": "django.core.wsgi.get_wsgi_application",
+      "type": "ast_import"
+    },
+    {
+      "from": "vnx_project/wsgi.py",
+      "to": "os",
+      "type": "ast_import"
+    }
+  ]
 }

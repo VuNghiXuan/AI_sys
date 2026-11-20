@@ -1,0 +1,18 @@
+<!-- File Path: hub_core/templates/hub_core/workbench.html -->
+<!-- Description: Trang làm việc chính kết nối các thành phần giao diện chuẩn. -->
+{% extends "hub_core/base.html" %}
+
+{% block title %}vnxBox Workbench{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        window.VnxUI.pushStream({
+            agent: "SystemBoot",
+            action: "Khởi tạo khung làm việc",
+            detail: "Đã sẵn sàng chế độ Auto, danh mục app và luồng theo dõi lộ trình.",
+            progress: "Sẵn sàng"
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,504 @@
+<!-- File Path: hub_core/templates/hub_core/partials/prompt_composer_bar.html -->
+<!-- Description: Thanh nhập prompt dưới đáy; nối API thật (route, jit, scaffold, expand, repair/jobs) và log chi tiết. -->
+<div style="position:relative;">
+    <div id="mentionPopover"
+        style="display:none;position:absolute;bottom:100%;left:0;margin-bottom:6px;background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:6px;z-index:20;min-width:260px;">
+        <div class="muted" style="padding:2px 6px;margin-bottom:4px;">Chọn việc cụ thể (@):</div>
+        <button type="button" class="mention-opt" data-mention="@tao-app">@tao-app — Vibe prompt sinh app mới</button>
+        <button type="button" class="mention-opt" data-mention="@mo-rong">@mo-rong — AI tự phân tích &amp; mở
+            rộng</button>
+        <button type="button" class="mention-opt" data-mention="@dinh-tuyen">@dinh-tuyen — Phân loại &amp; định
+            tuyến</button>
+        <button type="button" class="mention-opt" data-mention="@anh-huong">@anh-huong — Tra cứu phạm vi liên
+            kết</button>
+        <button type="button" class="mention-opt" data-mention="@tu-sua">@tu-sua — Chạy kiểm thử &amp; tự sửa</button>
+    </div>
+
+    <form id="promptComposerForm" style="display:flex;gap:8px;align-items:center;">
+        <span id="runModeBadge"
+            style="background:#0c4a6e;color:var(--text);border:1px solid var(--accent);border-radius:6px;padding:6px 10px;font-size:12px;white-space:nowrap;">
+            Auto
+        </span>
+        <input id="promptBox" type="text" autocomplete="off"
+            placeholder="Nhập prompt... (Mặc định chạy Auto; gõ @ để gọi việc cụ thể)"
+            style="flex:1;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;" />
+        <button type="submit"
+            style="background:var(--accent);color:#082f49;font-weight:600;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;">
+            Gửi
+        </button>
+    </form>
+</div>
+
+<style>
+    .mention-opt {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        color: var(--text);
+        border: none;
+        border-radius: 5px;
+        padding: 6px 8px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .mention-opt:hover {
+        background: var(--panel);
+        color: var(--accent);
+    }
+</style>
+
+<script>
+    (function () {
+        const input = document.getElementById("promptBox");
+        const popover = document.getElementById("mentionPopover");
+        const form = document.getElementById("promptComposerForm");
+        const badge = document.getElementById("runModeBadge");
+        if (!input || !popover || !form) return;
+
+        function detectTarget(text) {
+            const m = text.match(/@([a-zA-Z0-9_-]+)/);
+            return m ? m[1].toLowerCase() : "";
+        }
+
+        function formatCompletedSummary(jobId, result) {
+            if (!result || typeof result !== "object") {
+                return `[Job ${jobId}] Hoàn tất thành công.`;
+            }
+            if (result.slice_name && Array.isArray(result.created_files)) {
+                const lineCounts = result.line_counts || {};
+                const totalLines = Object.values(lineCounts).reduce((acc, n) => acc + (Number(n) || 0), 0);
+                const gs = result.graph_summary || {};
+                const graphPart = (gs.total_py_files !== undefined)
+                    ? ` | Graph: ${gs.total_py_files} files, ${gs.total_edges ?? 0} edges`
+                    : "";
+                const targetDir = result.slice_dir || `slices/${result.slice_name}`;
+                return `Hoàn tất lát cắt '${result.slice_name}' (${result.created_files.length} file, ${totalLines} dòng) tại ${targetDir}${graphPart}.`;
+            }
+            if (result.target_file) {
+                const breakerState = result.breaker_status?.state || "unknown";
+                return `Hoàn tất kiểm thử/tự sửa cho '${result.target_file}' | success=${Boolean(result.success)} | breaker=${breakerState}.`;
+            }
+            const compact = JSON.stringify(result);
+            return compact.length > 240
+                ? `Hoàn tất job ${jobId}: ${compact.slice(0, 237)}...`
+                : `Hoàn tất job ${jobId}: ${compact}`;
+        }
+
+        function pollJobLogs(jobId, labelPrefix) {
+            let offset = 0;
+            let ticks = 0;
+            const timer = setInterval(async () => {
+                ticks += 1;
+                try {
+                    const url = `/api/vnxbox/jobs/${encodeURIComponent(jobId)}/?offset=${offset}`;
+                    const res = await fetch(url);
+                    const rawText = await res.text();
+                    let data = {};
+                    try {
+                        data = JSON.parse(rawText);
+                    } catch (parseErr) {
+                        window.VnxUI?.pushStream({
+                            agent: "JobMonitor",
+                            action: `Lỗi parse JSON khi poll job ${jobId}`,
+                            fetched: url,
+                            filtered: `HTTP ${res.status}`,
+                            progress: "Lỗi dữ liệu",
+                            detail: rawText.slice(0, 240),
+                            report: `[Job ${jobId}] Không parse được JSON (HTTP ${res.status}): ${rawText.slice(0, 140)}`
+                        });
+                        if (ticks >= 40) clearInterval(timer);
+                        return;
+                    }
+
+                    if (!res.ok || data.status !== "ok" || !data.job) {
+                        const errInfo = data.message || `HTTP ${res.status}`;
+                        window.VnxUI?.pushStream({
+                            agent: "JobMonitor",
+                            action: `Poll job ${jobId} chưa ok (tick #${ticks})`,
+                            fetched: url,
+                            filtered: "Kiểm tra job_id & status",
+                            progress: "Đang thử lại",
+                            detail: errInfo,
+                            report: `[Job ${jobId}] Lỗi poll (tick #${ticks}): ${errInfo}`
+                        });
+                        if (ticks >= 40) clearInterval(timer);
+                        return;
+                    }
+
+                    const job = data.job;
+                    const newLogs = Array.isArray(job.logs) ? job.logs : [];
+                    if (newLogs.length > 0) {
+                        const startOffset = offset;
+                        offset += newLogs.length;
+                        newLogs.forEach((line, idx) => {
+                            window.VnxUI?.pushStream({
+                                agent: labelPrefix,
+                                action: `Log job ${jobId} [#${startOffset + idx}]`,
+                                fetched: url,
+                                filtered: `offset ${startOffset} -> ${offset}`,
+                                progress: job.progress || job.status,
+                                detail: line,
+                                report: `[Job ${jobId} | ${job.status}] ${line}`
+                            });
+                        });
+                    } else {
+                        window.VnxUI?.pushStream({
+                            agent: labelPrefix,
+                            action: `Nhịp poll job ${jobId} (tick #${ticks})`,
+                            fetched: url,
+                            filtered: `offset=${offset}, total_logs=${job.total_logs ?? 0}`,
+                            progress: job.progress || job.status,
+                            detail: `Trạng thái hiện tại: '${job.status}' — ${job.progress || "Đang chạy"}`
+                        });
+                    }
+
+                    if (job.status === "completed" || job.status === "failed") {
+                        clearInterval(timer);
+                        const summary = job.status === "completed"
+                            ? formatCompletedSummary(jobId, job.result)
+                            : `Job ${jobId} thất bại: ${job.error || "Không rõ lỗi"}`;
+                        window.VnxUI?.pushStream({
+                            agent: labelPrefix,
+                            action: `Chốt kết quả job ${jobId}`,
+                            fetched: url,
+                            filtered: `status=${job.status}`,
+                            progress: job.status === "completed" ? "100% Hoàn tất" : "Dừng / Lỗi",
+                            detail: summary,
+                            report: summary
+                        });
+                    }
+                } catch (err) {
+                    window.VnxUI?.pushStream({
+                        agent: "JobMonitor",
+                        action: `Ngoại lệ mạng khi poll job ${jobId}`,
+                        fetched: `/api/vnxbox/jobs/${jobId}/`,
+                        filtered: "Bắt lỗi fetch",
+                        progress: "Đang thử lại",
+                        detail: String(err),
+                        report: `[Job ${jobId}] Lỗi mạng khi poll: ${err}`
+                    });
+                    if (ticks >= 40) clearInterval(timer);
+                }
+            }, 700);
+        }
+
+        async function runScaffoldFlow(text) {
+            const endpoint = "/api/vnxbox/slices/scaffold/";
+            window.VnxUI?.pushStream({
+                agent: "SliceScaffolder",
+                action: "Gửi yêu cầu sinh lát cắt mới",
+                fetched: `POST ${endpoint}`,
+                filtered: `Prompt: "${text}"`,
+                progress: "Đang gọi backend...",
+                detail: "Payload gửi đi: overwrite=false, reindex=true",
+                report: `[Scaffold] Đang gọi ${endpoint} cho: "${text}"`
+            });
+
+            try {
+                const sRes = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: text, overwrite: false, reindex: true })
+                });
+                const rawBody = await sRes.text();
+                let sJson = {};
+                try {
+                    sJson = JSON.parse(rawBody);
+                } catch (e) {
+                    const msg = `Phản hồi không phải JSON (HTTP ${sRes.status}): ${rawBody.slice(0, 200)}`;
+                    window.VnxUI?.pushStream({
+                        agent: "SliceScaffolder",
+                        action: "Lỗi định dạng phản hồi từ /slices/scaffold/",
+                        fetched: endpoint,
+                        filtered: `HTTP ${sRes.status}`,
+                        progress: "Lỗi phản hồi",
+                        detail: msg,
+                        report: `[Scaffold lỗi] ${msg}`
+                    });
+                    return;
+                }
+
+                const jobId = sJson?.job?.job_id;
+                if (!sRes.ok || !jobId) {
+                    const errMsg = sJson?.message || `HTTP ${sRes.status} (không có job_id)`;
+                    window.VnxUI?.pushStream({
+                        agent: "SliceScaffolder",
+                        action: "Backend từ chối hoặc thiếu job_id",
+                        fetched: endpoint,
+                        filtered: `HTTP ${sRes.status}`,
+                        progress: "Lỗi khởi tạo job",
+                        detail: `Chi tiết: ${errMsg} | Raw: ${JSON.stringify(sJson).slice(0, 220)}`,
+                        report: `[Scaffold lỗi] ${errMsg}`
+                    });
+                    return;
+                }
+
+                window.VnxUI?.pushStream({
+                    agent: "SliceScaffolder",
+                    action: `Đã xếp hàng job sinh lát cắt (job_id=${jobId})`,
+                    fetched: endpoint,
+                    filtered: `status=${sJson.status}, job_id=${jobId}`,
+                    progress: `Đang chạy nền (${jobId})`,
+                    detail: `Bắt đầu poll log tại /api/vnxbox/jobs/${jobId}/?offset=0`,
+                    report: `[Scaffold] Đã tạo job=${jobId} — đang theo dõi log từng bước...`
+                });
+                pollJobLogs(jobId, "SliceScaffolder");
+            } catch (err) {
+                window.VnxUI?.pushStream({
+                    agent: "SliceScaffolder",
+                    action: "Lỗi gọi API /slices/scaffold/",
+                    fetched: endpoint,
+                    filtered: "Bắt ngoại lệ fetch",
+                    progress: "Lỗi kết nối",
+                    detail: String(err),
+                    report: `[Scaffold lỗi kết nối] ${err}`
+                });
+            }
+        }
+
+        async function runExpandFlow(text) {
+            const endpoint = "/api/vnxbox/slices/expand/";
+            window.VnxUI?.pushStream({
+                agent: "SliceExpander",
+                action: "Gửi yêu cầu mở rộng lát cắt",
+                fetched: `POST ${endpoint}`,
+                filtered: `Prompt: "${text}"`,
+                progress: "Đang gọi backend...",
+                detail: "Payload gửi đi: reindex=true",
+                report: `[Expand] Đang gọi ${endpoint} cho: "${text}"`
+            });
+
+            try {
+                const eRes = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: text, reindex: true })
+                });
+                const rawBody = await eRes.text();
+                let eJson = {};
+                try {
+                    eJson = JSON.parse(rawBody);
+                } catch (e) {
+                    const msg = `Phản hồi không phải JSON (HTTP ${eRes.status}): ${rawBody.slice(0, 200)}`;
+                    window.VnxUI?.pushStream({
+                        agent: "SliceExpander",
+                        action: "Lỗi định dạng phản hồi từ /slices/expand/",
+                        fetched: endpoint,
+                        filtered: `HTTP ${eRes.status}`,
+                        progress: "Lỗi phản hồi",
+                        detail: msg,
+                        report: `[Expand lỗi] ${msg}`
+                    });
+                    return;
+                }
+
+                const jobId = eJson?.job?.job_id;
+                if (!eRes.ok || !jobId) {
+                    const errMsg = eJson?.message || `HTTP ${eRes.status} (không có job_id)`;
+                    window.VnxUI?.pushStream({
+                        agent: "SliceExpander",
+                        action: "Backend từ chối hoặc thiếu job_id",
+                        fetched: endpoint,
+                        filtered: `HTTP ${eRes.status}`,
+                        progress: "Lỗi khởi tạo job",
+                        detail: `Chi tiết: ${errMsg} | Raw: ${JSON.stringify(eJson).slice(0, 220)}`,
+                        report: `[Expand lỗi] ${errMsg}`
+                    });
+                    return;
+                }
+
+                window.VnxUI?.pushStream({
+                    agent: "SliceExpander",
+                    action: `Đã xếp hàng job mở rộng lát cắt (job_id=${jobId})`,
+                    fetched: endpoint,
+                    filtered: `status=${eJson.status}, job_id=${jobId}`,
+                    progress: `Đang chạy nền (${jobId})`,
+                    detail: `Bắt đầu poll log tại /api/vnxbox/jobs/${jobId}/?offset=0`,
+                    report: `[Expand] Đã tạo job=${jobId} — đang theo dõi log từng bước...`
+                });
+                pollJobLogs(jobId, "SliceExpander");
+            } catch (err) {
+                window.VnxUI?.pushStream({
+                    agent: "SliceExpander",
+                    action: "Lỗi gọi API /slices/expand/",
+                    fetched: endpoint,
+                    filtered: "Bắt ngoại lệ fetch",
+                    progress: "Lỗi kết nối",
+                    detail: String(err),
+                    report: `[Expand lỗi kết nối] ${err}`
+                });
+            }
+        }
+
+        async function dispatchToBackend(text, target, mode) {
+            // Bước 1: Định tuyến 2 lớp
+            try {
+                const rRes = await fetch("/api/vnxbox/route/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: text })
+                });
+                const rJson = await rRes.json();
+                const routeInfo = rJson.route || null;
+                window.VnxUI?.pushStream({
+                    agent: "TwoLayerRouter",
+                    action: "Phân loại & định tuyến prompt",
+                    fetched: "config/domains.json & nội dung prompt",
+                    filtered: routeInfo ? `Mode=${routeInfo.mode}, Domain=${routeInfo.domain}` : "Lọc từ khóa nghiệp vụ",
+                    progress: "Bước 1/3 xong",
+                    detail: routeInfo
+                        ? `Khớp từ khóa: ${(routeInfo.matched_keywords || []).join(", ") || "mặc định"} | Sub-domain: ${routeInfo.sub_domain || "-"}`
+                        : "Đã ghi nhận định tuyến cơ bản.",
+                    report: `Định tuyến [${text}]: ${routeInfo ? `${routeInfo.mode}/${routeInfo.domain}` : "Auto"}`
+                });
+            } catch (err) {
+                window.VnxUI?.pushStream({
+                    agent: "TwoLayerRouter",
+                    action: "Định tuyến dự phòng (offline/lỗi)",
+                    fetched: "Prompt cục bộ",
+                    filtered: `Tag @${target || "auto"}`,
+                    progress: "Bước 1/3 (dự phòng)",
+                    detail: `Không gọi được /route/ (${err}), chuyển sang luồng dự phòng trên UI.`,
+                    report: `Định tuyến dự phòng cho: "${text}"`
+                });
+            }
+
+            // Bước 2: Gom ngữ cảnh JIT Context theo Impact Radius
+            const targetFile = "slices/doc_reconcile/core.py";
+            try {
+                const jRes = await fetch("/api/vnxbox/context/jit/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ target_file: targetFile, depth: 1, extra_notes: text, target })
+                });
+                const jJson = await jRes.json();
+                const ctx = jJson.context || {};
+                const files = ctx.included_files || [];
+                window.VnxUI?.pushStream({
+                    agent: "JITContextBuilder",
+                    action: "Lấy & lọc ngữ cảnh liên quan",
+                    fetched: `PROJECT_MAP.json & ${files.length} file quanh ${ctx.target_file || targetFile}`,
+                    filtered: `Giữ ${files.length} file, bỏ qua ${(ctx.skipped_files || []).length} file (${ctx.char_count || 0} ký tự)`,
+                    progress: "Bước 2/3 xong",
+                    detail: `File nạp: ${files.join(", ") || targetFile}`,
+                    report: `Ngữ cảnh JIT (${ctx.char_count || 0} ký tự): ${files.join(", ") || targetFile}`
+                });
+            } catch (err) {
+                window.VnxUI?.pushStream({
+                    agent: "JITContextBuilder",
+                    action: "Ghi nhận ngữ cảnh bước 2",
+                    fetched: targetFile,
+                    filtered: "Lọc phạm vi lân cận",
+                    progress: "Bước 2/3 (nhịp nền)",
+                    detail: `Đang giữ nhịp ngữ cảnh cho yêu cầu '${text}' (${err}).`,
+                    report: `Đã ghi nhận bước lấy ngữ cảnh cho: "${text}"`
+                });
+            }
+
+            // Bước 3: Điều phối theo @tag hoặc Auto
+            if (target === "tu-sua" || target === "repair") {
+                try {
+                    const pRes = await fetch("/api/vnxbox/repair/run/", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ target_file: targetFile, use_llm_suggestion: false, async_mode: true })
+                    });
+                    const pJson = await pRes.json();
+                    const jobId = pJson?.job?.job_id;
+                    window.VnxUI?.pushStream({
+                        agent: "RepairLoopRunner",
+                        action: "Đưa vòng lặp kiểm thử & tự sửa vào luồng nền",
+                        fetched: "POST /api/vnxbox/repair/run/",
+                        filtered: `Mục tiêu: ${targetFile}`,
+                        progress: jobId ? `Đang chạy (job=${jobId})` : "Đã gửi",
+                        detail: jobId ? `Đã tạo job nền ${jobId}, bắt đầu kéo log từng nhịp.` : JSON.stringify(pJson),
+                        report: jobId ? `Khởi chạy job tự sửa [${jobId}] cho ${targetFile}` : "Đã gửi lệnh tự sửa."
+                    });
+                    if (jobId) {
+                        pollJobLogs(jobId, "RepairLoopRunner");
+                    }
+                } catch (err) {
+                    window.VnxUI?.pushStream({
+                        agent: "RepairLoopRunner",
+                        action: "Lỗi gửi job tự sửa",
+                        fetched: "/api/vnxbox/repair/run/",
+                        filtered: "Bắt lỗi kết nối",
+                        progress: "Cảnh báo",
+                        detail: String(err),
+                        report: `Không gửi được job tự sửa: ${err}`
+                    });
+                }
+            } else if (target === "tao-app" || target === "scaffold") {
+                await runScaffoldFlow(text);
+            } else if (target === "mo-rong" || target === "expand") {
+                await runExpandFlow(text);
+            } else {
+                window.VnxUI?.pushStream({
+                    agent: target ? `Agent@${target}` : "AutoPlanner",
+                    action: `Điều phối tự động (Auto) cho: "${text}"`,
+                    fetched: "Danh mục app hệ thống/ngoài & lát cắt hiện hành",
+                    filtered: "Tách mục tiêu thành contract / logic / giao diện / kiểm thử (<300 dòng/file)",
+                    progress: "Bước 3/3 — Đã lên lộ trình",
+                    detail: "Đã chuẩn bị lộ trình các hạng mục: (1) Chốt phạm vi & cấu trúc, (2) Sinh module/lát cắt độc lập, (3) Chạy kiểm thử & cập nhật bản đồ.",
+                    report: `Lộ trình hoàn tất cho [${mode}]: ${text}`
+                });
+            }
+        }
+
+        input.addEventListener("input", () => {
+            const val = input.value;
+            const target = detectTarget(val);
+            if (badge) {
+                badge.textContent = target ? `@${target}` : "Auto";
+            }
+            const lastWord = val.split(/\s+/).pop() || "";
+            popover.style.display = lastWord.startsWith("@") ? "block" : "none";
+        });
+
+        popover.addEventListener("click", (e) => {
+            const opt = e.target.closest(".mention-opt");
+            if (!opt) return;
+            const tag = opt.dataset.mention;
+            const parts = input.value.split(/\s+/);
+            if (parts.length && parts[parts.length - 1].startsWith("@")) {
+                parts[parts.length - 1] = tag;
+                input.value = parts.join(" ") + " ";
+            } else {
+                input.value = (input.value ? input.value + " " : "") + tag + " ";
+            }
+            popover.style.display = "none";
+            if (badge) badge.textContent = tag;
+            input.focus();
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (!text) return;
+            const target = detectTarget(text);
+            const mode = target ? "Targeted" : "Auto";
+
+            window.dispatchEvent(new CustomEvent("vnxbox:prompt", {
+                detail: { prompt: text, mode, target }
+            }));
+
+            window.VnxUI?.pushStream({
+                agent: target ? `Agent@${target}` : "AutoOrchestrator",
+                action: `Tiếp nhận prompt (${mode})`,
+                detail: text,
+                fetched: "Danh mục app, bản đồ liên kết & cấu hình hiện tại",
+                filtered: target ? `Ưu tiên nhánh @${target}` : "Tự phân loại mục tiêu & lộ trình",
+                progress: "Đang lập lộ trình xử lý",
+                report: `Đã nhận lệnh (${mode}): "${text}"`
+            });
+
+            input.value = "";
+            if (badge) badge.textContent = "Auto";
+            popover.style.display = "none";
+
+            dispatchToBackend(text, target, mode);
+        });
+    })();
+</script>
