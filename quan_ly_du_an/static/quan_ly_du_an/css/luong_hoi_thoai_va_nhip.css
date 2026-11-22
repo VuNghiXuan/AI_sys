@@ -1,0 +1,328 @@
+/* ============================================================================
+ * File Path: quan_ly_du_an/static/quan_ly_du_an/css/luong_hoi_thoai_va_nhip.css
+ * Chuc nang: Dinh nghia thanh cuon don cho cot giua, phan hoi mo khong box,
+ *            nut thao tac (replay/like/dislike/heart/copy), dong ho & mau nhip.
+ * File lien quan: giao_dien_tong_the.css, vung_hoi_thoai_giua.html, cot_phai_thong_so_ollama.html
+ * ============================================================================ */
+
+/* Chi dung 1 thanh cuon doc duy nhat cho toan bo luong hoi thoai cot giua */
+.vung-cuon-hoi-thoai {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 24px 28px;
+}
+
+.khung-noi-dung-giua {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.trang-thai-tai-lich-su {
+    text-align: center;
+    font-size: 12px;
+    color: var(--chu-phu);
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(22, 28, 36, 0.75);
+    border: 1px dashed var(--vien-mong);
+}
+
+.luot-hoi-thoai {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(35, 44, 55, 0.7);
+}
+
+.luot-hoi-thoai:last-child {
+    border-bottom: none;
+}
+
+/* Khoi prompt gon ben phai, co thu gon/mo rong tren cung 1 thanh cuon */
+.hang-prompt {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.khoi-prompt {
+    max-width: 82%;
+    background: var(--nen-khung-phu);
+    border: 1px solid var(--vien-mong);
+    border-radius: 12px 12px 2px 12px;
+    padding: 10px 14px;
+}
+
+.dong-moc-thoi-gian {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--chu-mo);
+    margin-bottom: 4px;
+}
+
+.noi-dung-prompt {
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--chu-chinh);
+    font-size: 13.5px;
+}
+
+.noi-dung-prompt.thu-gon {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.nut-thu-gon-prompt {
+    background: transparent;
+    border: none;
+    color: var(--xanh-ngoc);
+    font-size: 12px;
+    padding: 4px 0 0;
+    cursor: pointer;
+}
+
+/* Phan hoi mo truc tiep tren nen toi, khong tao box bao quanh */
+.khoi-phan-hoi-mo {
+    padding: 2px 0;
+}
+
+.dong-thong-tin-phan-hoi {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--chu-phu);
+    margin-bottom: 8px;
+}
+
+.nhan-thoi-gian-phan-hoi {
+    color: var(--xanh-ngoc);
+    font-weight: 600;
+}
+
+.nhan-thoi-gian-phan-hoi.dang-chay {
+    color: var(--vang-canh-bao);
+}
+
+.van-ban-phan-hoi {
+    color: var(--chu-chinh);
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.thanh-nut-tuong-tac {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.nut-tuong-tac {
+    background: transparent;
+    color: var(--chu-phu);
+    border: 1px solid var(--vien-mong);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nut-tuong-tac:hover {
+    color: var(--chu-chinh);
+    background: var(--nen-khung-phu);
+}
+
+.nut-tuong-tac.kich-hoat {
+    color: var(--xanh-ngoc);
+    border-color: var(--xanh-ngoc);
+    background: var(--xanh-nen-nhe);
+}
+
+.nut-tuong-tac.kich-hoat-tim {
+    color: #f472b6;
+    border-color: #f472b6;
+    background: rgba(244, 114, 182, 0.12);
+}
+
+.nut-ve-cuoi-trang {
+    position: fixed;
+    right: 324px;
+    bottom: 92px;
+    background: var(--nen-khung-phu);
+    color: var(--xanh-ngoc);
+    border: 1px solid var(--xanh-ngoc);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    z-index: 20;
+}
+
+/* Khu vuc nhap prompt phia duoi */
+.vung-nhap-duoi {
+    background: var(--nen-khung);
+    border-top: 1px solid var(--vien-mong);
+    padding: 10px 24px 14px;
+}
+
+.khung-nhap-giua {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hang-nut-dieu-khien-nhanh {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.hang-o-nhap-va-gui {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.o-nhap-prompt {
+    flex: 1;
+    min-height: 44px;
+    max-height: 120px;
+    resize: vertical;
+    background: var(--nen-khung-phu);
+    color: var(--chu-chinh);
+    border: 1px solid var(--vien-mong);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+}
+
+.o-nhap-prompt:focus {
+    outline: none;
+    border-color: var(--xanh-ngoc);
+}
+
+/* The thong tin cot phai & mau sac theo trang thai thuc */
+.the-thong-so {
+    background: var(--nen-khung-phu);
+    border: 1px solid var(--vien-mong);
+    border-radius: 10px;
+    padding: 11px;
+}
+
+.dong-dau-the {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.ten-the {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--chu-chinh);
+}
+
+.trang-thai-mau {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.trang-thai-mau.tot {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.14);
+}
+
+.trang-thai-mau.cham {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.trang-thai-mau.nghi {
+    color: #94a3b8;
+    background: rgba(148, 163, 184, 0.14);
+}
+
+.dong-chi-tiet {
+    font-size: 12px;
+    color: var(--chu-phu);
+    margin-top: 4px;
+}
+
+.danh-sach-model {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.dong-model {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 7px;
+    background: var(--nen-chinh);
+    border: 1px solid var(--vien-mong);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.dong-model.dang-phan-hoi {
+    border-color: var(--xanh-ngoc);
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.dong-model.dang-nap-cham {
+    border-color: var(--vang-canh-bao);
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.thanh-tien-do-nen {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--nen-chinh);
+    overflow: hidden;
+    margin-top: 8px;
+    border: 1px solid var(--vien-mong);
+}
+
+.thanh-tien-do-chay {
+    height: 100%;
+    width: 0%;
+    transition: width 0.25s ease, background-color 0.25s ease;
+    background: var(--xanh-ngoc);
+}
+
+.thanh-tien-do-chay.cham {
+    background: var(--vang-canh-bao);
+}
+
+.thanh-tien-do-chay.nghi {
+    background: var(--xam-cho);
+}

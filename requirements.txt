@@ -1,2 +1,15 @@
-pytest>=8.0.0
-requests>=2.31.0
+# ==============================================================================
+# File Path: requirements.txt
+# Description: Minimal Python packages for AI_Sys_v2 local-first bootstrap phase.
+# Linked Files: []
+# Logs: Phase 1 core packages (testing, HTTP client for local LLM, validation).
+# ==============================================================================
+
+# Automated testing for core slices, edge cases, and regression checks
+pytest==8.3.4
+
+# HTTP client for calling local Ollama / llama-server REST endpoints
+requests==2.32.3
+
+# Optional structured data validation when growing data contracts
+pydantic==2.10.3

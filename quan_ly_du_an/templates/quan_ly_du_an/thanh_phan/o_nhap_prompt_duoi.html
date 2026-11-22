@@ -1,0 +1,25 @@
+<!-- =========================================================================
+  File Path: quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/o_nhap_prompt_duoi.html
+  Chuc nang: Nut dieu khien luong, o nhap prompt va nut gui.
+  ========================================================================= -->
+<div class="vung-nhap-duoi">
+    <div class="khung-nhap-giua">
+        <div class="hang-nut-dieu-khien-nhanh">
+            <span id="moTaTienDoNhip" style="font-size: 12px; color: var(--chu-phu);">
+                Sẵn sàng tiếp nhận prompt · Chạy CPU Local
+            </span>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="nut-do" id="nutDungLuong">Dừng luồng</button>
+                <button type="button" class="nut-phu" id="nutXoaVung">Xóa vùng này</button>
+            </div>
+        </div>
+
+        <div class="hang-o-nhap-va-gui">
+            <textarea id="oNhapPrompt" class="o-nhap-prompt" rows="2"
+                placeholder="Nhập prompt (Enter để gửi, Shift+Enter xuống dòng)..."></textarea>
+            <button type="button" class="nut-xanh" id="nutGuiPrompt" style="height: 44px; padding: 0 18px;">
+                Gửi prompt
+            </button>
+        </div>
+    </div>
+</div>
