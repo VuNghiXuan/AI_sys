@@ -40,7 +40,9 @@ INSTALLED_APPS = [
 
     # App thứ 3
     "quan_ly_du_an",
-    "dieu_phoi_y_dinh"
+    "dieu_phoi_y_dinh",
+    "xuong_tao_app",
+
 ]
 
 MIDDLEWARE = [

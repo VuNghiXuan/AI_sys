@@ -1,6 +1,6 @@
 # ==============================================================================
 # File Path: quan_ly_du_an/giao_dien/urls_giao_dien.py
-# Description: URL routes for the AI_Sys_v2 testing and orchestration workbench.
+# Description: URL routes for the AI_Sys testing and orchestration workbench.
 # Linked Files: [quan_ly_du_an/giao_dien/views_dieu_khien.py]
 # Logs: Map workbench root and profile detail URLs.
 # ==============================================================================

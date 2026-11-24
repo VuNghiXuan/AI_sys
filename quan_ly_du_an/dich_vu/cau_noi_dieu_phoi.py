@@ -1,10 +1,6 @@
 # ============================================================================
 # File Path: quan_ly_du_an/dich_vu/cau_noi_dieu_phoi.py
 # Module: Cau Noi Goi xu_ly_prompt_da_y_dinh & Doc Lich Su DB
-# Linked Files: dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
-#               dieu_phoi_y_dinh/models.py
-# Purpose: Goi thang xu_ly_prompt_da_y_dinh cua dieu_phoi_nhanh.py (khong luu
-#          trung DB) va cung cap ham doc lich su cu theo before_id cho giao dien.
 # ============================================================================
 
 import logging
@@ -40,6 +36,30 @@ def _dinh_dang_phan_hoi_tu_ket_qua(ket_qua: dict, prompt: str) -> str:
     return tom_tat or f"Đã xử lý yêu cầu: {prompt}"
 
 
+def _luu_lich_su_an_toan(
+    prompt: str,
+    y_dinh: str,
+    ma_linh_vuc: str,
+    ten_linh_vuc: str,
+    ket_qua_hien_thi: str,
+    trung_cache: bool,
+) -> int | None:
+    """Ghi nhan LichSuDieuPhoi va tra ve id ban ghi moi (an toan neu loi DB)."""
+    try:
+        bg = LichSuDieuPhoi.objects.create(
+            prompt=prompt,
+            y_dinh=y_dinh,
+            ma_linh_vuc=ma_linh_vuc,
+            ten_linh_vuc=ten_linh_vuc,
+            ket_qua_hien_thi=ket_qua_hien_thi,
+            trung_cache=trung_cache,
+        )
+        return bg.id
+    except Exception as loi:
+        logger.warning("Khong luu duoc LichSuDieuPhoi: %s", loi)
+        return None
+
+
 def chay_luong_y_dinh_va_luu_lich_su(prompt: str, che_do: str = "luong_chinh") -> dict:
     """Goi xu_ly_prompt_da_y_dinh tu dieu_phoi_nhanh.py va tra du lieu chuan cho UI."""
     thoi_diem_bat_dau = time.monotonic()
@@ -54,8 +74,19 @@ def chay_luong_y_dinh_va_luu_lich_su(prompt: str, che_do: str = "luong_chinh") -
     phan_hoi = _dinh_dang_phan_hoi_tu_ket_qua(ket_qua, prompt)
     ten_model = "qwen2.5-coder:7b" if (len(prompt) > 220 or len(cac_nhanh) >= 2) else "qwen2.5:3b"
 
-    ban_ghi_moi = LichSuDieuPhoi.objects.order_by("-id").first()
-    id_db = ban_ghi_moi.id if ban_ghi_moi else None
+    ma_y_dinh = str(ket_qua.get("y_dinh") or "chat_tu_do")
+    ma_linh_vuc = str(ket_qua.get("ma_linh_vuc") or ket_qua.get("nhom_lon") or "tong_quat")
+    ten_linh_vuc = str(ket_qua.get("ten_linh_vuc") or ket_qua.get("nhom_lon") or "Đa ngành / Tổng quát")
+    trung_cache = bool(ket_qua.get("trung_cache", False))
+
+    id_db = _luu_lich_su_an_toan(
+        prompt=prompt,
+        y_dinh=ma_y_dinh,
+        ma_linh_vuc=ma_linh_vuc,
+        ten_linh_vuc=ten_linh_vuc,
+        ket_qua_hien_thi=phan_hoi,
+        trung_cache=trung_cache,
+    )
 
     return {
         "id_db": id_db,
@@ -64,9 +95,10 @@ def chay_luong_y_dinh_va_luu_lich_su(prompt: str, che_do: str = "luong_chinh") -
         "ten_model": ten_model,
         "thoi_gian_phan_hoi": thoi_luong_chu,
         "so_nhanh": len(cac_nhanh) if cac_nhanh else 1,
-        "ma_linh_vuc": ket_qua.get("ma_linh_vuc") or "tong_quat",
-        "ten_linh_vuc": ket_qua.get("ten_linh_vuc") or "Đa ngành / Tổng quát",
-        "trung_cache": bool(ket_qua.get("trung_cache", False)),
+        "ma_linh_vuc": ma_linh_vuc,
+        "ten_linh_vuc": ten_linh_vuc,
+        "chuyen_huong_tao_app": bool(ket_qua.get("chuyen_huong_tao_app", False)),
+        "trung_cache": trung_cache,
     }
 
 

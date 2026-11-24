@@ -1,6 +1,6 @@
 # ==============================================================================
 # File Path: requirements.txt
-# Description: Minimal Python packages for AI_Sys_v2 local-first bootstrap phase.
+# Description: Minimal Python packages for AI_Sys local-first bootstrap phase.
 # Linked Files: []
 # Logs: Phase 1 core packages (testing, HTTP client for local LLM, validation).
 # ==============================================================================

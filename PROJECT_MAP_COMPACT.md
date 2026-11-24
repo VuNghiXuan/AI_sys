@@ -1,0 +1,119 @@
+# PROJECT_MAP_COMPACT
+
+- **Dự án:** `AI_sys` | **Tổng file:** 114 | **Cập nhật:** 2026-11-24 23:10:26
+- **Cảnh báo >300 dòng:** `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/ho_tro_llm_he_thong.py` (408 dòng), `dieu_phoi_y_dinh/du_lieu/bo_nho_hoc_qa.json` (2486 dòng)
+
+- `dieu_phoi_y_dinh/__init__.py` (0d) <- -
+- `dieu_phoi_y_dinh/admin.py` (3d) <- -
+- `dieu_phoi_y_dinh/apps.py` (14d) <- __init__.py, urls.py, views.py
+- `dieu_phoi_y_dinh/cau_hinh/cau_hinh_y_dinh.json` (236d) <- -
+- `dieu_phoi_y_dinh/dich_vu/__init__.py` (0d) <- -
+- `dieu_phoi_y_dinh/dich_vu/bo_nho_va_cache.py` (181d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py` (254d) <- dieu_phoi_y_dinh/dich_vu/tach_va_loc_y_dinh.py,
+- `dieu_phoi_y_dinh/dich_vu/dinh_tuyen/__init__.py` (0d) <- -
+- `dieu_phoi_y_dinh/dich_vu/dinh_tuyen/bo_dang_ky_y_dinh.py` (162d) <- dieu_phoi_y_dinh/dich_vu/dinh_tuyen/bo_dinh_tuyen_ngu_nghia.py,
+- `dieu_phoi_y_dinh/dich_vu/dinh_tuyen/bo_dinh_tuyen_ngu_nghia.py` (200d) <- dieu_phoi_y_dinh/dich_vu/dinh_tuyen/bo_dang_ky_y_dinh.py,
+- `dieu_phoi_y_dinh/dich_vu/dinh_tuyen/khoi_tao_y_dinh.py` (19d) <- -
+- `dieu_phoi_y_dinh/dich_vu/hoc_tang_cuong_qa.py` (166d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/dich_vu/tach_va_loc_y_dinh.py` (286d) <- dieu_phoi_y_dinh/dich_vu/dinh_tuyen/khoi_tao_y_dinh.py,
+- `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/do_ma_nguon_ast.py` (269d) <- dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/truy_van_db_va_ast.py,
+- `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/ho_tro_llm_he_thong.py` (408d [>300]) <- dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/trinh_xu_ly_chung.py,
+- `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/tra_cuu_mang.py` (254d) <- dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/trinh_xu_ly_chung.py,
+- `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/trinh_xu_ly_chung.py` (236d) <- dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/truy_van_db_va_ast.py,
+- `dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/truy_van_db_va_ast.py` (248d) <- dieu_phoi_y_dinh/dich_vu/thuc_thi_nhanh/trinh_xu_ly_chung.py,
+- `dieu_phoi_y_dinh/du_lieu/bo_nho_hoc_qa.json` (2486d [>300]) <- -
+- `dieu_phoi_y_dinh/models.py` (29d) <- bo_nao_cache_cosine.py, truy_van_du_lieu.py
+- `dieu_phoi_y_dinh/tests/__init__.py` (0d) <- -
+- `dieu_phoi_y_dinh/tests/test_bien_the_va_chong_bat_nham.py` (92d) <- ../dich_vu/khoi_tao_y_dinh.py, ../cau_hinh/cau_hinh_y_dinh.json,
+- `dieu_phoi_y_dinh/tests/test_bo_cau_hoi_y_dinh.py` (185d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/tests/test_cac_y_dinh_he_thong.py` (152d) <- ../dich_vu/khoi_tao_y_dinh.py, ../dich_vu/bo_dang_ky_y_dinh.py,
+- `dieu_phoi_y_dinh/tests/test_cau_hoi_he_thong.py` (175d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/tests/test_da_y_dinh_va_cau_lat_leo.py` (124d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/tests/test_hoi_lo_mo_nguoi_that.py` (153d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/tests/test_tong_hop_dieu_phoi.py` (202d) <- dieu_phoi_y_dinh/dich_vu/dieu_phoi_nhanh.py,
+- `dieu_phoi_y_dinh/tests.py` (3d) <- -
+- `dieu_phoi_y_dinh/tests_danh_gia_dieu_phoi.py` (84d) <- dieu_phoi_nhanh.py, cau_hinh_ollama.py, tach_da_y_dinh.py
+- `dieu_phoi_y_dinh/urls.py` (14d) <- views.py
+- `dieu_phoi_y_dinh/views.py` (38d) <- urls.py, dich_vu/dieu_phoi_nhanh.py
+- `he_thong/__init__.py` (0d) <- -
+- `he_thong/asgi.py` (16d) <- -
+- `he_thong/settings.py` (129d) <- -
+- `he_thong/urls.py` (16d) <- [quan_ly_du_an/giao_dien/urls_giao_dien.py]
+- `he_thong/wsgi.py` (16d) <- -
+- `lat_cat_da_tao/ho_so_2/hop_dong_du_lieu.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `lat_cat_da_tao/ho_so_2/kiem_tra_ket_qua.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `lat_cat_da_tao/ho_so_2/tests/test_m1_hop_dong_du_lieu.py` (18d) <- -
+- `lat_cat_da_tao/ho_so_2/tests/test_m2_xu_ly_chinh.py` (18d) <- -
+- `lat_cat_da_tao/ho_so_2/tests/test_m3_kiem_tra_ket_qua.py` (41d) <- -
+- `lat_cat_da_tao/ho_so_2/xu_ly_chinh.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `lat_cat_da_tao/kiem_tra_ket_qua.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `lat_cat_da_tao/lat_cat_da_tao/xu_ly_chinh.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `lat_cat_da_tao/tests/test_m2_xu_ly_chinh.py` (18d) <- -
+- `lat_cat_da_tao/tests/test_m3_kiem_tra_ket_qua.py` (18d) <- -
+- `lat_cat_da_tao/xu_ly_chinh.py` (19d) <- [quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `manage.py` (22d) <- -
+- `quan_ly_du_an/__init__.py` (0d) <- -
+- `quan_ly_du_an/admin.py` (114d) <- [quan_ly_du_an/models.py]
+- `quan_ly_du_an/api_dieu_phoi.py` (66d) <- quan_ly_du_an/dich_vu/cau_noi_dieu_phoi.py, quan_ly_du_an/urls.py
+- `quan_ly_du_an/apps.py` (40d) <- quan_ly_du_an/dich_vu/cap_nhat_project_map.py, PROJECT_MAP.md
+- `quan_ly_du_an/dich_vu/__init__.py` (6d) <- cau_noi_dieu_phoi.py
+- `quan_ly_du_an/dich_vu/cap_nhat_project_map.py` (202d) <- PROJECT_MAP.md, PROJECT_MAP_COMPACT.md, manage.py
+- `quan_ly_du_an/dich_vu/cau_noi_dieu_phoi.py` (124d) <- -
+- `quan_ly_du_an/dich_vu_dieu_phoi.py` (273d) <- [quan_ly_du_an/models.py]
+- `quan_ly_du_an/giao_dien/__init__.py` (0d) <- -
+- `quan_ly_du_an/giao_dien/urls_giao_dien.py` (20d) <- [quan_ly_du_an/giao_dien/views_dieu_khien.py]
+- `quan_ly_du_an/giao_dien/views_dieu_khien.py` (157d) <- [quan_ly_du_an/models.py, quan_ly_du_an/dich_vu_dieu_phoi.py, quan_ly_du_an/tu_dong_lam_ro.py, quan_ly_du_an/goi_y_dau_muc.py, quan_ly_du_an/thuc_thi_dau_muc.py]
+- `quan_ly_du_an/giao_dien/views_project_map.py` (28d) <- quan_ly_du_an/dich_vu/cap_nhat_project_map.py, PROJECT_MAP.md
+- `quan_ly_du_an/giao_dien/views_telemetry.py` (18d) <- services_telemetry.py, urls.py
+- `quan_ly_du_an/goi_y_dau_muc.py` (149d) <- [quan_ly_du_an/models.py, quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `quan_ly_du_an/models.py` (120d) <- [he_thong/settings.py]
+- `quan_ly_du_an/phan_luong_y_dinh.py` (114d) <- [quan_ly_du_an/models.py, quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `quan_ly_du_an/services_telemetry.py` (175d) <- views_telemetry.py, workbench_studio.js
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/cam_trang_con_va_nut.js` (75d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/dieu_khoi_render_bang.js` (158d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/dong_ho_va_nhip_ollama.js` (181d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/hien_thi_hoi_thoai.js` (166d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/nap_lich_su_tu_db.js` (84d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/quan_ly_lich_su_cuon.js` (74d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/dieu_khien/xu_ly_da_y_dinh.js` (75d) <- -
+- `quan_ly_du_an/static/quan_ly_du_an/js/khoi_tao_ung_dung.js` (239d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/cot_phai_thong_so_ollama.html` (61d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/cot_trai_danh_muc.html` (32d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/o_nhap_prompt_duoi.html` (25d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/thanh_dieu_huong_tren.html` (17d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/thanh_phan/vung_hoi_thoai_giua.html` (21d) <- -
+- `quan_ly_du_an/templates/quan_ly_du_an/trang_dieu_khien.html` (35d) <- -
+- `quan_ly_du_an/tests.py` (3d) <- -
+- `quan_ly_du_an/thuc_thi_dau_muc.py` (260d) <- [quan_ly_du_an/models.py, quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `quan_ly_du_an/tu_dong_lam_ro.py` (155d) <- [quan_ly_du_an/models.py, quan_ly_du_an/dich_vu_dieu_phoi.py]
+- `quan_ly_du_an/views.py` (3d) <- -
+- `test_da_y_dinh_registry.py` (55d) <- bo_dieu_phoi_da_y_dinh.py, khoi_tao_y_dinh.py, chi_muc_ma_nguon.py
+- `test_registry_y_dinh.py` (69d) <- khoi_tao_y_dinh.py, bo_dang_ky_y_dinh.py, truy_van_du_lieu.py
+- `xuong_tao_app/__init__.py` (0d) <- -
+- `xuong_tao_app/admin.py` (3d) <- -
+- `xuong_tao_app/apps.py` (6d) <- -
+- `xuong_tao_app/dich_vu/chuyen_huong_tao_app/__init__.py` (12d) <- cho_xac_nhan_tao_app.py, dieu_phoi_xac_nhan.py
+- `xuong_tao_app/dich_vu/chuyen_huong_tao_app/cho_xac_nhan_tao_app.py` (105d) <- dieu_phoi_xac_nhan.py, dieu_phoi_nhanh.py
+- `xuong_tao_app/dich_vu/chuyen_huong_tao_app/dieu_phoi_xac_nhan.py` (120d) <- cho_xac_nhan_tao_app.py, ../../giao_dien/trang_xuong_tao_app.py
+- `xuong_tao_app/dich_vu/dang_ky_tab_app/__init__.py` (23d) <- quan_ly_registry_tab.py, nap_app_vao_he_thong.py
+- `xuong_tao_app/dich_vu/dang_ky_tab_app/nap_app_vao_he_thong.py` (99d) <- quan_ly_registry_tab.py
+- `xuong_tao_app/dich_vu/dang_ky_tab_app/quan_ly_registry_tab.py` (152d) <- nap_app_vao_he_thong.py
+- `xuong_tao_app/dich_vu/quet_thu_muc/__init__.py` (12d) <- doc_tep_an_toan.py, quet_thu_muc_nguon.py
+- `xuong_tao_app/dich_vu/quet_thu_muc/doc_tep_an_toan.py` (148d) <- quet_thu_muc_nguon.py
+- `xuong_tao_app/dich_vu/quet_thu_muc/quet_thu_muc_nguon.py` (131d) <- doc_tep_an_toan.py, ../thiet_ke_va_task/
+- `xuong_tao_app/dich_vu/sinh_ma_sandbox/__init__.py` (16d) <- kiem_tra_ma_sinh.py, thuc_thi_sinh_sandbox.py
+- `xuong_tao_app/dich_vu/sinh_ma_sandbox/kiem_tra_ma_sinh.py` (122d) <- thuc_thi_sinh_sandbox.py
+- `xuong_tao_app/dich_vu/sinh_ma_sandbox/thuc_thi_sinh_sandbox.py` (140d) <- kiem_tra_ma_sinh.py, ../thiet_ke_va_task/chia_task_nguyen_tu.py
+- `xuong_tao_app/dich_vu/thiet_ke_va_task/__init__.py` (16d) <- tom_tat_va_thiet_ke.py, chia_task_nguyen_tu.py
+- `xuong_tao_app/dich_vu/thiet_ke_va_task/chia_task_nguyen_tu.py` (104d) <- tom_tat_va_thiet_ke.py, ../sinh_ma_sandbox/
+- `xuong_tao_app/dich_vu/thiet_ke_va_task/tom_tat_va_thiet_ke.py` (160d) <- ../quet_thu_muc/quet_thu_muc_nguon.py, chia_task_nguyen_tu.py
+- `xuong_tao_app/dich_vu/tu_sua_va_nang_cap/__init__.py` (23d) <- khoanh_vung_va_sao_luu.py, vong_lap_tu_sua.py
+- `xuong_tao_app/dich_vu/tu_sua_va_nang_cap/khoanh_vung_va_sao_luu.py` (121d) <- vong_lap_tu_sua.py
+- `xuong_tao_app/dich_vu/tu_sua_va_nang_cap/vong_lap_tu_sua.py` (193d) <- khoanh_vung_va_sao_luu.py,
+- `xuong_tao_app/giao_dien/__init__.py` (11d) <- trang_chu_view.py, ngu_canh_view.py
+- `xuong_tao_app/giao_dien/api_xuong_tao_app.py` (230d) <- ../dich_vu/quet_thu_muc/quet_thu_muc_nguon.py,
+- `xuong_tao_app/giao_dien/trang_xuong_tao_app.py` (80d) <- ../urls.py, ../dich_vu/chuyen_huong_tao_app/cho_xac_nhan_tao_app.py,
+- `xuong_tao_app/models.py` (3d) <- -
+- `xuong_tao_app/templates/xuong_tao_app/trang_chu_xuong_tao_app.html` (143d) <- -
+- `xuong_tao_app/tests.py` (3d) <- -
+- `xuong_tao_app/urls.py` (29d) <- giao_dien/trang_xuong_tao_app.py, giao_dien/api_xuong_tao_app.py

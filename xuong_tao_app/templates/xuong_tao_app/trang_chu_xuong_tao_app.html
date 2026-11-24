@@ -1,0 +1,143 @@
+{% extends "quan_ly_du_an/trang_dieu_khien.html" %}
+{% load static %}
+
+<!-- =========================================================================
+  File Path: xuong_tao_app/templates/xuong_tao_app/trang_chu_xuong_tao_app.html
+  Chuc nang: Giao dien dieu khien tung buoc cua Xuong Tao App ke thua khung
+             dieu khien chinh cua quan_ly_du_an.
+  File lien quan: quan_ly_du_an/templates/quan_ly_du_an/trang_dieu_khien.html,
+                  xuong_tao_app/giao_dien/trang_xuong_tao_app.py,
+                  xuong_tao_app/giao_dien/api_xuong_tao_app.py
+  ========================================================================= -->
+
+{% block title %}{{ tieu_de_tab }} - AI_Sys{% endblock %}
+
+{% block noi_dung_chinh %}
+<div class="khung-ung-dung" data-api-quet-thiet-ke="{% url 'xuong_tao_app:api_quet_va_thiet_ke' %}"
+    data-api-sinh-code="{% url 'xuong_tao_app:api_sinh_code_sandbox' %}"
+    data-api-sua-nang-cap="{% url 'xuong_tao_app:api_sua_hoac_nang_cap' %}"
+    data-api-hoan-tac="{% url 'xuong_tao_app:api_hoan_tac_ban_luu' %}"
+    data-api-nap-tab="{% url 'xuong_tao_app:api_nap_vao_tab_he_thong' %}">
+    {% include "quan_ly_du_an/thanh_phan/thanh_dieu_huong_tren.html" %}
+
+    <div class="than-3-cot">
+        {% include "quan_ly_du_an/thanh_phan/cot_trai_danh_muc.html" %}
+
+        <section class="vung-giua xuong-tao-app-panel" style="padding: 16px; overflow-y: auto;">
+            <div class="the-cau-hinh" style="margin-bottom: 14px;">
+                <h2>{{ tieu_de_tab }} <code>({{ app_name }})</code></h2>
+
+                <label for="duong_dan_nguon_app">Đường dẫn thư mục nguồn</label>
+                <input id="duong_dan_nguon_app" type="text" value="{{ duong_dan_nguon }}"
+                    placeholder="Ví dụ: D:\du_lieu\du_an_xay_dung" style="width: 100%; margin-bottom: 8px;" />
+
+                <label for="prompt_goc_app">Prompt mô tả app / yêu cầu nghiệp vụ</label>
+                <textarea id="prompt_goc_app" rows="2" placeholder="Nhập yêu cầu tạo app..."
+                    style="width: 100%; margin-bottom: 10px;">{{ prompt_goc }}</textarea>
+
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button id="btn-quet-thiet-ke" type="button">1. Quét &amp; Thiết kế</button>
+                    <button id="btn-sinh-code-sandbox" type="button">2. Sinh code môi trường test</button>
+                    <button id="btn-nap-tab-he-thong" type="button">4. Nạp vào tab hệ thống</button>
+                </div>
+            </div>
+
+            <div class="the-cau-hinh" style="margin-bottom: 14px;">
+                <h3>3. Test giao diện — Sửa / Nâng cấp hoặc Hoàn tác</h3>
+                <input id="mo-ta-anh-test" type="text"
+                    placeholder="Mô tả ảnh chụp màn hình / vị trí giao diện khi test..."
+                    style="width: 100%; margin-bottom: 8px;" />
+                <textarea id="prompt-phan-hoi-test" rows="2"
+                    placeholder="Nhập lỗi cần sửa hoặc chức năng con cần nâng cấp..."
+                    style="width: 100%; margin-bottom: 8px;"></textarea>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button id="btn-sua-nang-cap" type="button">Sửa / Nâng cấp</button>
+                    <button id="btn-hoan-tac-luu" type="button">Hoàn tác bản lưu</button>
+                </div>
+            </div>
+
+            <div class="the-cau-hinh">
+                <h3>Kết quả &amp; Nhật ký thao tác</h3>
+                <pre id="khung-ket-qua-xuong-app"
+                    style="white-space: pre-wrap; max-height: 260px; overflow-y: auto;">Sẵn sàng thao tác từng bước.</pre>
+            </div>
+        </section>
+
+        {% include "quan_ly_du_an/thanh_phan/cot_phai_thong_so_ollama.html" %}
+    </div>
+</div>
+
+<script>
+    (() => {
+        const root = document.querySelector(".khung-ung-dung[data-api-quet-thiet-ke]");
+        if (!root) return;
+
+        const out = document.getElementById("khung-ket-qua-xuong-app");
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.content || "";
+        let trangThaiHienTai = { ma_app: "", tieu_de_tab: "", danh_sach_task: [], ban_thiet_ke: null, snapshot: "" };
+
+        const ghiLog = (tieuDe, obj) => {
+            out.textContent = `[${tieuDe}]\n` + JSON.stringify(obj, null, 2);
+        };
+
+        const goiApi = async (url, payload) => {
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": csrf },
+                body: JSON.stringify(payload || {}),
+            });
+            return await res.json();
+        };
+
+        document.getElementById("btn-quet-thiet-ke")?.addEventListener("click", async () => {
+            const kq = await goiApi(root.dataset.apiQuetThietKe, {
+                duong_dan_nguon: document.getElementById("duong_dan_nguon_app")?.value || "",
+                prompt_goc: document.getElementById("prompt_goc_app")?.value || "",
+            });
+            if (kq.thanh_cong) {
+                trangThaiHienTai.ban_thiet_ke = kq.ban_thiet_ke;
+                trangThaiHienTai.danh_sach_task = kq.danh_sach_task || [];
+                trangThaiHienTai.ma_app = kq.ban_thiet_ke?.ten_app_goi_y || "";
+                trangThaiHienTai.tieu_de_tab = kq.ban_thiet_ke?.tieu_de_tab || "";
+            }
+            ghiLog("Quét & Thiết kế", kq);
+        });
+
+        document.getElementById("btn-sinh-code-sandbox")?.addEventListener("click", async () => {
+            const kq = await goiApi(root.dataset.apiSinhCode, {
+                danh_sach_task: trangThaiHienTai.danh_sach_task,
+                ban_thiet_ke: trangThaiHienTai.ban_thiet_ke,
+            });
+            ghiLog("Sinh code môi trường test", kq);
+        });
+
+        document.getElementById("btn-sua-nang-cap")?.addEventListener("click", async () => {
+            const kq = await goiApi(root.dataset.apiSuaNangCap, {
+                ma_app: trangThaiHienTai.ma_app,
+                mo_ta_anh: document.getElementById("mo-ta-anh-test")?.value || "",
+                prompt_phan_hoi: document.getElementById("prompt-phan-hoi-test")?.value || "",
+            });
+            if (kq.ma_snapshot) trangThaiHienTai.snapshot = kq.ma_snapshot;
+            ghiLog("Sửa / Nâng cấp", kq);
+        });
+
+        document.getElementById("btn-hoan-tac-luu")?.addEventListener("click", async () => {
+            const kq = await goiApi(root.dataset.apiHoanTac, {
+                ma_app: trangThaiHienTai.ma_app,
+                ma_snapshot: trangThaiHienTai.snapshot,
+            });
+            ghiLog("Hoàn tác bản lưu", kq);
+        });
+
+        document.getElementById("btn-nap-tab-he-thong")?.addEventListener("click", async () => {
+            const kq = await goiApi(root.dataset.apiNapTab, {
+                ma_app: trangThaiHienTai.ma_app,
+                tieu_de_tab: trangThaiHienTai.tieu_de_tab,
+                chuc_nang_con: trangThaiHienTai.ban_thiet_ke?.chuc_nang_con || [],
+                da_test_on: true,
+            });
+            ghiLog("Nạp vào tab hệ thống", kq);
+        });
+    })();
+</script>
+{% endblock %}

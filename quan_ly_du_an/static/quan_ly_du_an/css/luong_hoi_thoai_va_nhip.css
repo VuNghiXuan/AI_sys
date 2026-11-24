@@ -1,9 +1,10 @@
 /* ============================================================================
- * File Path: quan_ly_du_an/static/quan_ly_du_an/css/luong_hoi_thoai_va_nhip.css
- * Chuc nang: Dinh nghia thanh cuon don cho cot giua, phan hoi mo khong box,
- *            nut thao tac (replay/like/dislike/heart/copy), dong ho & mau nhip.
- * File lien quan: giao_dien_tong_the.css, vung_hoi_thoai_giua.html, cot_phai_thong_so_ollama.html
- * ============================================================================ */
+- File Path: quan_ly_du_an/static/quan_ly_du_an/css/luong_hoi_thoai_va_nhip.css
+- Chuc nang: Dinh nghia thanh cuon don cho cot giua, phan hoi mo khong box,
+-            bang Markdown ro rang, nut thao tac, dong ho & mau nhip.
+- File lien quan: giao_dien_tong_the.css, vung_hoi_thoai_giua.html,
+-                 cot_phai_thong_so_ollama.html, dieu_khoi_render_bang.js
+- ============================================================================ */
 
 /* Chi dung 1 thanh cuon doc duy nhat cho toan bo luong hoi thoai cot giua */
 .vung-cuon-hoi-thoai {
@@ -70,7 +71,8 @@
 
 .noi-dung-prompt {
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
     color: var(--chu-chinh);
     font-size: 13.5px;
 }
@@ -78,6 +80,7 @@
 .noi-dung-prompt.thu-gon {
     display: -webkit-box;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -118,9 +121,93 @@
 .van-ban-phan-hoi {
     color: var(--chu-chinh);
     font-size: 14px;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
+    line-height: 1.6;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.van-ban-phan-hoi p {
+    margin: 4px 0;
+    white-space: pre-line;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.van-ban-phan-hoi .md-h3 {
+    margin: 12px 0 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--xanh-ngoc, #38bdf8);
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.van-ban-phan-hoi .md-ul {
+    margin: 4px 0 8px 18px;
+    padding: 0;
+}
+
+.van-ban-phan-hoi .md-ul li {
+    margin: 3px 0;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.van-ban-phan-hoi .md-code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(148, 163, 184, 0.16);
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.van-ban-phan-hoi .md-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin: 8px 0 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.van-ban-phan-hoi .md-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: 0.92rem;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.van-ban-phan-hoi .md-table th,
+.van-ban-phan-hoi .md-table td {
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    padding: 7px 12px;
+    text-align: left;
+    vertical-align: top;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.van-ban-phan-hoi .md-table th {
+    background: rgba(56, 189, 248, 0.12);
+    font-weight: 600;
+}
+
+.van-ban-phan-hoi .md-table th:nth-child(1),
+.van-ban-phan-hoi .md-table td:nth-child(1),
+.van-ban-phan-hoi .md-table th:nth-child(2),
+.van-ban-phan-hoi .md-table td:nth-child(2) {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.van-ban-phan-hoi .md-table tbody tr:nth-child(even) {
+    background: rgba(148, 163, 184, 0.05);
 }
 
 .thanh-nut-tuong-tac {

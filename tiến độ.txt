@@ -63,3 +63,6 @@ Khi đang cần tốc độ gõ/sinh phản hồi nhanh, tránh gọi embedding 
 Giữ prompt và giới hạn độ dài đầu ra (num_predict) gọn:
 
 Càng ít ngữ cảnh thừa và càng giới hạn độ dài câu trả lời hợp lý thì thời gian chờ càng dễ chịu trên CPU-only.
+
+
+_lam_sach_o_bang

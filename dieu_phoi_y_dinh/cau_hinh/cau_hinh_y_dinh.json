@@ -1,0 +1,236 @@
+{
+    "version": "2.6",
+    "nguong_cosine_chot": 0.72,
+    "nguong_cosine_hoi_llm": 0.52,
+    "y_dinh_mac_dinh_thap": "chat_tu_do",
+    "y_dinh": [
+        {
+            "ma_y_dinh": "liet_ke_app_va_model",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "he_thong",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "db_truy_van",
+            "db_muc_tieu": "models_theo_app",
+            "cau_mau_ngu_nghia": [
+                "kể tên các app và model trong database hiện tại",
+                "danh sách bảng dữ liệu và trường trong db",
+                "cấu trúc model của hệ thống ra sao",
+                "liet ke cac app va truong du lieu",
+                "chức năng từng app và các model trong hệ thống"
+            ],
+            "tu_khoa_nhanh": [
+                "chức năng từng app",
+                "chức năng các app",
+                "cấu trúc bảng db",
+                "model có các trường gì",
+                "danh sách bảng dữ liệu"
+            ],
+            "mo_ta_ngu_nghia": "Đọc trực tiếp Django apps & models và cấu trúc trường từ hệ thống/DB."
+        },
+        {
+            "ma_y_dinh": "thong_ke_du_lieu_db",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "he_thong",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "db_truy_van",
+            "db_muc_tieu": "dem_ban_ghi_model",
+            "cau_mau_ngu_nghia": [
+                "thống kê số lượng bản ghi trong database",
+                "bảng nào trong db đang có dữ liệu",
+                "đếm số dòng dữ liệu các model",
+                "thong ke so ban ghi tung bang",
+                "bao nhiêu dòng dữ liệu trong bảng",
+                "mấy dòng dữ liệu hiện có"
+            ],
+            "tu_khoa_nhanh": [
+                "số lượng bản ghi",
+                "số dòng dữ liệu",
+                "dong du lieu",
+                "bao nhiêu dòng",
+                "mấy dòng",
+                "thống kê db"
+            ],
+            "mo_ta_ngu_nghia": "Đếm số bản ghi thực tế của các model trong database."
+        },
+        {
+            "ma_y_dinh": "huong_dan_su_dung_nhanh",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "he_thong",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "mau_co_dinh",
+            "cau_mau_ngu_nghia": [
+                "hướng dẫn tao cách sử dụng hệ thống",
+                "hệ thống này làm gì và dùng thế nào",
+                "luồng hoạt động chính ra sao",
+                "huong dan su dung he thong"
+            ],
+            "tu_khoa_nhanh": [
+                "hướng dẫn sử dụng",
+                "cách sử dụng hệ thống",
+                "hệ thống này làm gì"
+            ],
+            "mo_ta_ngu_nghia": "Hướng dẫn nhanh cách sử dụng hệ thống.",
+            "mau_tra_loi": "📌 **Cách dùng nhanh:**\n- Hỏi cấu trúc app/model/DB: *\"kể tên các app và model trong database hiện tại\"*\n- Thống kê dữ liệu DB: *\"thống kê số lượng bản ghi trong database\"*\n- Dò vị trí file/hàm/liên kết để vibe code: *\"file setting nằm ở đâu\"*, *\"hàm xu_ly_prompt_da_y_dinh ở file nào\"*, *\"file này liên kết với file nào\"*\n- Tạo app mới: *\"tạo app quản lý chấm công\"*\n- Đổi lượt vừa rồi thành bảng: *\"lập thành bảng chứ\"*"
+        },
+        {
+            "ma_y_dinh": "viet_code_va_phan_tich",
+            "mien": "ky_thuat_va_code",
+            "nhom_lon": "coding_phan_tich",
+            "uu_tien_nhanh": false,
+            "che_do_xu_ly": "llm_huong_dan",
+            "cau_mau_ngu_nghia": [
+                "viết cho tôi một hàm python hoặc đoạn code xử lý",
+                "sửa lỗi hoặc tối ưu đoạn mã này giúp",
+                "sửa lỗi đoạn mã này giúp: def chia(a, b): return a / b khi b=0",
+                "fix bug đoạn code python bị chia cho không",
+                "phân tích phương án và chia đầu mục triển khai",
+                "debug lỗi python django hoặc tối ưu truy vấn",
+                "viet ham loc so chan trong list",
+                "viet ham python xu ly du lieu"
+            ],
+            "tu_khoa_nhanh": [
+                "viết code",
+                "sửa code",
+                "sửa lỗi đoạn mã",
+                "fix bug",
+                "viết hàm",
+                "viet ham",
+                "văng lỗi",
+                "vang loi",
+                "chia cho 0",
+                "def ",
+                "phân tích phương án",
+                "lập đầu mục"
+            ],
+            "mo_ta_ngu_nghia": "Viết/sửa code, debug lỗi kỹ thuật hoặc phân tích phương án triển khai.",
+            "chi_dan_llm": "Trả lời ngắn gọn, rõ ràng, code gọn gàng, đúng chuẩn Python/Django, không bịa đặt."
+        },
+        {
+            "ma_y_dinh": "tao_app_chuyen_trang",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "tao_app",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "tao_app",
+            "cau_mau_ngu_nghia": [
+                "tạo ứng dụng phần mềm quản lý chấm công hoặc theo dõi đơn hàng",
+                "xây dựng hệ thống phần mềm mới cho nghiệp vụ cụ thể",
+                "khởi tạo ứng dụng hoặc trang quản lý mới chuyển sang xưởng tạo app"
+            ],
+            "tu_khoa_nhanh": [
+                "tạo app",
+                "tao app",
+                "lập app",
+                "xây dựng app",
+                "tạo ứng dụng",
+                "lập ứng dụng"
+            ],
+            "mo_ta_ngu_nghia": "Chuyển sang luồng Xưởng Tạo App để khởi tạo ứng dụng mới."
+        },
+        {
+            "ma_y_dinh": "tra_cuu_mang_va_thoi_su",
+            "mien": "tra_cuu_ngoai",
+            "nhom_lon": "tra_mang",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "tra_mang",
+            "cau_mau_ngu_nghia": [
+                "tuy hoà có mưa không",
+                "thời tiết hôm nay hoặc dự báo thời tiết",
+                "giá vàng, tỷ giá hoặc tin tức mới nhất hôm nay",
+                "tra cứu thông tin bên ngoài hoặc dữ liệu trực tiếp"
+            ],
+            "tu_khoa_nhanh": [
+                "có mưa không",
+                "thời tiết",
+                "giá vàng hôm nay",
+                "tỷ giá hôm nay",
+                "tin tức hôm nay"
+            ],
+            "mo_ta_ngu_nghia": "Câu hỏi dữ liệu ngoài / thời gian thực.",
+            "link_tham_khao": [
+                {
+                    "tieu_de": "Link tham khảo — Trạng thái kết nối tra cứu mạng ngoài (chưa bật trên luồng local)",
+                    "url": ""
+                }
+            ]
+        },
+        {
+            "ma_y_dinh": "chat_tu_do",
+            "mien": "hoi_thoai_va_tro_ly",
+            "nhom_lon": "hoi_thoai",
+            "uu_tien_nhanh": false,
+            "che_do_xu_ly": "chat_tu_do",
+            "cau_mau_ngu_nghia": [
+                "alo",
+                "chào buổi sáng nhé",
+                "ok cảm ơn nhiều",
+                "hôm nay hơi mệt xíu",
+                "tao muốn tạo một cái note để nhớ việc"
+            ],
+            "tu_khoa_nhanh": [
+                "alo",
+                "xin chào",
+                "cảm ơn"
+            ],
+            "mo_ta_ngu_nghia": "Trò chuyện thông thường, chào hỏi, nhớ tên hoặc phản hồi ngắn."
+        },
+        {
+            "ma_y_dinh": "tra_cuu_telemetry_va_model",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "he_thong",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "db_truy_van",
+            "db_muc_tieu": "telemetry_va_model",
+            "cau_mau_ngu_nghia": [
+                "thông số cpu ram gpu và model ollama hiện tại",
+                "máy đang chạy model nào và cấu hình phần cứng ra sao",
+                "kiểm tra telemetry hệ thống và danh sách model ollama",
+                "cau hinh may va model ollama dang chay"
+            ],
+            "tu_khoa_nhanh": [
+                "telemetry",
+                "model ollama",
+                "cấu hình phần cứng",
+                "thông số cpu"
+            ],
+            "mo_ta_ngu_nghia": "Lấy thông số CPU, RAM, GPU và model Ollama thực tế từ services_telemetry."
+        },
+        {
+            "ma_y_dinh": "hoi_dap_he_thong_chi_tiet",
+            "mien": "he_thong_va_du_lieu",
+            "nhom_lon": "he_thong",
+            "uu_tien_nhanh": true,
+            "che_do_xu_ly": "huong_dan_he_thong_co_nguon",
+            "cau_mau_ngu_nghia": [
+                "hệ thống này hoạt động như thế nào và gồm những thành phần gì",
+                "hướng dẫn chi tiết từng bước cách vận hành và mở rộng hệ thống",
+                "file dieu_phoi_y_dinh có liên quan các file nào",
+                "các class có trong dự án và chức năng từng thành phần",
+                "tao muốn thêm ý định thì thêm vào đâu",
+                "tra cứu tài liệu và hướng dẫn kỹ thuật có link tham khảo",
+                "file setting nằm ở đâu trong dự án",
+                "hàm xu_ly_prompt_da_y_dinh nằm ở file nào và dòng mấy",
+                "file này liên kết với file nào và gọi hàm nào",
+                "hàm này liên kết với hàm nào và nằm ở file nào"
+            ],
+            "tu_khoa_nhanh": [
+                "thêm ý định",
+                "them y dinh",
+                "liên quan các file",
+                "liên kết với file",
+                "liên kết với hàm",
+                "nằm ở đâu",
+                "ở đâu",
+                "ở file nào",
+                "file nào",
+                "hàm nào",
+                "file setting",
+                "các class",
+                "cấu trúc hệ thống",
+                "hướng dẫn từng bước",
+                "link tham khảo"
+            ],
+            "mo_ta_ngu_nghia": "Dò vị trí file, hàm/class/biến qua AST + PROJECT_MAP, phân tích liên kết 2 chiều file & hàm để vibe code, giải đáp kiến trúc và hướng dẫn mở rộng hệ thống.",
+            "chi_dan_llm": "Trả lời chính xác theo đường dẫn file, tên hàm/class/biến và liên kết thực tế của dự án, không bịa đặt."
+        }
+    ]
+}
