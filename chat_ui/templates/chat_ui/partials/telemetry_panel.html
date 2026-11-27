@@ -1,0 +1,103 @@
+<!-- ==========================================================================
+     File Path: chat_ui/templates/chat_ui/partials/telemetry_panel.html
+     Module: Bang Telemetry Ben Phai (Phan Cung, Token, Provider, Bieu Do)
+     Linked Files: templates/chat_ui/layout/base.html,
+                   static/chat_ui/js/telemetry.js
+     Purpose: Hien thi RAM/CPU/GPU, ngan sach token, trang thai model/provider
+              dang chay va bieu do nhay thoi gian thuc.
+     ========================================================================== -->
+<aside class="dj-telemetry" id="djTelemetry">
+    <div class="telem-box">
+        <div class="telem-head">
+            <span>PHẦN CỨNG &amp; KHẢ DỤNG</span>
+            <span id="hwCpuCoresBadge" class="telem-badge">CPU</span>
+        </div>
+
+        <div class="meter-row">
+            <div class="meter-label">
+                <span>RAM khả dụng</span>
+                <strong id="hwRamSummary">--%</strong>
+            </div>
+            <div class="meter-bar-bg">
+                <div id="ramMeterFill" class="meter-bar-fill fill-ram"></div>
+            </div>
+            <canvas id="ramSparkCanvas" class="telem-canvas" height="34"></canvas>
+        </div>
+
+        <div class="meter-row">
+            <div class="meter-label">
+                <span>CPU tải hiện tại</span>
+                <strong id="hwCpuSummary">--%</strong>
+            </div>
+            <div class="meter-bar-bg">
+                <div id="cpuMeterFill" class="meter-bar-fill fill-cpu"></div>
+            </div>
+            <canvas id="cpuSparkCanvas" class="telem-canvas" height="34"></canvas>
+        </div>
+
+        <div id="hwGpuSummary" class="telem-subline">GPU/VRAM: Chạy CPU/RAM • Local Ready</div>
+    </div>
+
+    <div class="telem-box">
+        <div class="telem-head">
+            <span>TOKEN &amp; NGÂN SÁCH</span>
+            <span id="telemWarnCount" class="telem-warn">0 CẢNH BÁO</span>
+        </div>
+        <div class="tok-3col">
+            <div class="tok-cell">
+                <div id="tokInputVal" class="tok-num">0</div>
+                <div class="tok-cap">Input</div>
+            </div>
+            <div class="tok-cell">
+                <div id="tokOutputVal" class="tok-num">0</div>
+                <div class="tok-cap">Output</div>
+            </div>
+            <div class="tok-cell">
+                <div id="tokTotalVal" class="tok-num">0</div>
+                <div class="tok-cap">Tổng bước</div>
+            </div>
+        </div>
+        <div class="budget-foot">
+            <span>Ngân sách lượt</span>
+            <strong id="budgetLimitText">0 / 18000</strong>
+        </div>
+    </div>
+
+    <div class="telem-box">
+        <div class="telem-head">
+            <span>MODEL &amp; CHUỖI PROVIDER</span>
+            <span id="providerChainBadge" class="telem-badge">IDLE</span>
+        </div>
+        <ul class="provider-stack">
+            <li class="provider-item" data-provider-row="free_cloud">
+                <div>
+                    <div class="prov-title">free_cloud · openrouter_free</div>
+                    <div class="prov-desc">Ưu tiên 1</div>
+                </div>
+                <span class="prov-badge" data-prov-status>Chờ</span>
+            </li>
+            <li class="provider-item" data-provider-row="local_ollama">
+                <div>
+                    <div class="prov-title">local_ollama · ollama_fast</div>
+                    <div class="prov-desc">Dự phòng local</div>
+                </div>
+                <span class="prov-badge" data-prov-status>Chờ</span>
+            </li>
+            <li class="provider-item" data-provider-row="paid_low_cost">
+                <div>
+                    <div class="prov-title">paid_low_cost · cheap_api</div>
+                    <div class="prov-desc">Trả phí vừa tầm</div>
+                </div>
+                <span class="prov-badge" data-prov-status>Chờ</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="telem-box">
+        <div class="telem-head">
+            <span>NHỊP TOKEN / TỐC ĐỘ</span>
+            <span id="tokRateBadge" class="telem-badge">0.0 tok/s</span>
+        </div>
+        <canvas id="tokenFlowCanvas" class="telem-canvas" height="44"></canvas>
+    </div>
+</aside>

@@ -1,0 +1,95 @@
+<!-- ==========================================================================
+     File Path: chat_ui/templates/chat_ui/layout/index.html
+     Module: Trang Chinh Workbench (Tabs Co Dinh, Chat, Repo, Ke Hoach)
+     Linked Files: templates/chat_ui/layout/base.html,
+                   static/chat_ui/js/workbench.js
+     Purpose: Chua thanh tab co dinh phia tren, vung chat tach bach prompt/tra loi,
+              tab ban do repo, tab ke hoach/kiem chung va khung nhap prompt.
+     ========================================================================== -->
+{% extends "chat_ui/layout/base.html" %}
+
+{% block content %}
+<div class="sticky-tab-bar" role="tablist">
+    <button type="button" class="wb-tab-btn active" data-wb-tab="wb-tab-chat" role="tab">
+        Chat &amp; Điều phối
+    </button>
+    <button type="button" class="wb-tab-btn" data-wb-tab="wb-tab-repo" role="tab">
+        Bản đồ Repo &amp; Tệp
+    </button>
+    <button type="button" class="wb-tab-btn" data-wb-tab="wb-tab-plan" role="tab">
+        Kế hoạch &amp; Kiểm chứng
+    </button>
+</div>
+
+<!-- TAB 1: CHAT & ĐIỀU PHỐI -->
+<section id="wb-tab-chat" class="wb-tab-view active">
+    <div id="chatFeed" class="chat-feed">
+        <div class="chat-item is-reply">
+            <div class="chat-meta">
+                <span class="chat-role-badge">HỆ THỐNG</span>
+                <span>Sẵn sàng</span>
+            </div>
+            <div class="chat-bubble">Workbench đã sẵn sàng. Nhập yêu cầu bên dưới để điều phối scanner, kiểm tra phần
+                cứng hoặc thực thi tác vụ.</div>
+        </div>
+    </div>
+
+    <div id="liveStatusBanner" class="live-status-banner is-hidden">
+        <div class="status-left">
+            <span class="live-dot"></span>
+            <strong id="liveStepText">Đang xử lý...</strong>
+            <span id="liveModelText">Model: --</span>
+        </div>
+        <div class="status-left">
+            <span id="liveElapsedText" class="status-timer">0.0s</span>
+            <button type="button" id="btnStopRun" class="dj-btn dj-btn-danger is-hidden">Dừng</button>
+        </div>
+    </div>
+</section>
+
+<!-- TAB 2: BẢN ĐỒ REPO & TỆP -->
+<section id="wb-tab-repo" class="wb-tab-view">
+    <div class="wb-card">
+        <div class="wb-card-head">
+            <span>Bản đồ tệp dự án</span>
+            <input type="text" id="repoSearchBox" class="dj-input" style="max-width: 260px;"
+                placeholder="Lọc theo tên hoặc đuôi tệp..." />
+        </div>
+        <ul id="repoTreeList" class="repo-tree-list">
+            <li>Chưa nạp danh sách tệp. Gửi yêu cầu liệt kê tệp hoặc nối dữ liệu từ scanner.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- TAB 3: KẾ HOẠCH & KIỂM CHỨNG -->
+<section id="wb-tab-plan" class="wb-tab-view">
+    <div class="wb-card">
+        <div class="wb-card-head">
+            <span>Kế hoạch &amp; Kết quả kiểm chứng tệp</span>
+            <span id="verifyBadge" class="telem-badge">Chưa chạy</span>
+        </div>
+        <div id="verifyDetailBox" class="telem-subline">
+            Chưa có dữ liệu kiểm chứng cho lượt chạy hiện tại.
+        </div>
+    </div>
+</section>
+
+<!-- COMPOSER -->
+<form id="chatPromptForm" class="dj-composer">
+    <div class="dj-slot-card" style="margin-bottom: 6px;">
+        Slot mở rộng trang chính: Khu vực so sánh Diff / chọn Agent chuyên biệt / chạy test nhanh.
+    </div>
+    <textarea id="promptInput" class="dj-prompt-box" rows="3"
+        placeholder="Nhập yêu cầu... (Enter để gửi, Alt + Enter để xuống dòng)"></textarea>
+    <div class="dj-composer-footer">
+        <label class="dj-check">
+            <input type="checkbox" id="allowWriteCheck" />
+            <span>Cho phép ghi tệp sinh ra (giới hạn số tệp/lượt)</span>
+        </label>
+        <div class="dj-actions">
+            <span class="dj-hint">Enter gửi • Alt+Enter xuống dòng</span>
+            <button type="submit" id="btnSendPrompt" class="dj-btn dj-btn-primary">Gửi yêu cầu</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

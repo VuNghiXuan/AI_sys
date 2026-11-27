@@ -1,0 +1,41 @@
+<!-- ==========================================================================
+     File Path: chat_ui/templates/chat_ui/partials/sidebar.html
+     Module: Sidebar Dieu Huong Ben Trai Phong Cach Django Admin
+     Linked Files: templates/chat_ui/layout/base.html,
+                   static/chat_ui/css/workbench.css
+     Purpose: Hien thi dieu huong he thong, chon chien thuat (profile) va
+              cac gioi han token/file hien hanh.
+     ========================================================================== -->
+<aside class="dj-sidebar" id="djSidebar">
+    <div>
+        <div class="dj-box-title">QUẢN TRỊ &amp; ĐIỀU HƯỚNG</div>
+        <span class="dj-section-label sidebar-collapsible">ĐIỀU HƯỚNG HỆ THỐNG</span>
+        <nav class="dj-nav-list">
+            <a href="#" class="dj-nav-link active">⌂ <span class="sidebar-collapsible">Trang chính
+                    (Workbench)</span></a>
+            <a href="#" class="dj-nav-link">⚙ <span class="sidebar-collapsible">Chính sách &amp; Chiến thuật</span></a>
+            <a href="#" class="dj-nav-link">⌘ <span class="sidebar-collapsible">Bản đồ Code &amp; AST</span></a>
+            <a href="#" class="dj-nav-link">▤ <span class="sidebar-collapsible">Nhật ký Token &amp; Fallback</span></a>
+        </nav>
+    </div>
+
+    <div class="sidebar-collapsible">
+        <label for="profileSelector" class="dj-section-label">CHIẾN THUẬT (PROFILE)</label>
+        <select id="profileSelector" class="dj-select">
+            <option value="quality_first_free_first" selected>quality_first_free_first</option>
+            <option value="local_first">local_first</option>
+            <option value="budget_strict">budget_strict</option>
+        </select>
+    </div>
+
+    <div class="dj-limit-list sidebar-collapsible">
+        <span class="dj-section-label">GIỚI HẠN HIỆN HÀNH</span>
+        <div class="dj-limit-row"><span>Max / step:</span><strong id="limMaxStep">6500 tok</strong></div>
+        <div class="dj-limit-row"><span>Max LLM calls:</span><strong id="limMaxCalls">6 / turn</strong></div>
+        <div class="dj-limit-row"><span>Max out files:</span><strong id="limMaxFiles">5 / turn</strong></div>
+    </div>
+
+    <div class="dj-slot-card sidebar-collapsible">
+        Slot mở rộng: Bộ lọc Agent / Preset cá nhân sẽ gắn tại đây.
+    </div>
+</aside>

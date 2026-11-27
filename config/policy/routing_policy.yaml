@@ -1,0 +1,69 @@
+active_profile: quality_first_free_first
+
+budgets:
+  max_input_tokens_per_step: 4500
+  max_output_tokens_per_step: 2000
+  max_total_tokens_per_step: 6500
+  max_total_tokens_per_turn: 18000
+  warn_ratio: 0.8
+  max_llm_calls_per_turn: 6
+  max_turns_per_task: 5
+
+file_limits:
+  max_input_files: 6
+  max_related_files: 4
+  max_map_tokens: 1500
+  max_output_files_per_turn: 3
+  ignore_dirs: [".venv", "venv", "__pycache__", ".git", "node_modules", "migrations"]
+
+hardware:
+  auto_detect: true
+  min_free_ram_mb: 2048
+  local_max_ctx_cap: 8192
+
+profiles:
+  quality_first_free_first:
+    allow_paid_fallback: true
+    tier_order: ["free_cloud", "local_ollama", "paid_low_cost", "paid_reasoning"]
+  frugal_capped:
+    allow_paid_fallback: false
+    tier_order: ["free_cloud", "local_ollama"]
+    max_total_tokens_per_step: 4000
+    max_llm_calls_per_turn: 3
+  strict_local_safe:
+    allow_paid_fallback: false
+    tier_order: ["local_ollama"]
+
+providers:
+  free_cloud:
+    - name: openrouter_free
+      kind: openai_compatible
+      base_url: "https://openrouter.ai/api/v1"
+      api_key_env: "OPENROUTER_API_KEY"
+      model: "qwen/qwen3-coder:free"
+      rpm_limit: 15
+      daily_token_budget: 200000
+      timeout_s: 35
+  local_ollama:
+    - name: ollama_fast
+      kind: ollama
+      base_url: "http://127.0.0.1:11434"
+      model: "qwen2.5:3b"
+      min_free_ram_mb: 2048
+      timeout_s: 45
+  paid_low_cost:
+    - name: cheap_api
+      kind: openai_compatible
+      base_url: "https://api.openai.com/v1"
+      api_key_env: "OPENAI_API_KEY"
+      model: "gpt-4o-mini"
+      daily_token_budget: 500000
+      timeout_s: 40
+  paid_reasoning:
+    - name: strong_api
+      kind: openai_compatible
+      base_url: "https://api.openai.com/v1"
+      api_key_env: "STRONG_API_KEY"
+      model: "gpt-4.1"
+      daily_token_budget: 200000
+      timeout_s: 60

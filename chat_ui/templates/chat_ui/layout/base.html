@@ -1,0 +1,56 @@
+<!-- ==========================================================================
+     File Path: chat_ui/templates/chat_ui/layout/base.html
+     Module: Khung Layout Chinh Cho Giao Dien Workbench
+     Linked Files: chat_ui/urls.py,
+                   static/chat_ui/css/workbench.css,
+                   static/chat_ui/js/telemetry.js,
+                   static/chat_ui/js/workbench.js,
+                   templates/chat_ui/partials/sidebar.html,
+                   templates/chat_ui/partials/telemetry_panel.html
+     Purpose: Dinh nghia topbar phong cach Django Admin, luoi 3 cot va noi
+              dung dan API chat (/api/chat/).
+     ========================================================================== -->
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}vnx_core — Workbench{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat_ui/css/workbench.css' %}" />
+</head>
+
+<body class="dj-admin-workbench" data-chat-api-url="{% block chat_api_url %}{% url 'chat_ui:api_chat' %}{% endblock %}"
+    data-telemetry-url="{% block telemetry_url %}{% endblock %}">
+    {% csrf_token %}
+
+    <header class="dj-topbar">
+        <div class="topbar-group">
+            <button type="button" id="btnToggleSidebar" class="dj-btn dj-btn-top">☰ Thu gọn</button>
+            <span class="brand-mark">vnx_core</span>
+            <span class="chip-info">Profile: <strong id="topProfileName">{{
+                    active_profile|default:"quality_first_free_first" }}</strong></span>
+            <span id="globalRunStatus" class="run-pill">Sẵn sàng</span>
+        </div>
+
+        <div class="topbar-group">
+            <span id="topActiveModel" class="chip-model">Model: --</span>
+            <span id="topLatencyBadge" class="chip-metric">0.0s</span>
+            <span id="topTokensBadge" class="chip-metric">0 tok</span>
+        </div>
+    </header>
+
+    <div class="workbench-grid" id="workbenchGrid">
+        {% include "chat_ui/partials/sidebar.html" %}
+        <main class="dj-center-pane">
+            {% block content %}{% endblock %}
+        </main>
+        {% include "chat_ui/partials/telemetry_panel.html" %}
+    </div>
+
+    <script src="{% static 'chat_ui/js/telemetry.js' %}"></script>
+    <script src="{% static 'chat_ui/js/workbench.js' %}"></script>
+</body>
+
+</html>
